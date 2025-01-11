@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Department Navigation</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png" />
+    <link rel="stylesheet" href="affiliates.css" />
+    <!-- 스타일 파일 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더와 푸터 스타일 -->
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container">
+      <div class="heading"><strong>제휴</strong></div>
+      <div class="sub-heading">다양한 제휴 혜택을 확인해 보세요!</div>
+
+      <div class="button-grid">
+        <button onclick="navigateTo('인문융합예술대학')">
+          인문융합<br />예술대학
+        </button>
+        <button onclick="navigateTo('법과대학')">법과대학</button>
+        <button onclick="navigateTo('음악대학')">음악대학</button>
+        <button onclick="navigateTo('지식서비스공과대학')">
+          지식서비스<br />공과대학
+        </button>
+        <button onclick="navigateTo('간호대학')">간호대학</button>
+        <button onclick="navigateTo('사회과학대학')">사회과학대학</button>
+        <button onclick="navigateTo('미술대학')">미술대학</button>
+        <button onclick="navigateTo('사범대학')">사범대학</button>
+        <button onclick="navigateTo('자연과학대학')">자연과학대학</button>
+        <button onclick="navigateTo('뷰티생활산업국제대학')">
+          뷰티생활산업<br />국제대학
+        </button>
+        <button onclick="navigateTo('창의융합교양대학')">
+          창의융합<br />교양대학
+        </button>
+      </div>
+    </div>
+
+    <script>
+      function navigateTo(department) {
+        location.href = `/affiliates_detail.html?partnership=${encodeURIComponent(
+          department
+        )}`;
+      }
+    </script>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="header_footer.js"></script>
+    <!-- 헤더와 푸터를 동적으로 로드 -->
+
+    <!-- 반응형 -->
+  </body>
+</html>

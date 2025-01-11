@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>성뭐먹</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png" />
+    <link rel="stylesheet" href="index.css" />
+    <!-- CSS 파일을 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더와 푸터 스타일 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- 동적 헤더 연결 -->
+    <div id="header-placeholder"></div>
+
+    <!-- 검색 섹션 -->
+    <section class="search-section">
+      <div class="search-container">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="메뉴나 가게를 검색하세요"
+        />
+        <button class="search-icon" id="search-button" aria-label="Search">
+          🔍
+        </button>
+      </div>
+    </section>
+
+    <!-- 중간 부분 섹션 -->
+    <section class="middle-section">
+      <div class="menu-buttons">
+        <div class="menu-button">
+          <a href="menu.html">
+            <span class="menu-icon">🥙</span>
+            <p>메뉴별 검색</p>
+          </a>
+        </div>
+        <div class="menu-button">
+          <a href="situation.html">
+            <span class="menu-icon">📅</span>
+            <p>상황별 검색</p>
+          </a>
+        </div>
+        <div class="menu-button">
+          <a href="random.html">
+            <span class="menu-icon">⚡</span>
+            <p>랜덤추천</p>
+          </a>
+        </div>
+        <div class="menu-button">
+          <a href="new.html">
+            <span class="menu-icon">🏠</span>
+            <p>New!</p>
+          </a>
+        </div>
+        <div class="menu-button">
+          <a href="affiliates.html">
+            <span class="menu-icon">🙌</span>
+            <p>제휴</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOP 3 섹션 -->
+    <section class="top3-section">
+      <h2># TOP 3</h2>
+
+      <!-- 찜 많은 순 버튼 -->
+      <div class="sort-button-container">
+        <button class="sort-button">찜 많은 순</button>
+      </div>
+
+      <!-- 가게 리스트 (찜 많은 순) -->
+      <div class="store-list"></div>
+
+      <!-- 리뷰 많은 순 버튼 -->
+      <div class="sort-button-container">
+        <button class="sort-button">리뷰 많은 순</button>
+      </div>
+
+      <!-- 가게 리스트 (리뷰 많은 순) -->
+      <div id="review-store-list" class="store-list"></div>
+    </section>
+
+    <!-- 슬라이드쇼 섹션 -->
+    <section class="slideshow-container">
+      <div class="mySlides fade">
+        <div class="slide-content">
+          <img src="코코베이글.jpg" alt="Slide 1" class="banner-img" />
+          <div class="banner-text">
+            <h2>Coco bagel<br />10% Off</h2>
+            <a href="affiliates.html">
+              <button>자세히 알아보기</button>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="mySlides fade">
+        <div class="slide-content">
+          <img src="훅트포케.jpg" alt="Slide 2" class="banner-img" />
+          <div class="banner-text">
+            <h2>Hooked Poke<br />10% Off</h2>
+            <a href="affiliates.html">
+              <button>자세히 알아보기</button>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="mySlides fade">
+        <div class="slide-content">
+          <img src="디에타.jpg" alt="Slide 3" class="banner-img" />
+          <div class="banner-text">
+            <h2>Dieta<br />10% Off</h2>
+            <a href="affiliates.html">
+              <button>자세히 알아보기</button>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- 네비게이션 버튼 (작은 동그라미) -->
+      <div class="dot-container">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+      </div>
+    </section>
+
+    <!-- 동적 푸터 연결 -->
+    <div id="footer-placeholder"></div>
+
+    <!-- 스크립트 -->
+    <script src="header_footer.js"></script>
+    <!-- 동적 헤더/푸터 스크립트 -->
+    <script src="main.js"></script>
+    <!-- 고유 스크립트 -->
+    <script>
+      document.getElementById("search-button").addEventListener("click", () => {
+        const query = document.getElementById("search-input").value.trim();
+        if (query) {
+          window.location.href = `store_search.html?query=${encodeURIComponent(
+            query
+          )}`;
+        } else {
+          alert("검색어를 입력해주세요.");
+        }
+      });
+    </script>
+
+    <!-- 반응형 -->
+  </body>
+</html>

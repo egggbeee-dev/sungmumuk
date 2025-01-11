@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>랜덤추천</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png" />
+    <link rel="stylesheet" href="random.css" />
+    <!-- 기존 CSS 파일을 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더와 푸터 스타일 -->
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <!-- Header Placeholder -->
+  <div id="header-placeholder"></div>
+  <body>
+    <!-- Main Content -->
+    <main class="random-container">
+      <div class="recommend-box">
+        <h1>🎉랜덤추천🎉</h1>
+      </div>
+      <div class="options-box">
+        <div class="option-group" id="food-options">
+          <h2>음식 선택</h2>
+          <span class="option" onclick="toggleOption(this, 'food', '전체')"
+            >전체</span
+          >
+          <span class="option" onclick="toggleOption(this, 'food', '일식')"
+            >일식</span
+          >
+          <span class="option" onclick="toggleOption(this, 'food', '중식')"
+            >중식</span
+          >
+          <span class="option" onclick="toggleOption(this, 'food', '한식')"
+            >한식</span
+          >
+          <span class="option" onclick="toggleOption(this, 'food', '양식')"
+            >양식</span
+          >
+          <span
+            class="option"
+            onclick="toggleOption(this, 'food', '샐러드/포케')"
+            >샐러드/포케</span
+          >
+          <span class="option" onclick="toggleOption(this, 'food', '술집')"
+            >술집</span
+          >
+          <span class="option" onclick="toggleOption(this, 'food', '디저트')"
+            >디저트</span
+          >
+        </div>
+        <div class="option-group" id="visit-options">
+          <h2>방문 인원 선택</h2>
+          <span class="option" onclick="toggleOption(this, 'visit', '1인')"
+            >1인</span
+          >
+          <span class="option" onclick="toggleOption(this, 'visit', '2인~4인')"
+            >2인 ~ 4인</span
+          >
+          <span class="option" onclick="toggleOption(this, 'visit', '단체')"
+            >단체</span
+          >
+        </div>
+
+        <div class="option-group" id="campus-options">
+          <h2>캠퍼스 선택</h2>
+          <span
+            class="option"
+            onclick="toggleOption(this, 'campus', '수정캠퍼스')"
+            >수정캠퍼스</span
+          >
+          <span
+            class="option"
+            onclick="toggleOption(this, 'campus', '운정캠퍼스')"
+            >운정캠퍼스</span
+          >
+        </div>
+
+        <div class="option-group" id="price-options">
+          <h2>금액대 선택</h2>
+          <span class="option" onclick="toggleOption(this, 'price', 'low')"
+            >10,000원 미만</span
+          >
+          <span class="option" onclick="toggleOption(this, 'price', 'mid')"
+            >10,000원 ~ 30,000원</span
+          >
+          <span class="option" onclick="toggleOption(this, 'price', 'high')"
+            >30,000원 이상</span
+          >
+        </div>
+
+        <div class="button-container">
+          <button class="recommend-button" onclick="startLoading()">
+            시작하기
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- 로딩 화면 -->
+    <div class="loading-screen" id="loading-screen" style="display: none">
+      <p id="loading-message"></p>
+    </div>
+
+    <div class="popup" id="popup">
+      <div class="popup-header">
+        <p class="popup-title">🎉랜덤추천 결과입니다! 🎉</p>
+      </div>
+      <div class="store-item">
+        <img src="" alt="이미지" id="popup-image" class="store-img" />
+        <div class="store-details">
+          <div>
+            <p id="popup-title" class="store-name">가게 이름</p>
+          </div>
+          <div class="popup-buttons">
+            <button
+              class="details-button"
+              onclick="window.location.href='store-details.html'"
+            >
+              자세히 보기
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="popup-footer">
+        <button class="confirm-button" onclick="closePopup()">확인</button>
+      </div>
+    </div>
+
+    <!-- 반응형 -->
+  </body>
+  <!-- Footer Placeholder -->
+  <div id="footer-placeholder"></div>
+
+  <script src="header_footer.js"></script>
+</html>
+
+<script>
+  function startLoading() {
+    document.getElementById("loading-message").textContent =
+      "가게를 찾고 있습니다...";
+    document.getElementById("loading-screen").style.display = "flex";
+
+    setTimeout(() => {
+      document.getElementById("loading-screen").style.display = "none";
+      showResults(); // 로딩 후 결과 표시
+    }, 2000);
+  }
+
+  const selections = {
+    food: [],
+    visit: "",
+    price: "",
+    campus: "",
+  };
+
+  function toggleOption(element, type, value) {
+    const options = document.querySelectorAll(`#${type}-options .option`);
+
+    if (type === "price" || type === "visit" || type === "campus") {
+      // 단일 선택 옵션 처리
+      if (element.classList.contains("selected")) {
+        // 이미 선택된 경우 해제
+        element.classList.remove("selected");
+        selections[type] = "";
+      } else {
+        // 선택 처리
+        options.forEach((option) => option.classList.remove("selected"));
+        element.classList.add("selected");
+        selections[type] = value;
+      }
+    } else if (type === "food") {
+      // 다중 선택 옵션 처리
+      if (value === "전체") {
+        if (element.classList.contains("selected")) {
+          // '전체'가 이미 선택된 경우 해제
+          element.classList.remove("selected");
+          selections.food = [];
+        } else {
+          // '전체' 선택 처리
+          options.forEach((option) => option.classList.remove("selected"));
+          element.classList.add("selected");
+          selections.food = ["전체"];
+        }
+      } else {
+        if (element.classList.contains("selected")) {
+          // 개별 옵션 해제
+          element.classList.remove("selected");
+          selections.food = selections.food.filter((item) => item !== value);
+        } else {
+          // '전체' 해제 및 개별 옵션 선택
+          options.forEach((option) => {
+            if (option.textContent === "전체") {
+              option.classList.remove("selected");
+            }
+          });
+          element.classList.add("selected");
+          selections.food.push(value);
+        }
+      }
+    }
+    console.log(selections); // 디버깅 출력
+  }
+
+  function showPopup(store) {
+    const popup = document.getElementById("popup");
+
+    // 팝업 데이터 설정
+    document.getElementById("popup-image").src =
+      store.image_url || "default-image.jpg";
+    document.getElementById("popup-title").textContent =
+      store.restaurant_name || "가게 이름 없음";
+
+    // "자세히 보기" 버튼 링크 설정
+    const detailsButton = document.querySelector(".details-button");
+    detailsButton.onclick = function () {
+      window.location.href = `/store_details?id=${store.restaurant_id}`;
+    };
+
+    popup.style.display = "flex"; // 팝업 열기
+  }
+
+  function closePopup() {
+    const popup = document.getElementById("popup");
+    popup.style.display = "none"; // 팝업 닫기
+  }
+
+  async function showResults() {
+    try {
+      const queryParams = new URLSearchParams({
+        food: selections.food.join(","), // 배열을 쉼표로 구분하여 전달
+        visit: selections.visit || "",
+        price: selections.price || "",
+        campus: selections.campus || "",
+      });
+
+      const response = await fetch(`/get-random-restaurant?${queryParams}`);
+      console.log("Request URL:", response.url);
+
+      if (response.ok) {
+        const restaurant = await response.json();
+        showPopup(restaurant);
+      } else {
+        alert("조건에 맞는 가게가 없습니다.");
+      }
+    } catch (error) {
+      console.error("Error fetching restaurant:", error);
+    }
+  }
+</script>

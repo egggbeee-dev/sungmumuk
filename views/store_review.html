@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review Details</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png" />
+    <link rel="stylesheet" href="store_review.css" />
+    <link rel="stylesheet" href="header_footer.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Review Details -->
+    <div class="review-details-container"></div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="header_footer.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const reviewId = urlParams.get("id");
+
+        if (!reviewId) {
+          document.querySelector(".review-details-container").innerHTML =
+            "<p>리뷰 ID를 찾을 수 없습니다.</p>";
+            return;
+        }
+
+        try {
+          const response = await fetch(`/api/store_review/${reviewId}`);
+          if (!response.ok)
+            throw new Error("리뷰 데이터를 불러오는 중 오류 발생");
+
+          const review = await response.json();
+          displayReviewDetails(review);
+        } catch (error) {
+          console.error(error);
+          document.querySelector(".review-details-container").innerHTML =
+            "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
+        }
+      });
+
+      
+      function generateStars(rating) {
+        const maxStars = 5;
+        let stars = "";
+        for (let i = 1; i <= maxStars; i++) {
+          stars += i <= rating ? "⭐" : "☆";
+        }
+        return stars;
+      }
+
+      function generateEditableStars(initialRating, type) {
+        let stars = "";
+        for (let i = 1; i <= 5; i++) {
+          stars += `<span class="star ${i <= initialRating ? "selected" : ""}" 
+                            data-value="${i}" 
+                            onclick="setRating('${type}', ${i})">★</span>`;
+        }
+        return stars;
+      }
+
+      function setRating(type, value) {
+        const stars = document.querySelectorAll(`#edit-${type}-rating .star`);
+        stars.forEach((star) => {
+          const starValue = parseInt(star.dataset.value);
+          star.classList.toggle("selected", starValue <= value);
+        });
+
+        const hiddenInput = document.querySelector(`#${type}-rating-input`);
+        if (hiddenInput) {
+          hiddenInput.value = value;
+        }
+      }
+
+      function displayReviewDetails(review) {
+        const detailsContainer = document.querySelector(
+          ".review-details-container"
+        );
+
+        if (review) {
+          detailsContainer.innerHTML = `
+                    <div class="review-header">
+                        <h2>${
+                          review.restaurant_name || "알 수 없는 레스토랑"
+                        }</h2>
+                        <p>${review.reviewer || "익명"}</p>
+                        <p>작성 시간: ${new Date(
+                          review.created_at
+                        ).toLocaleString()}</p>
+                    </div>
+                    ${
+                      review.review_photo
+                        ? `<img src="/review/${review.review_photo}" alt="리뷰 이미지" class="review-image">`
+                        : "<p></p>"
+                    }
+                    <div class="ratings">
+                        <p>맛: ${generateStars(review.taste_rating)}</p>
+                        <p>접근성: ${generateStars(review.access_rating)}</p>
+                        <p>재방문: ${generateStars(review.revisit_rating)}</p>
+                    </div>
+                    <p class="content">
+                        <h2>${review.review_text || "내용이 없습니다."}</h2>
+                    </p>
+                    ${
+                      review.isEditable
+                        ? `
+                        <div class="button-container">
+                            <button class="edit-button" onclick="editReview(${review.review_id})">수정</button>
+                            <button class="delete-button" onclick="deleteReview(${review.review_id})">삭제</button>
+                        </div>
+
+
+                    `
+                        : ""
+                    }
+                `;
+        } else {
+          detailsContainer.innerHTML = `<p>리뷰를 찾을 수 없습니다.</p>`;
+        }
+      }
+
+      function editReview(reviewId) {
+        const detailsContainer = document.querySelector(
+          ".review-details-container"
+        );
+
+        fetch(`/api/store_review/${reviewId}`)
+          .then((response) => response.json())
+          .then((review) => {
+            detailsContainer.innerHTML = `
+                        <div class="edit-review-container">
+                            <h3>리뷰 수정</h3>
+                            <label for="storeName">가게명:</label>
+                             <span id="storeName">${
+                               review.restaurant_name || "알 수 없는 가게"
+                             }</span>
+                            <div class="edit-ratings">
+                                <label for="edit-taste-rating">맛: </label>
+                                <div id="edit-taste-rating" class="star-rating">${generateEditableStars(
+                                  review.taste_rating || 0,
+                                  "taste"
+                                )}</div>
+                                <input type="hidden" id="taste-rating-input" value="${
+                                  review.taste_rating || 0
+                                }">
+                                <label for="edit-access-rating">접근성: </label>
+                                <div id="edit-access-rating" class="star-rating">${generateEditableStars(
+                                  review.access_rating || 0,
+                                  "access"
+                                )}</div>
+                                <input type="hidden" id="access-rating-input" value="${
+                                  review.access_rating || 0
+                                }">
+                                <label for="edit-revisit-rating">재방문: </label>
+                                <div id="edit-revisit-rating" class="star-rating">${generateEditableStars(
+                                  review.revisit_rating || 0,
+                                  "revisit"
+                                )}</div>
+                                <input type="hidden" id="revisit-rating-input" value="${
+                                  review.revisit_rating || 0
+                                }">
+                            </div>
+                            <label for="edit-review-photo">사진 추가:</label><br>
+                            <input type="file" id="edit-review-photo" accept="image/*"><br>
+                            <label for="EditreviewText">후기:</label><br>
+                                <textarea 
+                                    id="edit-review-text" 
+                                    name="review_text" 
+                                    rows="4" 
+                                    placeholder="추천하는 메뉴와 가격 등 자유롭게 후기를 작성해주세요!"
+                                >${review.review_text || ""}</textarea><br>
+                            <button onclick="submitEdit(${reviewId})">수정 완료</button>
+                            <button onclick="cancelEdit(${reviewId})">취소</button>
+                        </div>
+                    `;
+          })
+          .catch((error) => {
+            console.error("리뷰 수정 데이터를 가져오는 중 오류 발생:", error);
+            alert("수정 데이터를 불러오지 못했습니다.");
+          });
+      }
+
+      async function submitEdit(reviewId) {
+        const reviewText = document
+          .getElementById("edit-review-text")
+          .value.trim();
+        const tasteRating = document.getElementById("taste-rating-input").value;
+        const accessRating = document.getElementById(
+          "access-rating-input"
+        ).value;
+        const revisitRating = document.getElementById(
+          "revisit-rating-input"
+        ).value;
+
+        const reviewPhotoInput = document.getElementById("edit-review-photo");
+        const formData = new FormData();
+
+        formData.append("review_text", reviewText);
+        formData.append("taste_rating", tasteRating);
+        formData.append("access_rating", accessRating);
+        formData.append("revisit_rating", revisitRating);
+
+        if (reviewPhotoInput && reviewPhotoInput.files[0]) {
+          formData.append("review_photo", reviewPhotoInput.files[0]);
+        }
+
+        try {
+          const response = await fetch(`/api/store_review/${reviewId}`, {
+            method: "PUT",
+            body: formData,
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            alert("리뷰가 성공적으로 수정되었습니다.");
+
+            window.location.href = `/store_details?id=${result.restaurant_id}`;
+          } else {
+            const error = await response.json();
+            alert(`수정 실패: ${error.message}`);
+          }
+        } catch (error) {
+          console.error("리뷰 수정 중 오류 발생:", error);
+          alert("리뷰 수정 중 오류가 발생했습니다.");
+        }
+      }
+
+      function cancelEdit(reviewId) {
+        fetch(`/api/store_review/${reviewId}`)
+          .then((response) => response.json())
+          .then((review) => {
+            displayReviewDetails(review);
+          })
+          .catch((error) => {
+            console.error("리뷰 복구 중 오류 발생:", error);
+            alert("리뷰 복구 중 오류가 발생했습니다.");
+          });
+      }
+      async function deleteReview(reviewId) {
+        if (!confirm("정말로 이 리뷰를 삭제하시겠습니까?")) return;
+
+        try {
+          const response = await fetch(`/api/store_review/${reviewId}`, {
+            method: "DELETE",
+          });
+          if (response.ok) {
+            const result = await response.json();
+            alert("리뷰가 성공적으로 삭제되었습니다.");
+            window.location.href = `/store_details?id=${result.restaurant_id}`;
+          } else {
+            const error = await response.json();
+            alert(`삭제 실패: ${error.message}`);
+          }
+        } catch (error) {
+          console.error("리뷰 삭제 중 오류 발생:", error);
+          alert("리뷰 삭제 중 오류가 발생했습니다.");
+        }
+      }
+    </script>
+
+    <!-- 반응형 -->
+  </body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Affiliates Details</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png" />
+    <link rel="stylesheet" href="affiliates_detail.css" />
+    <!-- CSS 파일 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더와 푸터 스타일 -->
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container">
+      <div class="heading"><strong id="partnership-title"></strong></div>
+      <div id="store-list" class="new-store-list">
+        <!-- 가게 리스트가 동적으로 추가됩니다 -->
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const storeListContainer = document.getElementById("store-list");
+        const partnershipTitle = document.getElementById("partnership-title"); // 제목 요소 선택
+        const urlParams = new URLSearchParams(window.location.search);
+        const partnership = urlParams.get("partnership"); // URL에서 partnership 값 추출
+
+        try {
+          // 제목에 partnership 값 추가
+          partnershipTitle.textContent = `${partnership} 제휴 리스트`;
+
+          // 서버에 데이터 요청
+          const response = await fetch(
+            `/get-restaurants?partnership=${encodeURIComponent(partnership)}`
+          );
+          if (!response.ok) throw new Error("서버 응답 오류");
+          const stores = await response.json();
+
+          // 리스트 초기화
+          storeListContainer.innerHTML = "";
+
+          if (stores.length > 0) {
+            // 데이터를 기반으로 가게 리스트 생성
+            stores.forEach((store) => {
+              const storeItem = document.createElement("div");
+              storeItem.classList.add("new-store-item");
+              storeItem.innerHTML = `
+                    <img src="${
+                      store.image_url || "/public/images/default.jpg"
+                    }" class="store-img" alt="${store.category}">
+                    <div class="store-details">
+                        <p class="store-name">${store.restaurant_name}</p>
+                        <p class="store-description">${store.category}</p>
+                        <button class="details-button" onclick="location.href='/store_details?id=${
+                          store.restaurant_id
+                        }'">자세히 보기</button>
+                    </div>
+                `;
+              storeListContainer.appendChild(storeItem);
+            });
+          } else {
+            // 조건에 맞는 가게가 없는 경우
+            storeListContainer.innerHTML =
+              '<p class="no-data">조건에 맞는 가게가 없습니다.</p>';
+          }
+        } catch (error) {
+          console.warn("데이터베이스 연결 또는 데이터 로드 실패:", error);
+
+    
+    // 리스트 초기화
+    storeListContainer.innerHTML = "";
+
+    sampleStores.forEach((store) => {
+      const storeItem = document.createElement("div");
+      storeItem.classList.add("new-store-item");
+      storeItem.innerHTML = `
+        <img src="${
+          store.image_url || "/public/images/default.jpg"
+        }" class="store-img" alt="${store.category}">
+        <div class="store-details">
+            <p class="store-name">${store.restaurant_name}</p>
+            <p class="store-description">${store.category}</p>
+            <button class="details-button" onclick="location.href='/store_details?id=${
+              store.restaurant_id
+            }'">자세히 보기</button>
+        </div>
+      `;
+      storeListContainer.appendChild(storeItem);
+    });
+  }
+  });
+
+    </script>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="header_footer.js"></script>
+    <!-- 헤더와 푸터를 동적으로 로드 -->
+
+    <!-- 반응형 -->
+  </body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Page</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png" />
+    <link rel="stylesheet" href="review_register.css" />
+    <!-- 기존 CSS 파일을 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더와 푸터 스타일 -->
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <!-- 가게 목록 섹션-->
+
+    <div id="container">
+      <div
+        id="login-message"
+        style="display: none; text-align: center; margin-top: 20px"
+      >
+        <h1>리뷰 작성</h1>
+        <p>
+          리뷰를 작성하고 싶다면
+          <a href="login.html" style="color: blue">로그인</a> 해주세요!
+        </p>
+      </div>
+
+      <div class="review_form_container">
+        <h1>리뷰 작성</h1>
+        <input type="hidden" id="reviewer" name="reviewer" value="" />
+        <form
+          id="reviewForm"
+          method="POST"
+          action="/reviews/submit"
+          enctype="multipart/form-data"
+        >
+          <input type="hidden" id="restaurant-id" name="restaurant_id" />
+          <label for="storeName">가게명:</label>
+          <input type="text" id="storeName" name="restaurant_name" readonly />
+
+          <!-- 맛 평점 -->
+          <label for="tasteRating" class="taste-label">맛</label>
+          <div id="taste-rating" class="star-rating">
+            <span data-value="1">★</span>
+            <span data-value="2">★</span>
+            <span data-value="3">★</span>
+            <span data-value="4">★</span>
+            <span data-value="5">★</span>
+          </div>
+          <input type="hidden" id="tasteRating" name="taste_rating" value="0" />
+
+          <!-- 접근성 평점 -->
+          <label for="accessRating" class="access-label">접근성</label>
+          <div id="access-rating" class="star-rating">
+            <span data-value="1">★</span>
+            <span data-value="2">★</span>
+            <span data-value="3">★</span>
+            <span data-value="4">★</span>
+            <span data-value="5">★</span>
+          </div>
+          <input
+            type="hidden"
+            id="accessRating"
+            name="access_rating"
+            value="0"
+          />
+
+          <!-- 재방문 의사 평점 -->
+          <label for="revisitRating" class="revisit-label">재방문 의사</label>
+          <div id="revisit-rating" class="star-rating">
+            <span data-value="1">★</span>
+            <span data-value="2">★</span>
+            <span data-value="3">★</span>
+            <span data-value="4">★</span>
+            <span data-value="5">★</span>
+          </div>
+          <input
+            type="hidden"
+            id="revisitRating"
+            name="revisit_rating"
+            value="0"
+          />
+
+          <label for="reviewPhoto" class="form-label">사진 :</label>
+          <input type="file" id="reviewPhoto" name="review_photo" multiple />
+
+          <label for="reviewText">후기:</label>
+          <textarea
+            id="reviewText"
+            name="review_text"
+            rows="4"
+            placeholder="추천하는 메뉴와 가격 등 자유롭게 후기를 작성해주세요!"
+          ></textarea>
+
+          <button type="submit">저장</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+     
+      document.addEventListener("DOMContentLoaded", async function () {
+        try {
+          const authResponse = await fetch("/auth/status");
+          const authStatus = await authResponse.json();
+
+          // 로그인 상태에 따라 메시지와 폼 표시
+          if (authStatus.loggedIn) {
+            // 로그인된 상태
+            document.getElementById("login-message").style.display = "none";
+            document.querySelector(".review_form_container").style.display =
+              "block";
+            document.getElementById("reviewer").value = authStatus.nickname; // 닉네임 설정
+          } else {
+            // 비로그인 상태
+            document.getElementById("login-message").style.display = "block";
+            document.querySelector(".review_form_container").style.display =
+              "none";
+          }
+        } catch (error) {
+          console.error("로그인 상태 확인 중 오류 발생:", error);
+          // 오류 발생 시 로그인 메시지 표시
+          document.getElementById("login-message").style.display = "block";
+          document.querySelector(".review_form_container").style.display =
+            "none";
+        }
+      });
+
+      
+      // URL 파라미터에서 리뷰 정보를 가져와서 폼에 설정
+      window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const storeName = urlParams.get("storeName");
+        const restaurantID = urlParams.get("id");
+
+        if (storeName) document.getElementById("storeName").value = storeName;
+        if (restaurantID)
+          document.getElementById("restaurant-id").value = restaurantID;
+      };
+
+      // 별점 선택 함수
+      function setupStarRating(ratingId, inputId) {
+        const stars = document.querySelectorAll(`#${ratingId} span`);
+        const input = document.getElementById(inputId);
+
+        stars.forEach((star) => {
+          star.addEventListener("click", () => {
+            const rating = star.getAttribute("data-value");
+            input.value = rating;
+
+            // 선택된 별점에 따라 색상 변경
+            stars.forEach((s) => {
+              s.style.color =
+                s.getAttribute("data-value") <= rating ? "gold" : "gray";
+            });
+          });
+        });
+      }
+
+      // DOM 로드 후 별점 설정
+      window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const storeName = urlParams.get("storeName");
+        const restaurantID = urlParams.get("id");
+
+        if (storeName) document.getElementById("storeName").value = storeName;
+        if (restaurantID)
+          document.getElementById("restaurant-id").value = restaurantID;
+
+        // 각 별점 영역에 대한 설정 호출
+        setupStarRating("taste-rating", "tasteRating");
+        setupStarRating("access-rating", "accessRating");
+        setupStarRating("revisit-rating", "revisitRating");
+      };
+
+      document
+        .getElementById("reviewForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault(); // 기본 폼 제출 동작 방지
+
+          const formData = new FormData(this);
+          const restaurantID = document.getElementById("restaurant-id").value;
+
+          try {
+            const response = await fetch("/reviews/submit", {
+              method: "POST",
+              body: formData,
+            });
+
+            if (response.ok) {
+              // 서버 요청 성공 시 가게 상세 페이지로 리다이렉션
+              window.location.href = `/store_details?id=${restaurantID}`;
+            } else {
+              const errorMessage = await response.text();
+              alert(`리뷰 저장 실패: ${errorMessage}`);
+            }
+          } catch (error) {
+            console.error("리뷰 저장 중 오류 발생:", error);
+            alert("리뷰 저장 중 오류 발생");
+          }
+        });
+    </script>
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="header_footer.js"></script>
+
+    <!-- 반응형 -->
+  </body>
+</html>

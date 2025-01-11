@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Page</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png" />
+    <link rel="stylesheet" href="new.css" />
+    <!-- 기존 CSS 파일을 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더와 푸터 스타일 -->
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+    <!-- NEW! -->
+    <div class="sort-button-container">
+      <button class="sort-button">NEW!</button>
+    </div>
+
+    <!-- 새로운 가게 리스트 -->
+    <div class="new-store-list">
+      <div class="new-store-item">
+      
+      </div>
+    </div>
+    <script>
+       document.addEventListener('DOMContentLoaded', async () => {
+        const storeListContainer = document.querySelector('.new-store-list');
+        try {
+            const response = await fetch('/new'); // '/new' API 요청
+            if (!response.ok) throw new Error('서버 응답 오류');
+            const stores = await response.json(); // 가게 데이터 받기
+
+            // 가게 리스트 렌더링
+            storeListContainer.innerHTML = ''; // 기존 내용을 지우기
+            stores.forEach(store => {
+                const storeItem = document.createElement('div');
+                storeItem.classList.add('new-store-item');
+
+                storeItem.innerHTML = `
+              <img src="${store.image_url || 'default.jpg'}" class="store-img" alt="${store.restaurant_name}">
+              <div class="store-details">
+                  <p class="store-name">${store.restaurant_name}</p>
+                  <button class="details-button" onclick="location.href='store_details?id=${store.restaurant_id}'">자세히 보기</button>
+              </div>
+            `;
+            storeListContainer.appendChild(storeItem);
+          });
+        } catch (error) {
+            console.error('가게 데이터를 가져오는 중 오류 발생:', error);
+        }
+    });
+    </script>
+    
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="header_footer.js"></script>
+
+    <!-- 반응형 -->
+  </body>
+</html>

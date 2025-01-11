@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Page</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png" />
+    <link rel="stylesheet" href="review_details.css" />
+    <!-- 기존 CSS 파일을 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더와 푸터 스타일 -->
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- Review Details -->
+    <div class="review-details-container"></div>
+
+    <script src="header_footer.js"></script>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const reviewId = urlParams.get("reviewId");
+
+      if (!reviewId) {
+        // 리뷰 ID가 없을 경우 샘플 데이터 표시
+        const sampleReview = getSampleReview();
+        renderReviewDetails(sampleReview);
+      } else {
+        // 리뷰 ID가 있을 경우 데이터베이스에서 가져오거나 예외 처리
+        fetchReviewDetails(reviewId);
+      }
+
+      async function fetchReviewDetails(id) {
+    try {
+      const response = await fetch(`/api/reviews/${id}`);
+      if (!response.ok) throw new Error("리뷰 데이터를 가져오는 중 오류 발생");
+
+      const review = await response.json();
+      renderReviewDetails(review);
+    } catch (error) {
+      console.error(error);
+      document.body.innerHTML = "<p>리뷰 데이터를 가져오는 중 오류가 발생했습니다.</p>";
+    }
+  }
+
+    
+
+      function renderReviewDetails(review) {
+        const container = document.querySelector(".review-details-container");
+        container.innerHTML = `
+          <div class="review-header">
+              <h2>${review.restaurant_name || "알 수 없는 레스토랑"}</h2>
+              <p>${review.reviewer || "익명"}</p>
+              <p>작성 시간: ${new Date(review.created_at).toLocaleString()}</p>
+          </div>
+          ${
+            review.review_photo
+              ? `<img src="/review/${review.review_photo}" alt="리뷰 이미지" class="review-image">`
+              : "<p></p>"
+          }
+          <div class="ratings">
+              <p>맛: ${generateStars(review.taste_rating)}</p>
+              <p>접근성: ${generateStars(review.access_rating)}</p>
+              <p>재방문: ${generateStars(review.revisit_rating)}</p>
+          </div>
+          <p class="content">
+              ${review.review_text || "내용이 없습니다."}
+          </p>
+          <div class="button-container">
+              <button onclick="location.href='recent_reviews.html?page=1'" 
+                      style="padding: 10px 20px; background-color: #8E89F6; color: #fff; border: none; border-radius: 6px; font-size: 1em; cursor: pointer; font-weight: bold;">
+                  목록으로 돌아가기
+              </button>
+          </div>
+        `;
+      }
+
+      function generateStars(rating) {
+        const maxStars = 5;
+        let stars = "";
+        for (let i = 1; i <= maxStars; i++) {
+          stars += i <= rating ? "⭐" : "☆";
+        }
+        return stars;
+      }
+    </script>
+
+    <!-- 반응형 -->
+  </body>
+</html>

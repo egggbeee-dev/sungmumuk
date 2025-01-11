@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Page</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png" />
+    <link rel="stylesheet" href="menu.css" />
+    <!-- 기존 CSS 파일을 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더와 푸터 스타일 -->
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- 중간 부분 섹션 (메뉴 검색 부분) -->
+    <section class="middle-section">
+      <div class="menu-buttons">
+        <div class="menu-button">
+          <span class="menu-icon">🍚</span>
+          <p>한식</p>
+        </div>
+        <div class="menu-button">
+          <span class="menu-icon">🍣</span>
+          <p>일식</p>
+        </div>
+        <div class="menu-button">
+          <span class="menu-icon">🍲</span>
+          <p>중식</p>
+        </div>
+        <div class="menu-button">
+          <span class="menu-icon">🍖</span>
+          <p>양식</p>
+        </div>
+        <div class="menu-button">
+          <span class="menu-icon">🥗</span>
+          <p>샐러드/포케</p>
+        </div>
+        <div class="menu-button">
+          <span class="menu-icon">🍷</span>
+          <p>술집</p>
+        </div>
+        <div class="menu-button">
+          <span class="menu-icon">🍰</span>
+          <p>디저트</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 가게 리스트 섹션 -->
+    <section class="store-list-section">
+      <div class="sort-container">
+        <select id="sort-options" class="sort-dropdown">
+          <option value="favorite">찜 많은 순</option>
+          <option value="review">리뷰 많은 순</option>
+          <option value="sujeong">수정캠퍼스</option>
+          <option value="unjeong">운정캠퍼스</option>
+        </select>
+      </div>
+
+      <!-- 필터링된 가게 목록이 렌더링될 위치 -->
+      <div id="store-list" class="store-list"></div>
+    </section>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="header_footer.js"></script>
+    <script src="menu.js"></script>
+    <!-- JavaScript 파일을 링크 -->
+
+    <!-- 반응형 -->
+  </body>
+</html>
