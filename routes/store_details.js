@@ -2,22 +2,18 @@ const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2');
 const path = require('path');
-
+const pool = require('../config/db');
 const app = express();
-
-// 정적 파일 제공
-
-// 정적 파일 제공
-//app.use('/restaurant', express.static(path.join(__dirname, '../restaurant')));
 
 
 // MySQL 연결 설정
 const connection = mysql.createConnection({
-    host: 'localhost',       // MySQL 호스트
-    user: 'root',            // MySQL 사용자
-    password: 'root',        // MySQL 비밀번호
-    database: 'sungmukdb'    // 사용할 데이터베이스 이름
+    host: 'sungmumuk.crugokai46jv.ap-southeast-2.rds.amazonaws.com',       // MySQL 호스트
+    user: 'admin',            // MySQL 사용자
+    password: 'sungmumuk',        // MySQL 비밀번호
+    database: 'sungmumuk'    // 사용할 데이터베이스 이름
 });
+
 
 
 

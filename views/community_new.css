@@ -1,0 +1,116 @@
+/* 기본 스타일 */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5fa;
+}
+
+.page-header {
+  text-align: center;
+  color: #7a69c4;
+  font-size: 30px;
+  font-family: "Black Han Sans", sans-serif;
+  margin: 0;
+  padding: 20px 0;
+  background-color: #f4e7f9;
+  border-bottom: 1px solid #e6e6fa;
+}
+
+/* 네비게이션 바 스타일 */
+.navigation {
+  display: flex;
+  justify-content: center; /* 가운데 정렬 */
+  gap: 20px; /* 링크들 사이의 간격 */
+  margin: 20px 0; /* 위아래 여백 */
+}
+
+.navigation a {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #7a69c4; /* 텍스트 색상 */
+  text-decoration: none; /* 밑줄 제거 */
+  font-family: "Anton", sans-serif;
+  font-size: 23px; /* 링크 폰트 크기 */
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* 마우스를 올렸을 때의 효과 */
+.navigation a:hover {
+  color: #5a47a5; /* 마우스를 올렸을 때 텍스트 색상 변경 */
+  transform: scale(1.1); /* 살짝 커지는 효과 */
+}
+
+/* 메인 영역 */
+main {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto 50px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 폼 스타일 */
+form {
+  margin-top: 20px;
+  width: 100%; /* 부모 크기에 맞춰서 폼 요소들 크기 조정 */
+}
+
+form label {
+  font-size: 20px;
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+}
+
+form select,
+form input[type="text"],
+form textarea,
+form input[type="file"] {
+  width: 100%; /* 모든 입력 요소들의 가로 길이를 동일하게 설정 */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+form textarea {
+  resize: none;
+}
+
+/* form 버튼만 가운데 정렬 */
+form button {
+  display: block;
+  margin: 20px auto; /* 위아래 여백과 자동으로 좌우 정렬 */
+  background-color: #9081d1;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 200px; /* 버튼 크기 고정 */
+}
+
+/* 버튼 호버 효과 */
+form button:hover {
+  background-color: #6957b8;
+}
+@media (max-width: 1024px) {
+  main {
+    width: calc(100% - 32px);
+  }
+  .page-header {
+    margin-top: 60px;
+  }
+  .navigation a {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 14px;
+  }
+  .navigation {
+    gap: 0;
+  }
+}

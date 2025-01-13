@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>찜한 가게 전체 보기</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png">
+    <link rel="stylesheet" href="favorites.css"> <!-- 페이지 스타일 -->
+    <link rel="stylesheet" href="header_footer.css"> <!-- 헤더와 푸터 스타일 -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <!-- 메인 컨텐츠 -->
+ <!-- 메인 컨텐츠 -->
+</div>
+<div class="container">
+        <h1>찜한 가게</h1>
+    </header>
+
+    <!-- 검색 섹션 -->
+    <div class="search-section">
+        <input type="text" id="search-input" placeholder="가게명 또는 카테고리로 검색" onkeypress="handleKeyPress(event)">
+        <button id="search-button" onclick="searchStores()">🔍</button>
+    </div>
+
+    <!-- 가게 목록 섹션-->
+    <div id="login-message" style="display: none; text-align: center; margin-top: 20px;">
+        <p>찜한 가게를 보려면 <a href="login.html" style="color: blue;">로그인</a> 해주세요!</p>
+    </div>
+    <div id="favorites-container" style="display: none;"></div>
+
+    <!-- 하단 버튼 섹션 -->
+    <div class="action-buttons">
+        <button onclick="removeFromFavorites()">찜에서 삭제하기</button>
+        <button onclick="goToCompare()">비교함으로 가기</button>
+    </div>
+</div>
+
+<!-- Footer Placeholder -->
+<div id="footer-placeholder"></div>
+
+<!-- 스크립트 -->
+<script>
+
+// DOMContentLoaded 이벤트
+document.addEventListener('DOMContentLoaded', function () {
+    // 더미 데이터 렌더링
+    renderFavorites(mockFavorites);
+});
+    // 로그인 상태 확인
+   document.addEventListener('DOMContentLoaded', async function () {
+        try {
+            // 로그인 상태 확인
+            const authResponse = await fetch('/auth/status');
+            const authStatus = await authResponse.json();
+    
+            if (!authStatus.loggedIn) {
+                // 비로그인 상태 처리
+                console.log("인증 상태 확인: 비로그인 사용자입니다.");
+                document.getElementById('login-message').style.display = 'block';
+                document.querySelectorAll('.action-buttons').forEach(button => {
+                    button.style.display = 'none';
+                });
+                
+            } else {
+                // 로그인된 상태
+                console.log("인증 상태 확인: 로그인된 사용자입니다.");
+    
+                // /favorites API 호출
+                try {
+                    const response = await fetch('/favorites'); // API 호출
+                    if (response.ok) {
+                        const data = await response.json(); // 응답 데이터 파싱
+                        console.log('API 응답 데이터:', data);
+    
+                        if (data && data.rows && Array.isArray(data.rows)) {
+                            const stores = data.rows; // rows를 stores 변수에 할당
+    
+                            if (stores.length > 0) {
+                                console.log('가게 데이터:', stores);
+                                renderFavorites(stores); // 가게 데이터 렌더링
+                            } else {
+                                console.error('가게 데이터가 존재하지 않습니다.');
+                                document.getElementById('favorites-container').innerHTML = "<p>찜한 가게가 없습니다.</p>";
+                            }
+                        }
+                    } else {
+                        console.error('찜한 가게 데이터를 가져오는 중 오류 발생');
+                    }
+                } catch (error) {
+                    console.error('API 호출 중 오류 발생:', error);
+                }
+            }
+        } catch (error) {
+            console.error('로그인 상태 확인 중 오류 발생:', error);
+        }
+    });
+    /**
+     * 찜한 가게 데이터를 화면에 렌더링하는 함수
+     * @param {Array} stores - 가게 데이터 배열
+     */
+     function renderFavorites(stores) {
+        const container = document.getElementById('favorites-container');
+        container.style.display = 'block'; // 컨테이너 표시
+        
+        // 가게 데이터 렌더링
+        container.innerHTML = stores.map(store => {
+            // 요일 및 운영시간 데이터 합치기
+            const days = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+            const hours = [
+                store.opening_hours_mon,
+                store.opening_hours_tue,
+                store.opening_hours_wed,
+                store.opening_hours_thu,
+                store.opening_hours_fri,
+                store.opening_hours_sat,
+                store.opening_hours_sun
+            ];
+    
+            const openingHours = days.map((day, index) => 
+            `<span>${day}: ${hours[index] || '휴무'}</span>` // 각 요일 데이터에 <span> 추가
+        ).join('<br>');
+    
+            // HTML 템플릿
+            return `
+            <div class="store-box" data-url="/store_details?id=${store.restaurant_id}">
+                <img src="${store.restaurant_image}" alt="가게 이미지" class="store-image">
+                <div class="store-info">
+                    <h2 class="store-name">${store.restaurant_name}</h2>
+                    <p><strong>카테고리:</strong> ${store.category}</p>
+                    <p><strong>캠퍼스:</strong> ${store.campus}</p>
+                    <p><strong>주소:</strong> ${store.address}</p>
+                    <p><strong>운영시간:</strong><br> ${openingHours}</p>
+                </div>
+                <input type="checkbox" class="store-toggle" data-store-id="${store.restaurant_id}">
+            </div> 
+            `;
+        }).join(''); // map 결과를 하나의 HTML 문자열로 병합
+    }
+    // 엔터 키로 검색 실행
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            searchStores();
+        }
+    }
+    
+    // 검색 기능
+    function searchStores() {
+        const input = document.getElementById('search-input').value.trim().toLowerCase();
+        const stores = document.getElementsByClassName('store-box');
+        
+        Array.from(stores).forEach(store => {
+            const name = store.querySelector('.store-name').textContent.toLowerCase();
+            const category = store.querySelector('.store-info p').textContent.toLowerCase();
+            if (name.includes(input) || category.includes(input)) {
+                store.style.display = ''; // 검색어에 일치하는 경우 표시
+            } else {
+                store.style.display = 'none'; // 검색어에 일치하지 않는 경우 숨기기
+            }
+        });
+    }
+
+    // 찜에서 삭제하기 기능
+    async function removeFromFavorites() {
+        const toggles = document.querySelectorAll('.store-toggle:checked');
+        if (toggles.length === 0) {
+            alert('삭제할 가게를 선택해주세요.');
+            return;
+        }
+    
+        const selectedIds = Array.from(toggles).map(toggle => {
+            const id = parseInt(toggle.dataset.storeId, 10);
+            return id;
+        });        
+    
+        try {
+            const response = await fetch('/api/remove-favorites', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ storeIds: selectedIds })
+            });
+    
+            console.log('응답 상태:', response.status); // 디버깅
+            if (response.ok) {
+                toggles.forEach(toggle => {
+                    toggle.closest('.store-box').remove();
+                });
+                alert('선택한 가게가 찜 목록에서 삭제되었습니다.');
+            } else {
+                const errorData = await response.json();
+                console.error('서버 오류:', errorData); // 디버깅
+                alert(`삭제 중 오류 발생: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('통신 오류:', error); // 디버깅
+            alert('서버와 통신 중 문제가 발생했습니다.');
+        }
+    }    
+
+    // 비교함으로 가기 기능
+    async function goToCompare() {
+        // 로그인 상태 확인
+        const authResponse = await fetch('/auth/status');
+        const authStatus = await authResponse.json();
+    
+        if (!authStatus.loggedIn) {
+            alert('비교함을 사용하려면 로그인해야 합니다.');
+            return;
+        }
+    
+        const toggles = document.querySelectorAll('.store-toggle:checked');
+        if (toggles.length > 2) {
+            alert('비교함에는 최대 2개를 담을 수 있습니다.');
+            return;
+        }
+        if (toggles.length === 0) {
+            alert('비교함으로 보낼 가게를 선택해주세요.');
+            return;
+        }
+    
+        const selectedStoreIds = Array.from(toggles).map(toggle => toggle.getAttribute('data-store-id'));
+        try {
+            const response = await fetch('/api/compare', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ storeIds: selectedStoreIds, userId: authStatus.user.id }),
+            });
+    
+            if (response.ok) {
+                alert('선택한 가게가 비교함에 추가되었습니다.');
+                window.location.href = `compare.html`;
+            } else {
+                const errorData = await response.json();
+                alert(`비교함에 추가 중 오류 발생: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('서버와 통신 중 문제가 발생했습니다.');
+        }
+    }
+    
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('favorites-container');
+    
+        container.addEventListener('click', (event) => {
+            const box = event.target.closest('.store-box');
+            if (!box) return;
+    
+            // 클릭한 요소가 input 태그인 경우 이벤트를 무시
+            if (event.target.tagName === 'INPUT') return;
+    
+            const url = box.dataset.url;
+            if (url) {
+                console.log('이동할 URL:', url); // 디버깅 로그
+                window.location.href = url;
+            }
+        });
+    });
+</script>
+<script src="header_footer.js"></script> <!-- 헤더와 푸터 로드 -->

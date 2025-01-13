@@ -1,0 +1,37 @@
+.slideshow-container {
+  overflow: hidden;
+}
+@media (max-width: 1600px) {
+}
+@media (max-width: 1366px) {
+}
+@media (max-width: 1024px) {
+}
+@media (max-width: 768px) {
+}
+
+@media (max-width: 1024px) {
+  #header-placeholder + section {
+    padding-top: 60px;
+  }
+  .container {
+    padding: 110px 16px 50px 16px;
+    box-sizing: border-box;
+  }
+  h1,
+  h2 {
+    font-size: 28px;
+  }
+  * {
+    box-sizing: border-box;
+    word-break: keep-all;
+  }
+  .page-header {
+    font-size: 24px;
+    padding-bottom: 14px;
+  }
+
+  .start-now h1 {
+    font-size: 32px;
+  }
+}

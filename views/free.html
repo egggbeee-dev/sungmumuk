@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Community</title>
+    <link rel="icon" href="성뭐먹3.png" type="image/png" />
+    <link rel="stylesheet" href="community_sub.css" />
+    <!-- 스타일 시트 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더 및 푸터 스타일 -->
+    <script src="header_footer.js" defer></script>
+    <!-- 헤더 및 푸터 동적 로드 -->
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Gothic&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <div
+      id="login-message"
+      style="display: none; text-align: center; margin-top: 20px"
+    >
+      <p>
+        커뮤니티를 보려면
+        <a href="login.html" style="color: blue">로그인</a> 해주세요!
+      </p>
+    </div>
+
+    <div class="search-bar-container">
+      <div class="search-bar">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="궁금한 내용을 검색해보세요!"
+        />
+        <button id="search-btn">🔍</button>
+      </div>
+      <form action="free_new.html" method="get" class="new-post-form">
+        <button id="new-post-btn" type="submit">새 글 작성</button>
+      </form>
+    </div>
+
+    <div id="post-list">
+      <!-- 게시물 목록이 동적으로 여기에 추가됨 -->
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const postList = document.getElementById("post-list");
+        const loginMessage = document.getElementById("login-message");
+        const searchBar = document.querySelector(".search-bar-container");
+        const searchInput = document.getElementById("search-input");
+        const searchBtn = document.getElementById("search-btn");
+        const newPostBtn = document.getElementById("new-post-btn");
+
+        let currentUserId = 10; // 현재 로그인한 사용자 ID
+
+              // 예시 게시글 데이터
+              const examplePosts = [
+          {
+            post_id: 1,
+            category: "맛집탐방",
+            title: "대학로 하이디라오",
+            content: "맛있었어!!.",
+            user_id: 1,
+          },
+          {
+            post_id: 2,
+            category: "맛집탐방",
+            title: "샤브온당",
+            content: "얼큰 샤브 맛있었어!",
+            user_id: 2,
+          },
+          {
+            post_id: 3,
+            category: "맛집탐방",
+            title: "언앨리셰프",
+            content: "다 너무 맛있었어 :) ",
+            user_id: 3,
+          },
+        ];
+
+            // 게시글 목록 불러오기
+            function loadPosts() {
+              renderPosts(examplePosts); // 하드코딩된 예시 데이터를 사용
+    }
+
+    
+
+        // 로그인 상태 확인
+        /*
+        async function checkAuthStatus() {
+          try {
+            const response = await fetch("/auth/status");
+            const authStatus = await response.json();
+
+            if (!authStatus.loggedIn) {
+              loginMessage.style.display = "block";
+              postList.style.display = "none";
+              newPostBtn.style.display = "none";
+              searchBar.style.display = "none";
+            } else {
+              loginMessage.style.display = "none";
+              postList.style.display = "block";
+              newPostBtn.style.display = "inline-block";
+              searchBar.style.display = "flex";
+              currentUserId = authStatus.userId; // 로그인된 사용자 ID 저장
+              loadPosts();
+            }
+          } catch (error) {
+            console.error("로그인 상태 확인 오류:", error);
+          }
+        }
+          */
+
+        /* 게시글 목록 불러오기
+        async function loadPosts() {
+          try {
+            const response = await fetch("/free/posts");
+            const posts = await response.json();
+            renderPosts(posts);
+          } catch (error) {
+            console.error("게시물 로드 오류:", error);
+          }
+        }*/
+
+        // 게시글 목록 표시 함수
+        function renderPosts(posts) {
+          postList.innerHTML = "";
+          if (posts.length === 0) {
+            postList.innerHTML = "<p>게시글이 없습니다.</p>";
+            return;
+          }
+          posts.forEach((post) => {
+            const postDiv = document.createElement("div");
+            postDiv.classList.add("post");
+
+            const titleLink = document.createElement("a");
+            titleLink.href = `/free_post.html?id=${post.post_id}`;
+            titleLink.textContent = `${post.category} ${post.title}`;
+            titleLink.style.color = "blue";
+            titleLink.style.textDecoration = "none";
+            postDiv.appendChild(titleLink);
+
+            const contentDiv = document.createElement("div");
+            contentDiv.textContent = post.content.slice(0, 100) + "...";
+            postDiv.appendChild(contentDiv);
+
+            // 작성자만 수정/삭제 버튼 표시
+            if (currentUserId === post.user_id) {
+              const editBtn = document.createElement("button");
+              editBtn.textContent = "수정";
+              editBtn.addEventListener("click", () => editPost(post));
+              postDiv.appendChild(editBtn);
+
+              const deleteBtn = document.createElement("button");
+              deleteBtn.textContent = "삭제";
+              deleteBtn.style.backgroundColor = "red";
+              deleteBtn.style.color = "white";
+              deleteBtn.addEventListener("click", () =>
+                deletePost(post.post_id)
+              );
+              postDiv.appendChild(deleteBtn);
+            }
+
+            postList.appendChild(postDiv);
+          });
+        }
+
+        // 페이지네이션 버튼 렌더링
+        function renderPagination(totalPosts) {
+          pagination.innerHTML = ""; // 기존 페이지 버튼들 삭제
+          const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+          // '맨 처음 페이지로 이동' 버튼
+          const firstPageBtn = document.createElement("button");
+          firstPageBtn.textContent = "<<";
+          firstPageBtn.addEventListener("click", function () {
+            currentPage = 1;
+            loadPosts(currentPage);
+          });
+          pagination.appendChild(firstPageBtn);
+
+          // '이전 페이지' 버튼
+          const prevPageBtn = document.createElement("button");
+          prevPageBtn.textContent = "<";
+          prevPageBtn.addEventListener("click", function () {
+            if (currentPage > 1) {
+              currentPage--;
+              loadPosts(currentPage);
+            }
+          });
+          pagination.appendChild(prevPageBtn);
+
+          // 페이지 번호 버튼들 (10페이지씩 보이게 수정)
+          const startPage = Math.floor((currentPage - 1) / 10) * 10 + 1; // 시작 페이지 번호
+          const endPage = Math.min(startPage + 9, totalPages); // 끝 페이지 번호 (최대 10페이지)
+
+          for (let i = startPage; i <= endPage; i++) {
+            const pageBtn = document.createElement("button");
+            pageBtn.textContent = i;
+
+            // 버튼 스타일 설정
+
+            prevPageBtn.style.margin = "0 3px";
+            pageBtn.style.width = "40px"; // 버튼 크기 고정
+            pageBtn.style.margin = "0 5px"; // 버튼 간 여백 추가
+            pageBtn.style.display = "flex"; // 중앙 정렬을 위해 flex 사용
+            pageBtn.style.alignItems = "center"; // 수직 중앙 정렬
+            pageBtn.style.justifyContent = "center"; // 수평 중앙 정렬
+            pageBtn.style.padding = "5px 10px"; // 패딩 추가
+            pageBtn.style.fontSize = "16px"; // 글자 크기 설정
+
+            // 현재 페이지는 색상 변경
+            if (i === currentPage) {
+              pageBtn.style.backgroundColor = "#8E89F6"; // 진한 색상
+              pageBtn.style.color = "#fff"; // 텍스트 색상 변경
+              pageBtn.style.fontWeight = "bold"; // 글자 두껍게
+            }
+
+            pageBtn.addEventListener("click", function () {
+              currentPage = i;
+              loadPosts(currentPage);
+            });
+            pagination.appendChild(pageBtn);
+          }
+
+          // '다음 페이지' 버튼
+          const nextPageBtn = document.createElement("button");
+          nextPageBtn.textContent = ">";
+          nextPageBtn.addEventListener("click", function () {
+            if (currentPage < totalPages) {
+              currentPage++;
+              loadPosts(currentPage);
+            }
+          });
+          pagination.appendChild(nextPageBtn);
+
+          // '마지막 페이지로 이동' 버튼
+          const lastPageBtn = document.createElement("button");
+          lastPageBtn.textContent = ">>";
+          lastPageBtn.addEventListener("click", function () {
+            currentPage = totalPages;
+            loadPosts(currentPage);
+          });
+          pagination.appendChild(lastPageBtn);
+
+          // 페이지네이션 바 스타일을 가로로 설정
+          pagination.style.display = "flex";
+          pagination.style.justifyContent = "center"; // 버튼들을 가로로 중앙 정렬
+          pagination.style.alignItems = "center"; // 수직 중앙 정렬
+          lastPageBtn.style.margin = "0 3px";
+        }
+        // 게시글 수정
+        async function editPost(post) {
+          const newContent = prompt("수정할 내용을 입력하세요:", post.content);
+          if (!newContent) return;
+
+          try {
+            const response = await fetch(`/free/posts/${post.post_id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ content: newContent }),
+            });
+            if (response.ok) {
+              alert("게시글이 수정되었습니다.");
+              loadPosts();
+            } else {
+              alert("게시글 수정에 실패했습니다.");
+            }
+          } catch (error) {
+            console.error("게시글 수정 오류:", error);
+          }
+        }
+
+        // 게시글 삭제
+        async function deletePost(postId) {
+          const confirmDelete = confirm("정말 삭제하시겠습니까?");
+          if (!confirmDelete) return;
+
+          try {
+            const response = await fetch(`/free/posts/${postId}`, {
+              method: "DELETE",
+            });
+            if (response.ok) {
+              alert("게시글이 삭제되었습니다.");
+              loadPosts();
+            } else {
+              alert("게시글 삭제에 실패했습니다.");
+            }
+          } catch (error) {
+            console.error("게시글 삭제 오류:", error);
+          }
+        }
+
+        // 검색 버튼 클릭 이벤트 추가
+        searchBtn.addEventListener("click", async function () {
+          const query = searchInput.value.trim();
+          if (!query) {
+            alert("검색어를 입력해주세요.");
+            return;
+          }
+
+          try {
+            const response = await fetch(
+              `/free/search?query=${encodeURIComponent(query)}`
+            );
+            if (response.ok) {
+              const posts = await response.json();
+              renderPosts(posts);
+            } else {
+              alert("검색 중 오류가 발생했습니다.");
+            }
+          } catch (error) {
+            console.error("검색 요청 오류:", error);
+          }
+        });
+
+        //checkAuthStatus(); // 로그인 상태 확인
+        loadPosts();
+      });
+    </script>
+    
+
+    <footer class="footer">
+      <div class="footer-logo">
+        <img src="성뭐먹2.png" alt="Logo" class="footer-logo-img" />
+      </div>
+      <div class="footer-info">
+        <!-- 추가적인 정보 -->
+      </div>
+    </footer>
+
+    <!-- 반응형 -->
+  </body>
+</html>

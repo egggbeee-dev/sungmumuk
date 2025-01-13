@@ -1,0 +1,80 @@
+/* 기본 스타일 */
+
+/* 한국어는 Black Han Sans, 영어는 Anton 적용 */
+body {
+  font-family: 'Black Han Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #FFEBFF; /* 배경색 */
+}
+
+/* 영어 텍스트에 Anton 폰트 적용 */
+h1, h2, h3, .banner-text h2, button, .sort-button {
+  font-family: 'Anton', sans-serif; /* 영어 폰트 적용 */
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8eaf6;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+#page-title {
+  font-size: 36px;
+  color: #6a5acd;
+  margin-bottom: 30px;
+}
+
+.category-box {
+  background-color: #ffffff;
+  border: 2px solid #b9a3d3;
+  border-radius: 10px;
+  margin: 20px auto;
+  padding: 10px;
+  width: 50%;
+  position: relative;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+.category-box  + .category-box {
+  
+  margin-bottom: 120px;
+}
+.category-box:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-label {
+  position: absolute;
+  top: -15px;
+  left: 10px;
+  background-color: #a698db;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 25px;
+}
+
+.recent-post {
+  padding: 20px;
+  background-color: #fff;
+  color: #333;
+  text-align: left;
+  border: 1px solid #d3c7f1;
+  border-radius: 5px;
+  min-height: 50px;
+  font-size: 18px;
+  font-family: sans-serif; 
+  font-weight: bold; /
+}
+
+@media (max-width: 1024px) {
+  #page-title{
+    margin-top: 110px;
+  }
+  .category-box{
+    width: calc(100% - 32px);
+  }
+}

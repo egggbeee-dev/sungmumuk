@@ -1,0 +1,140 @@
+/* 기본 스타일 */
+body {
+  font-family: "Black Han Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffebff;
+}
+
+/* 컨테이너 스타일 */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 상단 정렬 */
+  padding: 20px;
+  position: relative; /* 자식 요소를 상대적으로 배치할 수 있도록 설정 */
+  width: 100%; /* 컨테이너 전체 너비 */
+}
+
+/* 제목 스타일 */
+h1 {
+  color: #8e89f6;
+  font-size: 35px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* 폼 스타일 */
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* 부모 컨테이너 너비 사용 */
+  max-width: 600px; /* 최대 너비 제한 */
+  margin-top: 20px;
+}
+
+label,
+small,
+input,
+textarea {
+  align-self: flex-start; /* 개별적으로 왼쪽 정렬 */
+}
+/* 라벨 스타일 */
+label {
+  align-self: flex-start; /* 왼쪽 정렬 */
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+/* 입력 필드 스타일 */
+input[type="text"],
+input[type="url"],
+textarea {
+  width: 100%; /* 부모의 100% 너비 */
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #8e89f6;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* 텍스트 영역 스타일 */
+textarea {
+  resize: none;
+  height: 250px;
+}
+
+/* 설명 메시지 스타일 */
+.form-note {
+  font-size: 14px;
+  color: #666;
+  margin-top: 0px; /* 폼과의 간격 */
+  margin-bottom: 30px;
+  align-self: flex-start; /* 부모 컨테이너 기준 왼쪽 정렬 */
+}
+
+/* 버튼 스타일 */
+button {
+  align-self: center;
+  background-color: #8e89f6;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #6d66d6;
+}
+/* 팝업창 배경 (오버레이) */
+.popup-overlay {
+  position: fixed; /* 화면 고정 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  z-index: 999; /* 다른 요소보다 위에 표시 */
+  display: none; /* 기본적으로 숨김 */
+}
+
+/* 팝업창 스타일 */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 화면 중앙으로 이동 */
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+  text-align: center;
+  z-index: 1000; /* 팝업창을 오버레이보다 위에 표시 */
+  display: none; /* 기본적으로 숨김 */
+}
+
+/* 팝업창 텍스트 */
+.popup p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* 팝업창 버튼 */
+.popup button {
+  background: #8e89f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.popup button:hover {
+  background: #6d66d6;
+}

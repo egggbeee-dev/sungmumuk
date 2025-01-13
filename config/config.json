@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "adimin",
+    "password": "sungmumuk",
+    "database": "sungmumuk",
+    "host": "sungmumuk.crugokai46jv.ap-southeast-2.rds.amazonaws.com",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "admin",
+    "password": "sungmumuk",
+    "database": "sungmumuk_test",
+    "host": "sungmumuk.crugokai46jv.ap-southeast-2.rds.amazonaws.com",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "admin",
+    "password": "sungmumuk",
+    "database": "sungmumuk_production",
+    "host": "sungmumuk.crugokai46jv.ap-southeast-2.rds.amazonaws.com",
+    "dialect": "mysql"
+  }
+}

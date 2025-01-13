@@ -1,0 +1,246 @@
+/* 한국어는 Black Han Sans, 영어는 Anton 적용 */
+body {
+  font-family: "Black Han Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffebff; /* 배경색 */
+}
+
+/* 영어 텍스트에 Anton 폰트 적용 */
+h1,
+h2,
+h3,
+.banner-text h2,
+button,
+.sort-button {
+  font-family: "Anton", sans-serif; /* 영어 폰트 적용 */
+}
+
+/* 헤더 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  background-color: #fff; /* 흰색 배경 */
+  border-bottom: 1px solid #8e89f6; /* 경계선 */
+  text-align: center;
+}
+
+.header img {
+  width: 270px;
+  height: auto;
+  margin-top: 20px; /* 로고를 밑으로 내리기 위해 상단에 20px 여백 추가 */
+}
+
+.sort-button {
+  margin-top: 50px;
+  padding: 10px 20px;
+  background-color: #afacfb;
+  border: none;
+  color: white;
+  font-size: 1.2em;
+  border-radius: 25px;
+  cursor: pointer;
+  font-family: "Black Han Sans", sans-serif;
+  text-align: left;
+  margin-bottom: 20px;
+  margin-left: 600px;
+}
+
+/* 가게 리스트 */
+.new-store-list {
+  display: flex;
+  flex-direction: column; /* 가게 상자들을 위아래로 정렬 */
+  justify-content: center;
+  gap: 20px; /* 각 가게 상자 사이 간격 */
+  margin-bottom: 40px;
+}
+
+.new-store-item {
+  display: flex; /* 이미지와 텍스트를 가로로 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+  background-color: #fff;
+  border: 1px solid #8e89f6;
+  border-radius: 10px;
+  padding: 20px; /* 상자 내부 패딩 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 750px; /* 상자 너비 설정 */
+  height: 200px; /* 상자 높이 증가 */
+  margin: 0 auto; /* 가운데 정렬 */
+}
+
+.store-img {
+  width: 200px; /* 이미지 너비 */
+  height: 150px; /* 이미지 높이 */
+  object-fit: cover; /* 이미지 비율 유지 */
+  border-radius: 5px;
+  margin-right: 20px; /* 이미지와 텍스트 사이 간격 */
+}
+
+.store-details {
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+  font-family: "Black Han Sans", sans-serif;
+}
+
+.store-name {
+  font-size: 2em;
+  color: #8e89f6;
+  margin-bottom: 10px;
+}
+
+.store-description {
+  font-size: 1.2em; /* 설명 글씨 */
+  color: #333;
+}
+
+/* 자세히 보기 버튼 스타일 */
+.details-button {
+  padding: 10px 20px;
+  background-color: #afacfb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1em;
+  font-family: "Anton", sans-serif;
+  transition: background-color 0.3s;
+}
+.top-category .store-list {
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  gap: 20px; /* 각 가게 사이 간격 */
+}
+
+/* 카테고리 메뉴 스타일 */
+.header-nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex; /* 카테고리 메뉴를 가로로 정렬 */
+  justify-content: center; /* 카테고리를 중앙에 정렬 */
+  margin-left: 0;
+  gap: 30px; /* 카테고리 간의 간격 */
+}
+
+.header-nav ul li {
+  position: relative; /* 하위 메뉴의 위치를 기준으로 설정 */
+  padding: 10px;
+  font-size: 1.3em; /* 카테고리 글자 크기 */
+  font-family: "Black Han Sans";
+}
+
+.header-nav ul li a {
+  text-decoration: none;
+  color: #8e89f6;
+  cursor: pointer;
+  font-size: 1.3em; /* 카테고리 링크 글자 크기 */
+  font-family: "Anton", sans-serif; /* Anton 폰트 적용 */
+  font-family: "Black Han Sans";
+}
+
+/* 하위 메뉴 기본적으로 숨김 */
+.submenu {
+  display: none !important; /* 기본적으로 하위 메뉴 숨김 */
+  list-style-type: none;
+  padding-left: 0;
+  position: absolute;
+  background-color: white; /* 하위 메뉴 배경색 */
+  border: 1px solid #ddd; /* 테두리 */
+  margin-top: 10px; /* 부모 카테고리와 간격 */
+  z-index: 1000;
+  white-space: nowrap; /* 줄바꿈 방지 */
+  right: 0; /* 하위 메뉴가 화면 끝에 닿지 않도록 오른쪽 정렬 */
+  left: auto; /* 왼쪽 자동 위치 조정 */
+  transform: none; /* 변형 제거 */
+  min-width: 200px; /* 최소 너비 설정 */
+}
+
+/* 하위 메뉴 항목을 세로로 정렬 */
+.submenu li {
+  display: block; /* 세로로 쌓이도록 설정 */
+  margin-bottom: 3px; /* 하위 메뉴 항목 간격 */
+  text-decoration: none; /* 기본적으로 하위 메뉴에서 밑줄 제거 */
+  color: black;
+  font-size: 0.8em; /* 하위 메뉴 글자 크기 수정 */
+  text-align: center; /* 글자를 가운데 정렬 */
+  border: none; /* 링크의 기본 border 제거 */
+  background: none; /* 배경 제거 */
+}
+
+.submenu li a {
+  display: block; /* 링크를 블록 요소로 설정 */
+  padding: 3px;
+  text-decoration: none;
+  color: black !important;
+  font-size: 0.9em !important; /* 하위 메뉴 글자 크기를 줄임 */
+  text-align: center; /* 글자를 가운데 정렬 */
+}
+
+.submenu li a:hover {
+  background-color: #f0f0f0; /* 마우스 오버 시 배경색 변경 */
+}
+
+/* 마우스를 올렸을 때 하위 메뉴 표시 */
+.header-nav ul li:hover .submenu {
+  display: block !important; /* 마우스를 올렸을 때 하위 메뉴 표시 */
+  color: black;
+}
+
+/* 클릭 불가능한 메뉴들에만 비활성화 적용 */
+.header-nav ul li.no-click > a {
+  pointer-events: none;
+}
+
+/* 하위 메뉴 클릭은 가능하도록 다시 활성화 */
+.header-nav ul li:hover .submenu a {
+  pointer-events: auto;
+}
+/* 클릭 불가능한 메뉴들에만 비활성화 적용 */
+.header-nav ul li.no-click > a {
+  pointer-events: none;
+}
+
+/* 하위 메뉴 클릭은 가능하도록 다시 활성화 */
+.header-nav ul li:hover .submenu a {
+  pointer-events: auto;
+}
+
+/* Footer 배경색을 흰색으로 설정 */
+.footer {
+  background-color: #fff; /* 배경색 흰색 */
+  padding: 20px 0;
+  text-align: center;
+  border-top: 1px solid #8e89f6; /* 상단 경계선 */
+  color: #8e89f6; /* 텍스트 색상 */
+}
+
+/* Footer 로고 */
+.footer-logo-img {
+  width: 160px;
+  height: auto;
+}
+@media (max-width: 1024px) {
+  .sort-button-container {
+    margin-top: 60px;
+  }
+  .sort-button {
+    margin-left: 16px;
+  }
+  .new-store-item {
+    width: calc(100% - 32px);
+  }
+}
+@media (max-width: 600px) {
+  .new-store-item {
+    flex-direction: column;
+    height: auto;
+    align-items: flex-start;
+  }
+  .store-img {
+    margin-right: 0;
+    width: 100%;
+    aspect-ratio: 200/150;
+    height: auto;
+  }
+}

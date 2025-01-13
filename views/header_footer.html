@@ -1,0 +1,165 @@
+\<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Page</title>
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더와 푸터 스타일 -->
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header class="header">
+      <div class="logo">
+        <a href="index.html">
+          <img src="성뭐먹1.png" alt="Logo" />
+        </a>
+      </div>
+      <nav class="header-nav">
+        <ul>
+          <li><a href="about.html">소개</a></li>
+          <li class="no-click">
+            <a href="customer.html">고객센터</a>
+            <ul class="submenu">
+              <li><a href="inquiry.html">1:1문의</a></li>
+              <li><a href="my_inquiry.html">나의 문의내역</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="community.html">커뮤니티</a>
+            <ul class="submenu">
+              <li><a href="haksik.html">학식</a></li>
+              <li><a href="free.html">자유</a></li>
+            </ul>
+          </li>
+          <li><a href="recent_reviews.html">최신리뷰</a></li>
+          <li><a href="compare.html">비교함</a></li>
+          <li class="no-click">
+            <a href="my.html">My</a>
+            <ul class="submenu">
+              <li><a href="login.html">로그인</a></li>
+              <li><a href="signup.html">회원가입</a></li>
+              <li><a href="favorites.html">찜한 가게</a></li>
+              <li><a href="reviews.html">내가 작성한 리뷰</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <div class="login-status">
+        <span id="user-status">로그인 중이지 않습니다.</span>
+        <a id="login-logout" href="login.html">로그인</a>
+      </div>
+      <div class="s__container mobile-menu">
+        <div class="s__row">
+          <a href="index.html" class="s__logo"
+            ><img src="/image/img_logo_m.png" alt="홈으로 이동"
+          /></a>
+          <a href="#!" class="menu"
+            ><img
+              class="icon-is-open"
+              src="/image/icon_menu.svg"
+              alt="메뉴열기" /><img
+              class="icon-is-close"
+              src="/image/icon_close.svg"
+              alt="메뉴닫기"
+          /></a>
+        </div>
+        <ul class="mobile-menu__list">
+          <li>
+            <a href="about.html" class="mobile-menu__step1"
+              ><span>소개</span></a
+            >
+          </li>
+          <li>
+            <a href="#!" class="mobile-menu__step1"
+              ><span>고객센터</span
+              ><img src="/image/icon_down_arrow.svg" alt="열기"
+            /></a>
+            <ul>
+              <li>
+                <a href="inquiry.html" class="mobile-menu__step2">1:1문의</a>
+              </li>
+              <li>
+                <a href="my_inquiry.html" class="mobile-menu__step2"
+                  >나의 문의내역</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#!" class="mobile-menu__step1"
+              ><span>커뮤니티</span
+              ><img src="/image/icon_down_arrow.svg" alt="열기"
+            /></a>
+            <ul>
+              <li>
+                <a href="community.html" class="mobile-menu__step2">커뮤니티</a>
+              </li>
+              <li><a href="haksik.html" class="mobile-menu__step2">학식</a></li>
+              <li><a href="free.html" class="mobile-menu__step2">자유</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="recent_reviews.html" class="mobile-menu__step1"
+              ><span>최신리뷰</span></a
+            >
+          </li>
+          <li>
+            <a href="compare.html" class="mobile-menu__step1"
+              ><span>비교함</span></a
+            >
+          </li>
+          <li>
+            <a href="#!" class="mobile-menu__step1"
+              ><span>My</span><img src="/image/icon_down_arrow.svg" alt="열기"
+            /></a>
+            <ul>
+              <li>
+                <a
+                  href="login.html"
+                  id="login-logout-mobile"
+                  class="mobile-menu__step2"
+                  >로그인</a
+                >
+              </li>
+              <li>
+                <a href="signup.html" class="mobile-menu__step2">회원가입</a>
+              </li>
+              <li>
+                <a href="favorites.html" class="mobile-menu__step2"
+                  >찜한 가게</a
+                >
+              </li>
+              <li>
+                <a href="reviews.html" class="mobile-menu__step2"
+                  >내가 작성한 리뷰</a
+                >
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="footer-logo">
+        <img src="성뭐먹2.png" alt="Logo" class="footer-logo-img" />
+      </div>
+      <div class="footer-info">
+        <!-- 푸터 정보 추가 가능 -->
+      </div>
+    </footer>
+
+    <!-- 반응형 -->
+  </body>
+</html>

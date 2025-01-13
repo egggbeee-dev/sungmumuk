@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Page</title>
+    <link rel="stylesheet" href="login.css" />
+    <!-- CSS 파일을 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더 및 푸터 CSS -->
+    <!-- Google Fonts에서 Black Han Sans 불러오기 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts에서 Anton 불러오기 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- 동적 헤더가 삽입될 위치 -->
+    <div id="header-placeholder"></div>
+
+    <!-- 로그인 페이지 컨텐츠 -->
+    <div class="container">
+      <div class="login-box">
+        <h2>로그인</h2>
+        <form id="loginForm" method="POST">
+          <div class="input-group">
+            <label for="username">아이디 (이메일)</label>
+            <input
+              type="email"
+              id="username"
+              name="username"
+              placeholder="아이디를 입력하세요"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label for="password">비밀번호</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="비밀번호를 입력하세요"
+              required
+            />
+          </div>
+          <button type="submit">로그인</button>
+        </form>
+        <div class="register">
+          <p>✔️ 회원이 아니신가요? <a href="signup.html">회원가입하기</a></p>
+          <p>
+            ✔️ 비밀번호를 잊으셨나요?
+            <a href="find_password.html">비밀번호 찾기</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 로그인 성공 시 index.html로 이동하는 JavaScript 코드 -->
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          // 현재 URL에서 redirect 파라미터를 가져옵니다.
+          const params = new URLSearchParams(window.location.search);
+          const redirectTo = params.get("redirect") || "index.html"; // 기본값: index.html
+
+          fetch("/api/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.message === "로그인 성공") {
+                alert("로그인에 성공했습니다!");
+                window.location.href = redirectTo; // 성공 시 redirectTo로 이동
+              } else {
+                alert(data.message);
+              }
+            })
+            .catch((error) => {
+              console.error("로그인 요청 오류:", error);
+              alert("로그인 중 오류가 발생했습니다.");
+            });
+        });
+    </script>
+
+    <!-- 동적 푸터가 삽입될 위치 -->
+    <div id="footer-placeholder"></div>
+
+    <!-- 동적 로드 스크립트 -->
+    <script src="header_footer.js"></script>
+
+    <!-- 반응형 -->
+  </body>
+</html>

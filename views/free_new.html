@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성</title>
+     <link rel="icon" href="성뭐먹3.png" type="image/png">
+    <link rel="stylesheet" href="community_new.css">
+    <link rel="stylesheet" href="header_footer.css"> <!-- 헤더와 푸터 스타일 -->
+    <script src="free_new.js" defer></script>
+    <script src="header_footer.js" defer></script> <!-- 헤더 및 푸터 동적 로드 -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+</head>
+<body>
+        <!-- Header Placeholder -->
+        <div id="header-placeholder"></div>
+
+    
+        <div class="page-header">
+        게시글 작성하기
+        </div>
+       
+        <div class="navigation">
+            <a href="index.html">홈</a>
+            <a href="haksik.html">학식 게시판</a>
+            <a href="free.html">자유 게시판</a>
+        </div>
+        
+<body>
+
+    <main>
+       
+        <form id="new-post-form" enctype="multipart/form-data" method="POST">
+            <label for="new-post-category">말머리 :</label>
+            <select id="new-post-category" name="category">
+                <option value="[맛집탐방]">[맛집탐방]</option>
+                <option value="[카페탐방]">[카페탐방]</option>
+                <option value="[여행 중 맛집 발견]">[여행 중 맛집 발견]</option>
+                <option value="[아쉬워요]">[아쉬워요]</option>
+            </select>
+            
+            <label for="new-post-title">제목 :</label>
+            <input type="text" id="new-post-title" name="title" placeholder="제목을 입력하세요" required />
+            
+            <label for="new-post-content">게시물 :</label>
+            <textarea id="new-post-content" name="content" rows="5" placeholder="게시물 내용을 입력하세요..." required></textarea>
+            
+            <label for="new-post-image">이미지 첨부 :</label>
+            <input type="file" id="new-post-image" name="image" accept="image/*">
+            
+            <button id="submit-post" type="submit">작성 완료</button>
+        </form>
+    </main>
+<!-- Footer Placeholder -->
+<div id="footer-placeholder"></div>
+
+<script src="header_footer.js"></script>
+
+    <script>
+        document.getElementById('new-post-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+            
+            const formData = new FormData(this); // 폼 데이터를 가져옴
+
+            try {
+                const response = await fetch('/free_new/posts', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('게시물이 성공적으로 저장되었습니다.');
+                    window.location.href = '/free.html'; // 게시글 저장 후 free.html로 리디렉션
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.message || '게시물 저장에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('서버와의 통신 중 문제가 발생했습니다.');
+            }
+        });
+    </script>
+ <script src="media_query.js"></script>
+    <!-- 반응형 -->
+  </body>
+</html>

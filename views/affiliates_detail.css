@@ -1,0 +1,135 @@
+/* 전체 페이지 레이아웃 */
+body {
+  font-family: "Black Han Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.container {
+  max-width: 100%; /* 가로로 꽉 차게 설정 */
+  margin: 0 auto;
+  padding: 20px;
+  overflow-x: hidden; /* 수평 스크롤 방지 */
+}
+
+.heading {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #8e89f6;
+}
+
+/* 수평 리스트 */
+.new-store-list {
+  display: flex;
+  gap: 20px;
+  padding: 10px 0;
+  max-width: calc(300px * 3 + 20px * 2); /* 카드 3개와 간격 2개 기준 */
+  margin: 0 auto;
+}
+
+.new-store-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 300px; /* 고정 너비 */
+  flex: 0 0 auto; /* 크기 고정 */
+  scroll-snap-align: start; /* 스냅 포인트 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.new-store-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 가게 이미지 */
+.store-img {
+  width: 100%;
+  height: 200px;
+  min-height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 가게 상세 정보 */
+.store-details {
+  padding: 15px;
+  text-align: center;
+}
+
+.store-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.store-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+/* 버튼 스타일 */
+.details-button {
+  background-color: #8e89f6;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.details-button:hover {
+  background-color: #7369dc;
+}
+
+/* 조건에 맞는 데이터가 없을 때 */
+.no-data,
+.error {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #999;
+  margin-top: 50px;
+}
+
+/* 스크롤바 스타일 */
+.new-store-list::-webkit-scrollbar {
+  height: 10px; /* 스크롤바 높이 */
+}
+
+.new-store-list::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* 스크롤바 색상 */
+  border-radius: 5px;
+}
+
+.new-store-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+@media (max-width: 1024px) {
+  .new-store-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .new-store-item {
+    width: auto;
+  }
+}
+@media (max-width: 768px) {
+  .new-store-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 550px) {
+  .new-store-list {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

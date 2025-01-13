@@ -1,0 +1,258 @@
+/* 한국어는 Black Han Sans, 영어는 Anton 적용 */
+body {
+    font-family: 'Black Han Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #FFEBFF; /* 배경색 */
+  }
+  
+  /* 영어 텍스트에 Anton 폰트 적용 */
+  h1, h2, h3, .banner-text h2, button, .sort-button {
+    font-family: 'Anton', sans-serif; /* 영어 폰트 적용 */
+  }
+  
+  /* 헤더 */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    background-color: #fff; /* 흰색 배경 */
+    border-bottom: 1px solid #8E89F6; /* 경계선 */
+    text-align: center;
+  }
+  
+  
+  .header img {
+    width: 270px;
+    height: auto;
+    margin-top: 20px; /* 로고를 밑으로 내리기 위해 상단에 20px 여백 추가 */
+    
+  }
+  
+  /* 카테고리 메뉴 스타일 */
+  .header-nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* 카테고리 메뉴를 가로로 정렬 */
+    justify-content: center; /* 카테고리를 중앙에 정렬 */
+    margin-left: 0;
+    gap: 30px; /* 카테고리 간의 간격 */
+  }
+  
+  .header-nav ul li {
+    position: relative; /* 하위 메뉴의 위치를 기준으로 설정 */
+    padding: 10px;
+    font-size: 1.3em; /* 카테고리 글자 크기 */
+    font-family: 'Black Han Sans';
+  }
+  
+  .header-nav ul li a {
+    text-decoration: none;
+    color: #8E89F6;
+    cursor: pointer;
+    font-size: 1.3em; /* 카테고리 링크 글자 크기 */
+    font-family: 'Anton', sans-serif; /* Anton 폰트 적용 */
+    font-family: 'Black Han Sans';
+  }
+  
+  /* 하위 메뉴 기본적으로 숨김 */
+  .submenu {
+    display: none !important; /* 기본적으로 하위 메뉴 숨김 */
+    list-style-type: none;
+    padding-left: 0;
+    position: absolute;
+    background-color: white; /* 하위 메뉴 배경색 */
+    border: 1px solid #ddd; /* 테두리 */
+    margin-top: 10px; /* 부모 카테고리와 간격 */
+    z-index: 1000;
+    white-space: nowrap; /* 줄바꿈 방지 */
+    right: 0; /* 하위 메뉴가 화면 끝에 닿지 않도록 오른쪽 정렬 */
+    left: auto; /* 왼쪽 자동 위치 조정 */
+    transform: none; /* 변형 제거 */
+    min-width: 200px; /* 최소 너비 설정 */
+  }
+  
+  /* 하위 메뉴 항목을 세로로 정렬 */
+  .submenu li {
+    display: block; /* 세로로 쌓이도록 설정 */
+    margin-bottom: 3px; /* 하위 메뉴 항목 간격 */
+    text-decoration: none; /* 기본적으로 하위 메뉴에서 밑줄 제거 */
+    color: black;
+    font-size: 0.8em; /* 하위 메뉴 글자 크기 수정 */
+    text-align: center; /* 글자를 가운데 정렬 */
+    border: none; /* 링크의 기본 border 제거 */
+    background: none; /* 배경 제거 */
+  }
+  
+  .submenu li a {
+    display: block; /* 링크를 블록 요소로 설정 */
+    padding: 3px;
+    text-decoration: none;
+    color: black !important;
+    font-size: 0.9em !important; /* 하위 메뉴 글자 크기를 줄임 */
+    text-align: center; /* 글자를 가운데 정렬 */
+  }
+  
+  .submenu li a:hover {
+    background-color: #f0f0f0; /* 마우스 오버 시 배경색 변경 */
+  }
+  
+  /* 마우스를 올렸을 때 하위 메뉴 표시 */
+  .header-nav ul li:hover .submenu {
+    display: block !important; /* 마우스를 올렸을 때 하위 메뉴 표시 */
+    color:black;
+  }
+  
+  /* 클릭 불가능한 메뉴들에만 비활성화 적용 */
+  .header-nav ul li.no-click > a {
+    pointer-events: none;
+  }
+  
+  /* 하위 메뉴 클릭은 가능하도록 다시 활성화 */
+  .header-nav ul li:hover .submenu a {
+    pointer-events: auto;
+  }
+/* 기본 스타일 */
+body {
+    font-family: 'Black Han Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+/* 컨테이너 및 헤더 */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  background-color: #fff; /* 흰색 배경 */
+  border-bottom: 1px solid #8E89F6; /* 경계선 */
+  text-align: center;
+}
+
+
+/* 리뷰 목록 섹션 */
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 개별 리뷰 박스 */
+.review-box {
+    display: flex;
+    background-color: #8E89F6;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 리뷰 정보 섹션 */
+.review-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 가게명 */
+.store-name {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* 리뷰 사진 */
+.review-photo img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* 평점 */
+.review-rating, .review-date {
+    font-size: 16px;
+}
+
+/* 리뷰 텍스트 */
+.review-text {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* 수정 버튼 */
+.edit-button {
+    padding: 8px 15px;
+    background-color: #6d63e5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.edit-button:hover {
+    background-color: #5a50d5;
+}
+
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 10px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Footer 배경색을 흰색으로 설정 */
+.footer {
+    background-color: #fff; /* 배경색 흰색 */
+    padding: 20px 0;
+    text-align: center;
+    border-top: 1px solid #8E89F6; /* 상단 경계선 */
+    color: #8E89F6; /* 텍스트 색상 */
+  }
+  
+  /* Footer 로고 */
+  .footer-logo-img {
+    width: 160px;
+    height: auto;
+  }
+  

@@ -41,7 +41,7 @@ const authRoutes = require('./routes/auth'); // auth.js 파일 경로
 
 
 
-app.set('port', process.env.PORT || 8001);
+app.set('port', process.env.PORT || 80);
 app.set('view engine', 'html');
 nunjucks.configure('views', {
   express: app,

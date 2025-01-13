@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Page</title>
+    <link rel="stylesheet" href="signup.css" />
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- 헤더와 푸터 스타일 -->
+    <!-- CSS 파일을 링크 -->
+    <!-- Google Fonts에서 Black Han Sans 불러오기 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts에서 Anton 불러오기 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- 회원가입 폼 -->
+    <div class="container">
+      <div class="register-box">
+        <h2>회원가입</h2>
+        <form id="registerForm" method="POST">
+          <div class="input-group">
+            <label for="username">아이디 (이메일)</label>
+            <input
+              type="email"
+              id="username"
+              name="username"
+              placeholder="아이디를 입력하세요"
+              required
+            />
+            <span id="email-error" class="error-message"></span>
+          </div>
+          <div class="input-group">
+            <label for="password">비밀번호 설정</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="비밀번호를 입력하세요"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label for="password-confirm">비밀번호 확인</label>
+            <input
+              type="password"
+              id="password-confirm"
+              name="password-confirm"
+              placeholder="비밀번호를 입력하세요"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <label for="nickname">닉네임</label>
+            <input
+              type="text"
+              id="nickname"
+              name="nickname"
+              placeholder="닉네임을 설정하세요"
+              required
+            />
+            <span id="username-error" class="error-message"></span>
+          </div>
+          <button type="submit">회원가입</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- JavaScript 코드 -->
+    <script>
+      console.log("JavaScript 코드 실행 확인");
+
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          console.log("회원가입 폼 제출");
+
+          const email = document.getElementById("username").value; // 이메일을 username으로 받아옴
+          const password = document.getElementById("password").value;
+          const passwordConfirm =
+            document.getElementById("password-confirm").value;
+          const nickname = document.getElementById("nickname").value;
+
+          if (password !== passwordConfirm) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+          }
+
+          console.log("Fetch 요청 전송 중..."); // fetch 요청 전 로그 추가
+
+          fetch("/api/signup", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: email,
+              email,
+              password,
+              nickname,
+            }), // username에 email을 담음
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("서버 응답:", data); // 서버 응답 로그 출력
+              if (data.message === "회원가입이 완료되었습니다.") {
+                alert("회원가입 성공!");
+                window.location.href = "login.html";
+              } else {
+                alert(data.message);
+              }
+            })
+            .catch((error) => {
+              console.error("Fetch 요청 오류:", error); // 에러 메시지 출력
+              alert("회원가입 중 오류가 발생했습니다.");
+            });
+        });
+    </script>
+
+    <!-- 동적 푸터 연결 -->
+    <div id="footer-placeholder"></div>
+
+    <!-- 반응형 -->
+    <!-- 동적 로드 스크립트 -->
+    <script src="header_footer.js"></script>
+  </body>
+</html>

@@ -1,0 +1,265 @@
+/* 한국어는 Black Han Sans, 영어는 Anton 적용 */
+body {
+  font-family: "Black Han Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffebff; /* 배경색 */
+}
+
+/* 영어 텍스트에 Anton 폰트 적용 */
+h1,
+h2,
+h3,
+.banner-text h2,
+button,
+.sort-button {
+  font-family: "Anton", sans-serif; /* 영어 폰트 적용 */
+}
+
+/* 가게명 텍스트 색상 */
+#store-name {
+  color: #6a0dad;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #e0d6ff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 이미지 섹션 */
+.image-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* 이미지 크기 및 슬라이드 애니메이션 */
+.store-image {
+  width: 600px;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: flex;
+}
+
+.store-image.active {
+  display: block;
+}
+
+/* 슬라이드 버튼 */
+.slide-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.slide-button.prev {
+  left: 0;
+}
+
+.slide-button.next {
+  right: 0;
+}
+
+/* 가게 정보 섹션 */
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+/* 정보 박스 */
+.info-box {
+  display: flex;
+  align-items: center;
+  background-color: #f6f2fc;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+/* 라벨과 콘텐츠 */
+.info-label {
+  font-size: 17px; /* 폰트 크기 증가 */
+  width: 120px; /* 라벨의 고정 너비 */
+  color: #000;
+  flex-shrink: 0; /* 라벨이 줄어들지 않도록 고정 */
+}
+
+.info-content {
+  flex: 1; /* 콘텐츠는 남은 공간을 차지 */
+  font-size: 16px;
+  color: #333;
+  overflow-wrap: break-word; /* 텍스트가 길 경우 줄바꿈 처리 */
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  overflow: hidden; /* 넘치는 텍스트는 숨기기 */
+  text-overflow: ellipsis; /* 넘치는 텍스트는 ... 표시 */
+}
+/* 찜 및 공유 버튼 */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.wish-button,
+.share-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #6d63e5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.wish-button:hover,
+.share-button:hover {
+  background-color: #5a50d5;
+}
+
+/* 리뷰 섹션 */
+.review-section {
+  margin-top: 20px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.review-header h2 {
+  color: #6c63ff;
+  margin: 0;
+}
+
+.review-register-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #6d63e5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.review-register-button:hover {
+  background-color: #5a50d5;
+}
+
+/* 정렬 옵션 스타일 */
+.sort-options {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.sort-options label {
+  font-size: 14px;
+  color: #333;
+}
+
+.sort-options select {
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* 리뷰 항목 스타일 */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.review-item {
+  display: flex;
+  gap: 15px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  align-items: flex-start;
+}
+
+/* 리뷰 사진 */
+.review-photo {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+/* 페이지네이션 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  background-color: #6d63e5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #5a50d5;
+}
+.review-snippet {
+  white-space: nowrap; /* 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트 숨기기 */
+  text-overflow: ellipsis; /* 말줄임표 추가 */
+  display: block; /* 블록 요소로 설정 */
+  max-width: 200px; /* 최대 너비 설정 */
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 16px !important;
+    margin-top: 110px;
+    max-width: inherit;
+    width: calc(100% - 32px);
+  }
+  .review-section {
+    width: calc(100% - 32px);
+    margin: 0 auto;
+  }
+  .pagination {
+    margin-bottom: 50px;
+  }
+  .store-image {
+    width: 100%;
+    aspect-ratio: 600/500;
+    height: auto;
+  }
+}
+@media (max-width: 768px) {
+  .review-item {
+    flex-direction: column;
+  }
+}

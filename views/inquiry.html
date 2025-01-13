@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant Page</title>
+    <link rel="stylesheet" href="inquiry.css" />
+    <!-- CSS 파일을 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <!-- Header와 Footer CSS 추가 -->
+    <!-- Google Fonts에서 Black Han Sans 불러오기 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts에서 Anton 불러오기 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Section Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container">
+      <h1>1:1문의</h1>
+      <div
+        id="login-message"
+        style="display: none; text-align: center; margin-top: 20px"
+      >
+        <p>
+          1:1문의를 하고 싶다면
+          <a href="login.html" style="color: blue">로그인</a> 해주세요!
+        </p>
+      </div>
+      <div class="store_register">
+        <p>
+          ✔️ 찾으시는 가게가 없으신가요?
+          <a href="store_register.html">가게 등록 요청하기</a>
+        </p>
+      </div>
+      <!--inquiryFrorm display none 제거-->
+      <form id="inquiryForm">
+        <label for="title">문의 제목</label>
+        <input type="text" id="title" name="title" required />
+
+        <label for="content">문의 내용</label>
+        <textarea id="content" name="content" required></textarea>
+        <button type="submit">제출하기</button>
+      </form>
+    </div>
+
+    <!-- 팝업창과 배경 -->
+    <div class="popup-overlay" id="popupOverlay" style="display: none"></div>
+    <div class="popup" id="popupMessage" style="display: none">
+      <p id="popupText">제출이 완료되었습니다.</p>
+      <button onclick="closePopup()">확인</button>
+    </div>
+
+    <!-- JavaScript 코드 -->
+    <script>
+     document.addEventListener("DOMContentLoaded", async () => {
+        const inquiryForm = document.getElementById("inquiryForm");
+        const loginMessage = document.getElementById("login-message");
+        const storeRegister = document.getElementsByClassName("store_register");
+
+        try {
+          // 로그인 상태 확인
+          const response = await fetch("/auth/status");
+          const authStatus = await response.json();
+
+          if (authStatus.loggedIn) {
+            loginMessage.style.display = "none";
+            inquiryForm.style.display = "block";
+            storeRegister.style.display = "block";
+          } else {
+            loginMessage.style.display = "block";
+            inquiryForm.style.display = "none";
+            storeRegister.style.display = "none";
+          }
+        } catch (error) {
+          console.error("로그인 상태 확인 오류:", error);
+        }
+      });
+
+      document
+        .getElementById("inquiryForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // 페이지 새로고침 방지
+
+          const title = document.getElementById("title").value.trim();
+          const content = document.getElementById("content").value.trim();
+
+          // 유효성 검사
+          if (!title || !content) {
+            showPopup("제목과 내용을 입력해주세요.");
+            return;
+          }
+
+          try {
+            const response = await fetch("/inquiry", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ title, content }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              showPopup(result.message || "문의가 성공적으로 제출되었습니다.");
+              resetForm();
+            } else {
+              showPopup(result.message || "문의 제출에 실패했습니다.");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            showPopup("서버와의 통신 중 오류가 발생했습니다.");
+          }
+        
+
+      });
+      // 폼 초기화 함수
+      function resetForm() {
+        document.getElementById("title").value = "";
+        document.getElementById("content").value = "";
+        document.getElementById("inquiryForm").style.display = "block"; // 폼을 다시 보이게 설정
+      }
+
+      // 팝업 표시 함수
+      function showPopup(message) {
+        const popupOverlay = document.getElementById("popupOverlay");
+        const popupMessage = document.getElementById("popupMessage");
+        const popupText = document.getElementById("popupText");
+
+        popupText.textContent = message;
+        popupOverlay.style.display = "block";
+        popupMessage.style.display = "block";
+      }
+
+      // 팝업 닫기 함수
+      function closePopup() {
+        document.getElementById("popupOverlay").style.display = "none";
+        document.getElementById("popupMessage").style.display = "none";
+      }
+    </script>
+
+    <!-- Header와 Footer를 포함하는 JavaScript 파일 링크 -->
+    <script src="header_footer.js"></script>
+
+    <!-- Footer Section Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- 반응형 -->
+  </body>
+</html>
