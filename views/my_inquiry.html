@@ -44,86 +44,73 @@
     <script src="header_footer.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
-        try {
-          // 로그인 상태 확인
-          const authResponse = await fetch("/auth/status");
-          const authStatus = await authResponse.json();
-
-          if (!authStatus.loggedIn) {
-            // 비로그인 상태 처리
-            console.log("인증 상태 확인: 비로그인 사용자입니다.");
-            document.getElementById("login-message").style.display = "block";
-          } else {
-            // 로그인된 상태
-            console.log("인증 상태 확인: 로그인된 사용자입니다.");
-
-            // Fetch inquiries from the API
-            const response = await fetch("/my-inquiry");
-            if (!response.ok) {
-              throw new Error(
-                "Network response was not ok " + response.statusText
-              );
-            }
-
-            const data = await response.json();*/
-            const container = document.querySelector(".inquiry-container");
-
-            if (mockInquiries.length === 0) {
-              container.innerHTML = `<p class="no-inquiries">현재 문의 내역이 없습니다.</p>`;
-              return;
-            }
-
-            container.innerHTML = mockInquiries
-              .map(
-                (inquiry) => `
-                        <div class="inquiry-item">
-                            <div class="inquiry-header">
-                                <h2 class="inquiry-title">${inquiry.title}</h2>
-                                <span class="inquiry-status ${
-                                  inquiry.status === "답변 완료"
-                                    ? "답변완료"
-                                    : "답변대기"
-                                }">
-                                    ${inquiry.status}
-                                </span>
-                            </div>
-                            <div class="inquiry-details">
-                                <p>문의일: <span class="inquiry-date">${formatDate(
-                                  inquiry.created_at
-                                )}</span></p>
-                                <p class="inquiry-response-date">답변일: 
-                                    <span class="response-date">${
-                                      inquiry.answered_at || "답변 대기 중"
-                                    }</span>
-                                </p>
-                            </div>
-                            <div class="inquiry-response">
-                                <p>문의 내용:</p>
-                                <p>${inquiry.content}</p>
-                            </div>
-                        </div>
-                    `
-              )
-              .join("");
+          try {
+              // 로그인 상태 확인
+              const authResponse = await fetch('/auth/status');
+              const authStatus = await authResponse.json();
+  
+              if (!authStatus.loggedIn) {
+                  // 비로그인 상태 처리
+                  console.log("인증 상태 확인: 비로그인 사용자입니다.");
+                  document.getElementById('login-message').style.display = 'block';
+              } else {
+                  // 로그인된 상태
+                  console.log("인증 상태 확인: 로그인된 사용자입니다.");
+  
+                  // Fetch inquiries from the API
+                  const response = await fetch('/my-inquiry');
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok ' + response.statusText);
+                  }
+  
+                  const data = await response.json();
+                  const container = document.querySelector('.inquiry-container');
+  
+                  if (data.length === 0) {
+                      container.innerHTML = `<p class="no-inquiries">현재 문의 내역이 없습니다.</p>`;
+                      return;
+                  }
+  
+                  container.innerHTML = data.map(inquiry => `
+                      <div class="inquiry-item">
+                          <div class="inquiry-header">
+                              <h2 class="inquiry-title">${inquiry.title}</h2>
+                              <span class="inquiry-status ${inquiry.status === '답변 완료' ? '답변완료' : '답변대기'}">
+                                  ${inquiry.status}
+                              </span>
+                          </div>
+                          <div class="inquiry-details">
+                              <p>문의일: <span class="inquiry-date">${formatDate(inquiry.created_at)}</span></p>
+                              <p class="inquiry-response-date">답변일: 
+                                  <span class="response-date">${inquiry.answered_at || '답변 대기 중'}</span>
+                              </p>
+                          </div>
+                          <div class="inquiry-response">
+                              <p>문의 내용:</p>
+                              <p>${inquiry.content}</p>
+                          </div>
+                      </div>
+                  `).join('');
+              }
+          } catch (error) {
+              console.error('Error loading inquiries:', error);
+              const container = document.querySelector('.inquiry-container');
+              container.innerHTML = `<p class="error-message">문의 데이터를 불러오는 중 문제가 발생했습니다. 나중에 다시 시도해주세요.</p>`;
           }
-         catch (error) {
-          console.error("Error loading inquiries:", error);
-          const container = document.querySelector(".inquiry-container");
-          container.innerHTML = `<p class="error-message">문의 데이터를 불러오는 중 문제가 발생했습니다. 나중에 다시 시도해주세요.</p>`;
-        }
       });
       function formatDate(dateString) {
-        const options = {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        };
-        const date = new Date(dateString);
-        return date.toLocaleDateString("ko-KR", options);
+          const options = { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric', 
+              hour: '2-digit', 
+              minute: '2-digit' 
+          };
+          const date = new Date(dateString);
+          return date.toLocaleDateString('ko-KR', options);
       }
-    </script>
+      
+  </script>
 
     <!-- 반응형 -->
   </body>
