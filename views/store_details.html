@@ -56,6 +56,10 @@
           <div class="info-content" id="restaurant-category"></div>
         </div>
         <div class="info-box">
+          <div class="info-label">평균 가격(1인)</div>
+          <div class="info-content" id="restaurant-price"></div>
+        </div>
+        <div class="info-box">
           <div class="info-label">기타</div>
           <div class="info-content" id="restaurant-features"></div>
         </div>
@@ -124,6 +128,8 @@
           ).textContent = `${restaurant.average_rating} / 5.00`;
           document.querySelector("#restaurant-category").textContent =
             restaurant.category;
+            document.querySelector("#restaurant-price").textContent =
+           restaurant.average_price + "원";
           document.querySelector("#restaurant-features").innerHTML = `
                     혼밥 : ${restaurant.solo_meal ? "가능" : "불가능"} <br>
                     단체 : ${restaurant.group_meal ? "가능" : "불가능"} <br>
