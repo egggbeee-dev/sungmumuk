@@ -4,31 +4,80 @@ const {ensureAuthenticated} = require('../middlewares/auth');
 const router = express.Router();
 const pool = require('../config/db'); // pool 가져오기
 
-// 가게 데이터를 가져오는 함수 정의 (유저별 데이터 가져오기)
 async function getStoreData(userId) {
   try {
     console.log('데이터베이스에 연결 중...');
     const [rows] = await pool.execute(`
       SELECT 
-        f.favorites_id, f.restaurant_id, r.restaurant_name, r.category, r.campus, r.address, r.opening_hours_mon, r.opening_hours_tue, r.opening_hours_wed, r.opening_hours_thu, 
-        r.opening_hours_fri, r.opening_hours_sat, r.opening_hours_sun, r.restaurant_image
+        f.favorites_id, 
+        f.restaurant_id, 
+        r.restaurant_name, 
+        r.category, 
+        r.campus, 
+        r.address, 
+        r.opening_hours_mon, 
+        r.opening_hours_tue, 
+        r.opening_hours_wed, 
+        r.opening_hours_thu, 
+        r.opening_hours_fri, 
+        r.opening_hours_sat, 
+        r.opening_hours_sun,
+        ri.image_url
       FROM 
         favorites f
       JOIN 
         restaurant r 
       ON 
         f.restaurant_id = r.restaurant_id
+      LEFT JOIN 
+        restaurant_image ri 
+      ON 
+        r.restaurant_id = ri.restaurant_id
       WHERE 
         f.user_id = ?
     `, [userId]);
-    
-    console.log('데이터베이스 연결 성공:', rows)
-    return { rows, storeIds: rows.map(row => row.restaurant_id) };
+
+    console.log('데이터베이스 연결 성공:', rows);
+
+    // 중복 제거 및 대표사진 지정
+    const stores = rows.reduce((acc, row) => {
+      const existingStore = acc.find(store => store.restaurant_id === row.restaurant_id);
+      if (existingStore) {
+        // 이미 대표 사진이 지정된 경우 추가 작업 필요 없음
+        return acc;
+      } else {
+        // 새 레코드 생성
+        acc.push({
+          favorites_id: row.favorites_id,
+          restaurant_id: row.restaurant_id,
+          restaurant_name: row.restaurant_name,
+          category: row.category,
+          campus: row.campus,
+          address: row.address,
+          opening_hours: {
+            mon: row.opening_hours_mon,
+            tue: row.opening_hours_tue,
+            wed: row.opening_hours_wed,
+            thu: row.opening_hours_thu,
+            fri: row.opening_hours_fri,
+            sat: row.opening_hours_sat,
+            sun: row.opening_hours_sun,
+          },
+          representative_image: row.image_url || null // 첫 번째 이미지를 대표사진으로 설정
+        });
+      }
+      return acc;
+    }, []);
+
+    console.log('대표사진이 포함된 데이터:', stores);
+    return stores;
   } catch (error) {
     console.error('데이터를 가져오는 중 오류 발생:', error);
     throw error;
   }
 }
+
+
 
 router.get('/favorites', ensureAuthenticated, async (req, res) => {
   try {

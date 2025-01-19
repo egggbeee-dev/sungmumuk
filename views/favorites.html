@@ -17,10 +17,9 @@
 
     <!-- 메인 컨텐츠 -->
  <!-- 메인 컨텐츠 -->
+ <div class="container">
+    <h1>찜한 가게</h1>
 </div>
-<div class="container">
-        <h1>찜한 가게</h1>
-    </header>
 
     <!-- 검색 섹션 -->
     <div class="search-section">
@@ -46,102 +45,83 @@
 
 <!-- 스크립트 -->
 <script>
-
-// DOMContentLoaded 이벤트
-document.addEventListener('DOMContentLoaded', function () {
-    // 더미 데이터 렌더링
-    renderFavorites(mockFavorites);
-});
     // 로그인 상태 확인
-   document.addEventListener('DOMContentLoaded', async function () {
+    document.addEventListener('DOMContentLoaded', async function () {
+        console.log('DOMContentLoaded 이벤트 실행');
+    
         try {
             // 로그인 상태 확인
             const authResponse = await fetch('/auth/status');
             const authStatus = await authResponse.json();
     
             if (!authStatus.loggedIn) {
-                // 비로그인 상태 처리
-                console.log("인증 상태 확인: 비로그인 사용자입니다.");
+                console.log("비로그인 사용자입니다.");
                 document.getElementById('login-message').style.display = 'block';
-                document.querySelectorAll('.action-buttons').forEach(button => {
+                document.querySelectorAll('.action-buttons button').forEach(button => {
                     button.style.display = 'none';
                 });
-                
-            } else {
-                // 로그인된 상태
-                console.log("인증 상태 확인: 로그인된 사용자입니다.");
+                return;
+            }
     
-                // /favorites API 호출
-                try {
-                    const response = await fetch('/favorites'); // API 호출
-                    if (response.ok) {
-                        const data = await response.json(); // 응답 데이터 파싱
-                        console.log('API 응답 데이터:', data);
+            console.log("로그인된 사용자입니다.");
+            const response = await fetch('/favorites');
+            if (response.ok) {
+                const data = await response.json();
+                console.log('API 응답 데이터:', data);
     
-                        if (data && data.rows && Array.isArray(data.rows)) {
-                            const stores = data.rows; // rows를 stores 변수에 할당
-    
-                            if (stores.length > 0) {
-                                console.log('가게 데이터:', stores);
-                                renderFavorites(stores); // 가게 데이터 렌더링
-                            } else {
-                                console.error('가게 데이터가 존재하지 않습니다.');
-                                document.getElementById('favorites-container').innerHTML = "<p>찜한 가게가 없습니다.</p>";
-                            }
-                        }
-                    } else {
-                        console.error('찜한 가게 데이터를 가져오는 중 오류 발생');
-                    }
-                } catch (error) {
-                    console.error('API 호출 중 오류 발생:', error);
+                if (data.length > 0) {
+                    renderFavorites(data);
+                } else {
+                    document.getElementById('favorites-container').innerHTML = "<p>찜한 가게가 없습니다.</p>";
                 }
+            } else {
+                console.error('API 요청 실패:', response.statusText);
             }
         } catch (error) {
-            console.error('로그인 상태 확인 중 오류 발생:', error);
+            console.error('로그인 상태 확인 또는 데이터 가져오기 중 오류 발생:', error);
         }
     });
+    
     /**
      * 찜한 가게 데이터를 화면에 렌더링하는 함수
      * @param {Array} stores - 가게 데이터 배열
      */
      function renderFavorites(stores) {
+        console.log('렌더링할 데이터:', stores); // 전달된 데이터를 확인
+    
         const container = document.getElementById('favorites-container');
         container.style.display = 'block'; // 컨테이너 표시
-        
-        // 가게 데이터 렌더링
+    
+        // 가게 데이터를 HTML로 렌더링
         container.innerHTML = stores.map(store => {
-            // 요일 및 운영시간 데이터 합치기
+            // 요일별 운영시간 처리
             const days = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
-            const hours = [
-                store.opening_hours_mon,
-                store.opening_hours_tue,
-                store.opening_hours_wed,
-                store.opening_hours_thu,
-                store.opening_hours_fri,
-                store.opening_hours_sat,
-                store.opening_hours_sun
-            ];
+            const openingHours = days.map((day, index) => {
+                const dayKey = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][index];
+                return `<span>${day}: ${store.opening_hours[dayKey] || '휴무'}</span>`;
+            }).join('<br>');
     
-            const openingHours = days.map((day, index) => 
-            `<span>${day}: ${hours[index] || '휴무'}</span>` // 각 요일 데이터에 <span> 추가
-        ).join('<br>');
+            // 대표 사진 처리 (null일 경우 기본 이미지 사용)
+            const representativeImage = store.representative_image || '/images/default-image.jpg';
     
-            // HTML 템플릿
+            // HTML 템플릿 반환
             return `
-            <div class="store-box" data-url="/store_details?id=${store.restaurant_id}">
-                <img src="${store.restaurant_image}" alt="가게 이미지" class="store-image">
-                <div class="store-info">
-                    <h2 class="store-name">${store.restaurant_name}</h2>
-                    <p><strong>카테고리:</strong> ${store.category}</p>
-                    <p><strong>캠퍼스:</strong> ${store.campus}</p>
-                    <p><strong>주소:</strong> ${store.address}</p>
-                    <p><strong>운영시간:</strong><br> ${openingHours}</p>
+                <div class="store-box" data-url="/store_details?id=${store.restaurant_id}">
+                    <img src="${representativeImage}" alt="${store.restaurant_name} 이미지" class="store-image">
+                    <div class="store-info">
+                        <h2 class="store-name">${store.restaurant_name}</h2>
+                        <p><strong>카테고리:</strong> ${store.category}</p>
+                        <p><strong>캠퍼스:</strong> ${store.campus}</p>
+                        <p><strong>주소:</strong> ${store.address}</p>
+                        <p><strong>운영시간:</strong><br>${openingHours}</p>
+                    </div>
+                    <input type="checkbox" class="store-toggle" data-store-id="${store.restaurant_id}">
                 </div>
-                <input type="checkbox" class="store-toggle" data-store-id="${store.restaurant_id}">
-            </div> 
             `;
-        }).join(''); // map 결과를 하나의 HTML 문자열로 병합
+        }).join(''); // 결과를 하나의 HTML 문자열로 병합
     }
+    
+    
     // 엔터 키로 검색 실행
     function handleKeyPress(event) {
         if (event.key === 'Enter') {
