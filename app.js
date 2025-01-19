@@ -38,7 +38,7 @@ const affiliatesRouter = require('./routes/affiliates');
 const indexRouter = require('./routes/index')
 const storeSearchRouter = require('./routes/store_search');
 const authRoutes = require('./routes/auth'); // auth.js 파일 경로
-
+const myReviewRouter = require('./routes/my_review')
 
 
 app.set('port', process.env.PORT || 80);
@@ -95,9 +95,10 @@ app.use('/', storeReviewRouter);
 app.use('/', storeRegisterRouter); 
 app.use('/', randomRouter);
 app.use('/', affiliatesRouter);
-app.use('/', indexRouter)
+app.use('/', indexRouter);
 app.use('/store_search', storeSearchRouter);
 app.use('/auth', authRoutes); 
+app.use('/my_reviews', ensureAuthenticated, myReviewRouter);
 
 
 // 정적 HTML 파일 제공 라우트
