@@ -15,17 +15,6 @@ body {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 헤더 스타일 */
-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-header h1 {
-  font-size: 24px;
-  color: #6c63ff;
-}
-
 /* 검색 섹션 스타일 */
 .search-section {
   padding: 40px 0;
