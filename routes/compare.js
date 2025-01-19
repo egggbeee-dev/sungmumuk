@@ -9,11 +9,28 @@ router.get('/compare', ensureAuthenticated, async (req, res) => {
     const userId = req.user.id;
     try {
         const query = `
-            SELECT r.*
-            FROM compare c
-            JOIN restaurant r ON c.restaurant_id = r.restaurant_id
-            WHERE c.user_id = ?
-            ORDER BY c.created_at ASC
+            SELECT 
+                r.*, 
+                ri.image_url AS representative_image
+            FROM 
+                compare c
+            JOIN 
+                restaurant r ON c.restaurant_id = r.restaurant_id
+            LEFT JOIN (
+                SELECT 
+                    restaurant_id, 
+                    MIN(image_id) AS min_image_id
+                FROM 
+                    restaurant_image
+                GROUP BY 
+                    restaurant_id
+            ) min_images ON r.restaurant_id = min_images.restaurant_id
+            LEFT JOIN 
+                restaurant_image ri ON min_images.min_image_id = ri.image_id
+            WHERE 
+                c.user_id = ?
+            ORDER BY 
+                c.created_at ASC
             LIMIT 2
         `;
         const [rows] = await pool.query(query, [userId]);
@@ -26,6 +43,7 @@ router.get('/compare', ensureAuthenticated, async (req, res) => {
         res.status(500).json({ message: '서버 오류가 발생했습니다.' });
     }
 });
+
 
 // /api/compare POST 요청
 router.post('/api/compare', ensureAuthenticated, async (req, res) => {

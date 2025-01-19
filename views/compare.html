@@ -63,35 +63,55 @@
         // HTML 렌더링 함수
         function renderComparison(stores) {
             const container = document.querySelector('.comparison-container');
+        
+            // HTML 렌더링
             container.innerHTML = stores
-                .map(store => `
-                    <div class="store">
-                        <button class="register-button">가게 등록</button>
-                        <img src="${store.restaurant_image}" alt="가게 이미지">
-                        <div class="store-details">
-                            <h2>${store.restaurant_name}</h2>
-                            <p><strong>주소:</strong> ${store.address}</p>
-                            <p><strong>캠퍼스:</strong> ${store.campus}</p>
-                            <p><strong>카테고리:</strong> ${store.category}</p>
-                            <p><strong>평균 가격:</strong> ${store.average_price}</p>
-                            <p><strong>연락처:</strong> ${store.contact_number}</p>
-                            <p><strong>제휴:</strong> ${store.partnership}</p>
-                            <h3>영업시간:</h3>
-                            <table>
-                                <tr><th>요일</th><th>영업시간</th></tr>
-                                <tr><td>월요일</td><td>${store.opening_hours_mon}</td></tr>
-                                <tr><td>화요일</td><td>${store.opening_hours_tue}</td></tr>
-                                <tr><td>수요일</td><td>${store.opening_hours_wed}</td></tr>
-                                <tr><td>목요일</td><td>${store.opening_hours_thu}</td></tr>
-                                <tr><td>금요일</td><td>${store.opening_hours_fri}</td></tr>
-                                <tr><td>토요일</td><td>${store.opening_hours_sat}</td></tr>
-                                <tr><td>일요일</td><td>${store.opening_hours_sun}</td></tr>
-                            </table>
+                .map(store => {
+                    // 대표 이미지가 없을 경우 기본 이미지 사용
+                    const representativeImage = store.representative_image || '/images/default-image.jpg';
+        
+                    // 영업시간 필드
+                    const days = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+                    const hours = [
+                        store.opening_hours_mon,
+                        store.opening_hours_tue,
+                        store.opening_hours_wed,
+                        store.opening_hours_thu,
+                        store.opening_hours_fri,
+                        store.opening_hours_sat,
+                        store.opening_hours_sun
+                    ];
+                    const openingHours = days.map((day, index) => {
+                        return `<tr><td>${day}</td><td>${hours[index] || '정보 없음'}</td></tr>`;
+                    }).join('');
+        
+                    // HTML 템플릿
+                    return `
+                        <div class="store">
+                            <div class="store-header">
+                                <img src="${representativeImage}" alt="가게 이미지" class="store-image">
+                                <h2 class="store-name">${store.restaurant_name}</h2>
+                                <button class="register-button">가게 등록</button>
+                            </div>
+                            <div class="store-details">
+                                <p><strong>주소:</strong> ${store.address || '정보 없음'}</p>
+                                <p><strong>캠퍼스:</strong> ${store.campus || '정보 없음'}</p>
+                                <p><strong>카테고리:</strong> ${store.category || '정보 없음'}</p>
+                                <p><strong>평균 가격:</strong> ${store.average_price || '정보 없음'}</p>
+                                <p><strong>연락처:</strong> ${store.contact_number || '정보 없음'}</p>
+                                <p><strong>제휴:</strong> ${store.partnership || '제휴 없음'}</p>
+                                <h3>영업시간:</h3>
+                                <table>
+                                    <tr><th>요일</th><th>영업시간</th></tr>
+                                    ${openingHours}
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                `)
+                    `;
+                })
                 .join('');
         }
+        
         
     </script>
 
