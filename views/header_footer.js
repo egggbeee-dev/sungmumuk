@@ -95,7 +95,7 @@ function checkLoginStatus() {
       console.error("Error checking login status:", error);
       const userStatus = document.getElementById("user-status");
       if (userStatus) {
-        userStatus.textContent = "로그인 상태를 확인할 수 없습니다.";
+        userStatus.textContent = "더 많은 기능을 이용하려면 로그인이 필요합니다.";
       }
     });
 }
@@ -114,7 +114,7 @@ function updateLoginStatus(isLoggedIn, nickname) {
       addLogoutEvent(); // 로그아웃 이벤트 추가
     } else {
       userStatus.textContent = `더 많은 기능을 이용하려면 로그인이 필요합니다.`;
-      loginLogout.innerHTML = `<a href="login.html">로그인</a>`;
+      loginLogout.innerHTML = `<a href="login.html">로그인/회원가입</a>`;
       loginLogoutMobile.innerHTML = `<a href="login.html" id="login-logout-mobile" class="mobile-menu__step2">로그인</a>`;
     }
   } else {
