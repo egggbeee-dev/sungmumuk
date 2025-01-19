@@ -195,33 +195,31 @@ input[type="text"] {
   max-width: 1000px; /* 최대 너비 확대 */
 }
 
+
 .store-item {
-  display: flex;
+  flex-direction: column; /* 세로 정렬 */
   align-items: center;
-  background-color: #fff;
-  border: 1px solid #8e89f6;
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  margin: 10px 0px 20px 0px;
+  text-align: center;
 }
 
 .store-img {
-  width: 200px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 5px;
-  margin-right: 20px;
+  width: 100%; /* 부모 요소 너비에 맞게 조정 */
+  max-width: 300px; /* 최대 너비 제한 */
+  height: auto; /* 비율 유지하며 크기 조정 */
+  object-fit: cover; /* 이미지 잘림 없이 균일하게 표시 */
+  border-radius: 15px; /* 모서리를 둥글게 */
+  margin-bottom: 10px; /* 이미지와 텍스트 간격 */
+  transition: all 0.3s ease; /* 크기 변경 시 부드러운 애니메이션 */
+}
+
+@media (max-width: 768px) {
+  .store-img {
+    max-width: 200px; /* 작은 화면에서는 이미지 크기 줄임 */
+  }
 }
 
 .store-details {
-  display: flex; /* 요소들을 가로 정렬 */
-  align-items: center; /* 세로 가운데 정렬 */
-  justify-content: space-between; /* 제목과 버튼 사이에 공간 확보 */
-  text-align: left;
-  font-family: "Black Han Sans", sans-serif;
-  width: 100%;
+  text-align: center;
 }
 
 .store-name {
@@ -245,6 +243,7 @@ input[type="text"] {
 
 .details-button {
   padding: 10px 20px;
+  margin-top: 10px;
   background-color: #afacfb;
   color: white;
   border: none;
@@ -253,8 +252,11 @@ input[type="text"] {
   font-size: 1em;
   font-family: "Anton", sans-serif;
   transition: background-color 0.3s;
-  margin-right: 30px; /* 버튼과 텍스트 간격 조정 */
+  margin: 0 auto; /* 버튼을 중앙 정렬 */
+  display: block; /* 중앙 정렬을 위해 block 요소로 변경 */
+  text-align: center;
 }
+
 
 .details-button:hover {
   background-color: #8e89f6;
@@ -277,16 +279,13 @@ input[type="text"] {
   background-color: #6d66d6;
 }
 
-.popup-footer {
-  margin-top: 20px; /* 위와의 간격 */
-  width: 100%; /* 너비 전체 */
-  display: flex;
-  justify-content: center; /* 중앙 정렬 */
-}
+
 
 .popup-header {
-  text-align: center;
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
 }
 
 .popup-title {
@@ -305,6 +304,22 @@ input[type="text"] {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 500;
 }
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.close-button:hover {
+  color: #8e89f6;
+}
+
+
 @media (max-width: 1024px) {
   .random-container {
     margin-top: 60px;
