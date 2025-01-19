@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="my.css" />
+    <!-- CSS 파일 링크 -->
+    <link rel="stylesheet" href="header_footer.css" />
+    <script src="header_footer.js" defer></script>
+    <!-- Google Fonts에서 Black Han Sans 불러오기 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts에서 Anton 불러오기 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+      <!-- 페이지 제목 -->
+      <div class="page-title">
+        <h1>마이 페이지</h1>
+      </div>
+
+      <!-- Profile Section -->
+      <div class="profile-section">
+        <h2>개인정보</h2>
+        <div class="profile-details">
+          <div class="info-group">
+            <label>생년월일:</label>
+            <div class="info-content" id="birthdate">test1</div>
+          </div>
+          <div class="info-group">
+            <label>성함:</label>
+            <div class="info-content" id="name">test2</div>
+          </div>
+          <div class="info-group">
+            <label>연락처:</label>
+            <div class="info-content" id="contact">test3</div>
+          </div>
+          <div class="info-group">
+            <label>학과:</label>
+            <div class="info-content" id="department">test4</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="favorites-container">
+        <h2>내가 찜한 가게</h2>
+        <div class="favorites-list">
+            <!-- 찜한 가게 목록이 렌더링됩니다 -->
+        </div>
+        <div class="view-all">
+            <a href="/favorites.html">전체 보기</a>
+        </div>
+    </div>
+    
+      
+
+      <!-- 내가 작성한 리뷰 섹션 -->
+      <div class="reviews-container">
+        <h2>내가 작성한 리뷰</h2>
+        <div class="favorites-list">
+          <!-- 리뷰 데이터가 렌더링됩니다 -->
+        </div>
+        <div class="view-all">
+          <a href="/my_reviews.html">전체 보기</a>
+        </div>
+      </div>
+      
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          // 서버에서 상위 3개 찜한 가게 데이터를 가져옴
+          const response = await fetch('/mypage/favorites');
+          if (!response.ok) throw new Error('찜한 가게 데이터를 가져올 수 없습니다.');
+      
+          const stores = await response.json(); // JSON 데이터 파싱
+          renderFavorites(stores); // 화면에 렌더링
+        } catch (error) {
+          console.error('마이페이지 데이터 로드 중 오류:', error);
+        }
+      });
+      
+      function renderFavorites(stores) {
+        const container = document.querySelector('.favorites-list');
+        const viewAll = document.querySelector('.view-all');
+      
+        // 데이터가 없는 경우 처리
+        if (!stores.length) {
+          container.innerHTML = '<p>찜한 가게가 없습니다.</p>';
+          viewAll.style.display = 'none'; // 데이터가 없으면 버튼 숨김
+          return;
+        }
+      
+        // 데이터가 있는 경우 목록 렌더링
+        container.innerHTML = stores
+          .map(store => `
+            <div class="favorite-store">
+              <img src="${store.representative_image || '/images/default-image.jpg'}" alt="${store.restaurant_name}" class="store-image" />
+              <div class="store-info">
+                <div class="store-name">${store.restaurant_name}</div>
+                <p class="store-category">${store.category}</p>
+                <p class="store-campus">${store.campus}</p>
+                <a href="/store_details?id=${store.restaurant_id}" class="detail-button">자세히 보기</a>
+              </div>
+            </div>
+          `)
+          .join('');
+      
+        // 데이터가 있으면 "전체 보기" 버튼 표시
+        viewAll.style.display = 'block';
+      }
+      
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          const response = await fetch('/my_reviews/mypage/reviews'); // 리뷰 데이터를 가져오는 API 호출
+          if (!response.ok) throw new Error('리뷰 데이터를 가져오지 못했습니다.');
+      
+          const reviews = await response.json(); // JSON 데이터 파싱
+          renderReviews(reviews); // 리뷰 렌더링 함수 호출
+        } catch (error) {
+          console.error('리뷰 데이터 로드 중 오류:', error);
+          const container = document.querySelector('.reviews-container');
+          container.innerHTML = '<p>리뷰를 가져오는 중 문제가 발생했습니다.</p>';
+        }
+      });
+      
+      function renderReviews(reviews) {
+        const container = document.querySelector('.reviews-container .favorites-list');
+      
+        if (!reviews.length) {
+          container.innerHTML = '<p>작성된 리뷰가 없습니다.</p>';
+          return;
+        }
+      
+        container.innerHTML = reviews
+          .map(review => `
+            <div class="reviews-box">
+              <img src="/review/${review.review_photo || '/images/default-image.jpg'}" alt="${review.restaurant_name}" class="review-image" />
+              <div class="reviews-content">
+                <h3 class="restaurant-name">${review.restaurant_name}</h3>
+                <p class="reviews-text">${review.review_text}</p>
+                <div class="reviews-ratings">
+                  <span>맛:</span> ${'⭐'.repeat(review.taste_rating)}
+                  <span>재방문:</span> ${'⭐'.repeat(review.revisit_rating)}
+                  <span>접근성:</span> ${'⭐'.repeat(review.access_rating)}
+                </div>
+                <p class="reviews-date">작성일: ${new Date(review.created_at).toLocaleDateString()}</p>
+                <a href="/store_details?id=${review.review_id}" class="detail-button">자세히 보기</a>
+              </div>
+            </div>
+          `)
+          .join('');
+
+      }
+      
+      
+      // 예시 데이터를 설정하여 동적으로 정보 표시
+      const profileData = {
+        birthdate: "1995-06-15",
+        name: "홍길동",
+        contact: "010-1234-5678",
+        department: "컴퓨터공학과",
+      };
+
+      // 각 정보 항목에 값을 설정
+      document.getElementById("birthdate").textContent = profileData.birthdate;
+      document.getElementById("name").textContent = profileData.name;
+      document.getElementById("contact").textContent = profileData.contact;
+      document.getElementById("department").textContent =
+        profileData.department;
+    </script>
+  </body>
+</html>

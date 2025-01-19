@@ -189,6 +189,30 @@ router.get('/api/user-favorites', ensureAuthenticated, async (req, res) => {
   }
 });
 
+// MyPage에서 상위 3개 찜한 가게를 가져오는 API
+router.get('/mypage/favorites', ensureAuthenticated, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: '인증되지 않은 사용자입니다.' });
+    }
+    const userId = req.user.id; // 로그인된 사용자 ID
+    console.log("로그인한 사용자 ID:", userId);
+
+    // getStoreData로 사용자 데이터를 가져옴
+    const allStores = await getStoreData(userId);
+
+    // 상위 3개의 데이터만 선택
+    const top3Stores = allStores.slice(0, 3);
+    console.log('마이페이지에서 상위 3개 찜한 가게:', top3Stores);
+
+    res.json(top3Stores); // 상위 3개 데이터를 클라이언트로 반환
+  } catch (error) {
+    console.error('마이페이지 찜한 가게 데이터를 가져오는 중 오류 발생:', error);
+    res.status(500).json({ message: '서버 오류' });
+  }
+});
+
+
 module.exports = router;
 
 
