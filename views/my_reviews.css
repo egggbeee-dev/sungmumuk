@@ -11,6 +11,13 @@ body {
     font-family: 'Anton', sans-serif; /* 영어 폰트 적용 */
   }
   
+  .page-title {
+    text-align: center; /* 제목을 가운데로 정렬 */
+    color: #8E89F6; /* 연보라색 적용 */
+    font-size: 1.3em; /* 제목 글자 크기 */
+    margin-bottom: 20px; /* 아래쪽 여백 */
+}
+
   /* 헤더 */
   .header {
     display: flex;
@@ -154,6 +161,7 @@ body {
     border-radius: 10px;
     color: white;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px; /* 박스 간 간격 설정 */
 }
 
 /* 리뷰 정보 섹션 */
