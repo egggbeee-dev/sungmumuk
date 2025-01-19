@@ -35,7 +35,7 @@ button,
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh; /* 화면 전체 높이에 맞게 조정 */
   background-color: #f9f0ff;
   padding: 20px; /* 여백 추가 */
 }
@@ -51,6 +51,7 @@ button,
   max-width: 500px;
   box-sizing: border-box;
   overflow-wrap: break-word;
+  margin-top: 20px; /* 컨테이너에서 레지스터 박스가 위로 밀리지 않도록 여백 추가 */
 }
 
 /* 제목 */
