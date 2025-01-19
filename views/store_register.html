@@ -1,100 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant Page</title>
-    <link rel="icon" href="성뭐먹3.png" type="image/png" />
-    <link rel="stylesheet" href="review_details.css" />
-    <!-- 기존 CSS 파일을 링크 -->
-    <link rel="stylesheet" href="header_footer.css" />
-    <!-- 헤더와 푸터 스타일 -->
-    <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <!-- Header Placeholder -->
+    <link rel="stylesheet" href="store_register.css"> <!-- CSS 파일을 링크 -->
+    <link rel="stylesheet" href="header_footer.css"> <!-- Header와 Footer CSS 추가 -->
+    <!-- Google Fonts에서 Black Han Sans 불러오기 -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <!-- Google Fonts에서 Anton 불러오기 -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section Placeholder -->
     <div id="header-placeholder"></div>
 
-    <!-- Review Details -->
-    <div class="review-details-container"></div>
+    <div class="container">
+        <h1> 가게 등록 요청</h1>
+        <form id="registerForm">
+             <!-- 가게 이름 입력 -->
+            <label for="storeName">가게 이름 *</label>
+            <input type="text" id="storeName" name="storeName" placeholder = "가게명을 입력해주세요" required>
 
-    <script src="header_footer.js"></script>
-    <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      const reviewId = urlParams.get("reviewId");
-
-      if (!reviewId) {
-        // 리뷰 ID가 없을 경우 샘플 데이터 표시
-        const sampleReview = getSampleReview();
-        renderReviewDetails(sampleReview);
-      } else {
-        // 리뷰 ID가 있을 경우 데이터베이스에서 가져오거나 예외 처리
-        fetchReviewDetails(reviewId);
-      }
-
-      async function fetchReviewDetails(id) {
-    try {
-      const response = await fetch(`/api/reviews/${id}`);
-      if (!response.ok) throw new Error("리뷰 데이터를 가져오는 중 오류 발생");
-
-      const review = await response.json();
-      renderReviewDetails(review);
-    } catch (error) {
-      console.error(error);
-      document.body.innerHTML = "<p>리뷰 데이터를 가져오는 중 오류가 발생했습니다.</p>";
-    }
-  }
-
+             <!-- 가게 URL 입력 -->
+            <label for="storeUrl">가게 URL *</label>
+            <small style="display: block; text-align: left; margin-bottom: 5px;">
+            URL은 반드시 http:// 또는 https://로 시작해야 합니다.
+            </small>
+            <input type="url" id="storeUrl" name="storeUrl" placeholder = "네이버, 카카오, 구글 등 가게 url을 입력해주세요" required>
     
+             <!-- 기타 입력 -->
+             <label for="additionalInfo">추가 정보(선택)</label>
+             <textarea id="additionalInfo" name="additionalInfo" placeholder="추가 정보를 입력해주세요" rows="4"></textarea>
 
-      function renderReviewDetails(review) {
-        const container = document.querySelector(".review-details-container");
-        container.innerHTML = `
-          <div class="review-header">
-              <h2>${review.restaurant_name || "알 수 없는 레스토랑"}</h2>
-              <p>${review.reviewer || "익명"}</p>
-              <p>작성 시간: ${new Date(review.created_at).toLocaleString()}</p>
-          </div>
-          ${
-            review.review_photo
-              ? `<img src="/review/${review.review_photo}" alt="리뷰 이미지" class="review-image">`
-              : "<p></p>"
-          }
-          <div class="ratings">
-              <p>맛: ${generateStars(review.taste_rating)}</p>
-              <p>접근성: ${generateStars(review.access_rating)}</p>
-              <p>재방문: ${generateStars(review.revisit_rating)}</p>
-          </div>
-          <p class="content">
-              ${review.review_text || "내용이 없습니다."}
-          </p>
-          <div class="button-container">
-              <button onclick="location.href='recent_reviews.html?page=1'" 
-                      style="padding: 10px 20px; background-color: #8E89F6; color: #fff; border: none; border-radius: 6px; font-size: 1em; cursor: pointer; font-weight: bold;">
-                  목록으로 돌아가기
-              </button>
-          </div>
-        `;
-      }
+             <p class="form-note">* 표시가 되어있는 항목은 필수 입력 항목입니다.</p>
 
-      function generateStars(rating) {
-        const maxStars = 5;
-        let stars = "";
-        for (let i = 1; i <= maxStars; i++) {
-          stars += i <= rating ? "⭐" : "☆";
+             <!-- 제출 버튼 -->
+        <button type="submit">등록 요청하기</button>
+    </form>
+</div>
+
+    <!--제출 완료 팝업창-->
+    <div class="popup-overlay" id="popupOverlay" style="display: none;"></div>
+    <div class="popup" id="popupMessage" style="display: none;">
+        <p id="popupText">
+            제출이 완료되었습니다.<br>
+            가게는 심사 후 3-5일 이내로 업데이트 예정입니다.
+        </p>
+        <button onclick="closePopup()">확인</button>
+    </div>  
+
+    <!-- JavaScript 코드 -->
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+        
+            const storeName = document.getElementById('storeName').value.trim();
+            const storeUrl = document.getElementById('storeUrl').value.trim();
+            const additionalInfo = document.getElementById('additionalInfo').value.trim();
+        
+            if (!storeName || !storeUrl) {
+                alert('모든 필수 항목을 입력해주세요.');
+                return;
+            }
+        
+            try {
+                const authResponse = await fetch('/auth/status');
+                const authStatus = await authResponse.json();
+                const userId = authStatus.loggedIn ? authStatus.user.id : null;
+        
+                const response = await fetch('/store-register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ storeName, storeUrl, additionalInfo, userId }),
+                });
+        
+                const result = await response.json();
+        
+                if (response.ok) {
+                    showPopup(); // 팝업창 표시
+                    document.getElementById('registerForm').reset(); // 폼 초기화
+                } else {
+                    alert(result.error || '가게 등록 요청에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('서버와의 통신 중 오류가 발생했습니다.');
+            }
+        });
+        
+        function showPopup() {
+            const popupOverlay = document.getElementById('popupOverlay');
+            const popupMessage = document.getElementById('popupMessage');
+            popupOverlay.style.display = 'block';
+            popupMessage.style.display = 'block';
         }
-        return stars;
-      }
+        
+        function closePopup() {
+            const popupOverlay = document.getElementById('popupOverlay');
+            const popupMessage = document.getElementById('popupMessage');
+            popupOverlay.style.display = 'none';
+            popupMessage.style.display = 'none';
+        }
+    
+        
     </script>
 
-    <!-- 반응형 -->
-  </body>
+    <!-- Header와 Footer를 포함하는 JavaScript 파일 링크 -->
+    <script src="header_footer.js"></script>
+
+    <!-- Footer Section Placeholder -->
+    <div id="footer-placeholder"></div>
+</body>
 </html>
