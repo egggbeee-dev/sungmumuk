@@ -306,3 +306,9 @@ body.is-hidden {
   overflow-y: auto; /* 스크롤 가능 */
   max-height: calc(100vh - 60px); /* 화면 높이에서 상단 여백 제외 */
 }
+/* 클릭 비활성화 */
+.no-click a {
+  pointer-events: none; /* 클릭 동작 비활성화 */
+  cursor: default; /* 클릭 불가능한 커서로 표시 */
+  color: #ccc; /* 비활성화된 상태를 시각적으로 나타냄 */
+}
