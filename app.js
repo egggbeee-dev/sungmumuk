@@ -39,6 +39,8 @@ const indexRouter = require('./routes/index')
 const storeSearchRouter = require('./routes/store_search');
 const authRoutes = require('./routes/auth'); // auth.js 파일 경로
 const myReviewRouter = require('./routes/my_review')
+const nodemailer = require("nodemailer"); //이메일 인증
+const email = require('./routes/email');
 
 
 app.set('port', process.env.PORT || 80);
@@ -99,7 +101,7 @@ app.use('/', indexRouter);
 app.use('/store_search', storeSearchRouter);
 app.use('/auth', authRoutes); 
 app.use('/my_reviews', ensureAuthenticated, myReviewRouter);
-
+app.use('/api/email', email); //이메일 추가
 
 // 정적 HTML 파일 제공 라우트
 app.get('/', (req, res) => {

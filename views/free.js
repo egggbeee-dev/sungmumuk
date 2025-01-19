@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let posts = []; // 게시물 저장소
     let isLoggedIn = false; // 사용자 로그인 상태
 
-    /* 사용자 인증 상태 확인
+    //사용자 인증 상태 확인
     async function checkAuthStatus() {
         try {
             const response = await fetch('/auth/status');
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('인증 상태 확인 중 오류가 발생했습니다.');
         }
     }
-        */
+    
 
     // 사용자 동작 활성화 (로그인 상태일 때)
     function enablePostActions() {
