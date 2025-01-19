@@ -56,6 +56,10 @@
           <div class="info-content" id="restaurant-category"></div>
         </div>
         <div class="info-box">
+          <div class="info-label">평균 가격(1인)</div>
+          <div class="info-content" id="restaurant-price"></div>
+        </div>
+        <div class="info-box">
           <div class="info-label">기타</div>
           <div class="info-content" id="restaurant-features"></div>
         </div>
@@ -69,7 +73,8 @@
         </div>
         <div class="info-box">
           <div class="info-label">운영시간</div>
-          <div class="info-content" id="restaurant-hours"></div>
+          <div class="info-content" id="restaurant-hours">
+          </div>
         </div>
       </div>
     </div>
@@ -124,6 +129,8 @@
           ).textContent = `${restaurant.average_rating} / 5.00`;
           document.querySelector("#restaurant-category").textContent =
             restaurant.category;
+            document.querySelector("#restaurant-price").textContent =
+           restaurant.average_price + "원";
           document.querySelector("#restaurant-features").innerHTML = `
                     혼밥 : ${restaurant.solo_meal ? "가능" : "불가능"} <br>
                     단체 : ${restaurant.group_meal ? "가능" : "불가능"} <br>
@@ -239,7 +246,7 @@ document.addEventListener("DOMContentLoaded", displayRestaurantDetails);  // 페
         <img src="${
           review.review_photo
             ? `/review/${review.review_photo}`
-            : "성뭐먹1.png"
+            : "성뭐먹1.png"
         }" 
              alt="리뷰 이미지" 
              style="max-width: 100%; height: auto; max-height: 200px; object-fit: cover;">

@@ -93,6 +93,19 @@
             name="revisit_rating"
             value="0"
           />
+          <label for="checkPrice">가격(1인):</label>
+          <div id="price-options">
+          <label>
+            <input type="radio" name="price" value="10000" /> 10,000원 이하
+          </label>
+          <label>
+            <input type="radio" name="price" value="20000" /> 20,000원 ~ 30,000원 
+          </label>
+          <label>
+            <input type="radio" name="price" value="30000" /> 30,000원 이상
+          </label>
+        </div>
+        <input type="hidden" id="selectedPrice" name="selected_price" value="" />
 
           <label for="reviewPhoto" class="form-label">사진 :</label>
           <input type="file" id="reviewPhoto" name="review_photo" multiple />
@@ -138,6 +151,17 @@
             "none";
         }
       });
+
+       // 가격(1인) 라디오 버튼 설정
+  const priceRadios = document.querySelectorAll('input[name="price"]');
+  const selectedPriceInput = document.getElementById("selectedPrice");
+
+  // 라디오 버튼 클릭 시 선택된 값을 hidden 필드에 저장
+  priceRadios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      selectedPriceInput.value = radio.value;
+    });
+  });
 
       
       // URL 파라미터에서 리뷰 정보를 가져와서 폼에 설정
@@ -190,6 +214,12 @@
         .getElementById("reviewForm")
         .addEventListener("submit", async function (e) {
           e.preventDefault(); // 기본 폼 제출 동작 방지
+
+          const selectedPrice = document.querySelector('input[name="price"]:checked');
+          if (!selectedPrice) {
+            alert("가격(1인)을 선택해주세요!");
+            return; // 폼 제출 중단
+          }
 
           const formData = new FormData(this);
           const restaurantID = document.getElementById("restaurant-id").value;

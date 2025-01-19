@@ -173,9 +173,23 @@
                                   review.revisit_rating || 0
                                 }">
                             </div>
-                            <label for="edit-review-photo">사진 추가:</label><br>
+                            <label for="edit-review-price">가격(1인):</label>
+                            <div id="price-options">
+                            <label>
+                              <input type="radio" name="price" value="10000" /> 10,000원 이하
+                            </label>
+                            <label>
+                              <input type="radio" name="price" value="20000" /> 10,000원 ~ 30,000원 
+                            </label>
+                            <label>
+                              <input type="radio" name="price" value="30000" /> 30,000원 이상
+                            </label>
+                          </div>
+                          <input type="hidden" id="selectedPrice" name="selected_price" value="" /><br>
+
+                            <label for="edit-review-photo">사진 수정:</label><br>
                             <input type="file" id="edit-review-photo" accept="image/*"><br>
-                            <label for="EditreviewText">후기:</label><br>
+                            <label for="edit-review-text">후기:</label><br>
                                 <textarea 
                                     id="edit-review-text" 
                                     name="review_text" 
@@ -204,7 +218,14 @@
         const revisitRating = document.getElementById(
           "revisit-rating-input"
         ).value;
+        const selectedPrice = document.querySelector(
+          'input[name="price"]:checked'
+        )?.value;
 
+        if (!selectedPrice) {
+          alert("가격(1인)을 선택해주세요!");
+          return;
+        }
         const reviewPhotoInput = document.getElementById("edit-review-photo");
         const formData = new FormData();
 
@@ -212,6 +233,7 @@
         formData.append("taste_rating", tasteRating);
         formData.append("access_rating", accessRating);
         formData.append("revisit_rating", revisitRating);
+        formData.append("selected_price", selectedPrice);
 
         if (reviewPhotoInput && reviewPhotoInput.files[0]) {
           formData.append("review_photo", reviewPhotoInput.files[0]);
