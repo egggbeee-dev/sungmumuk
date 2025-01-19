@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+
+
   // header_footer.html을 불러와 동적으로 삽입
   fetch("header_footer.html")
     .then((response) => {
@@ -172,3 +175,19 @@ function refreshSession() {
 setInterval(() => {
   refreshSession();
 }, 15 * 60 * 1000); // 15분마다 실행
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const menuButton = document.querySelector(".menu");
+  const mobileMenu = document.querySelector(".mobile-menu");
+  const body = document.body;
+
+  if (menuButton && mobileMenu) {
+    menuButton.addEventListener("click", () => {
+      mobileMenu.classList.toggle("is-open");
+      body.classList.toggle("is-hidden"); // 배경 스크롤 차단
+    });
+  } else {
+    console.error("Menu button or mobile menu not found.");
+  }
+});
