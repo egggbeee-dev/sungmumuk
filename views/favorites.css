@@ -65,7 +65,7 @@ h1 {
 }
 
 .store-box {
-  margin-bottom: 20px; /* Additional spacing between boxes */
+  margin-bottom: 20px; /* 박스 간격 */
   display: flex;
   align-items: center;
   background-color: #8e89f6; /* 보라색 배경 */
@@ -76,6 +76,9 @@ h1 {
   position: relative;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 90%; /* 부모 요소 너비에 맞춤 */
+  max-width: 800px; /* 가로 최대 크기 제한 */
+  margin: 0 auto 20px; /* 수평 중앙 정렬 및 간격 */
 }
 
 .store-box:hover {
@@ -117,8 +120,9 @@ h1 {
 /* 버튼 섹션 */
 .action-buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   margin-top: 30px;
+  gap : 300px;
 }
 
 .action-buttons button {
@@ -184,6 +188,7 @@ header.favorite-title-box {
 @media (max-width: 768px) {
   .action-buttons {
     gap: 8px;
+    width: 90%
   }
   .action-buttons button {
     padding: 12px 16px;
