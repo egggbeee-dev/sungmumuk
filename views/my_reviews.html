@@ -6,7 +6,6 @@
     <title>내가 쓴 리뷰 내역</title>
     <link rel="stylesheet" href="reviews.css" />
     <link rel="stylesheet" href="header_footer.css" />
-    <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
       rel="stylesheet"
@@ -27,7 +26,14 @@
       <div class="page-title">
         <h1>내가 쓴 리뷰</h1>
       </div>
-      <div class="review-list" id="review-list">
+      
+      <!-- 비로그인 메시지 -->
+      <div id="login-message" style="display: none; text-align: center; margin-top: 20px;">
+        <p>내가 작성한 리뷰를 보려면 <a href="login.html" style="color: blue;">로그인</a> 해주세요!</p>
+      </div>
+      
+      <!-- 리뷰 리스트 -->
+      <div class="review-list" id="review-list" style="display: none;">
         <!-- 서버에서 가져온 리뷰 데이터를 동적으로 렌더링 -->
       </div>
     </div>
@@ -70,7 +76,7 @@
           }
 
           const reviews = await response.json();
-          console.log("응답 받은 리뷰 데이터:", reviews); // 받은 데이터 디버깅용 출력
+          console.log("응답 받은 리뷰 데이터:", reviews);
 
           if (!reviews || reviews.length === 0) {
             // 리뷰 데이터가 없을 경우 메시지 표시
@@ -79,6 +85,7 @@
           }
 
           renderReviews(reviews); // 데이터가 있을 경우 렌더링
+          document.getElementById("review-list").style.display = "block";
         } catch (error) {
           console.error("리뷰 데이터를 가져오는 중 오류 발생:", error);
           document.getElementById("review-list").innerHTML =
@@ -87,23 +94,50 @@
       }
 
       /**
+       * 로그인 상태 확인 및 처리
+       */
+      async function checkAuthStatus() {
+        try {
+          const authResponse = await fetch('/auth/status');
+          const authStatus = await authResponse.json();
+
+          if (!authStatus.loggedIn) {
+            // 비로그인 상태
+            console.log("인증 상태 확인: 비로그인 사용자입니다.");
+            document.getElementById('login-message').style.display = 'block';
+          } else {
+            // 로그인 상태
+            console.log("인증 상태 확인: 로그인된 사용자입니다.");
+            fetchReviews(); // 리뷰 데이터 가져오기
+          }
+        } catch (error) {
+          console.error("로그인 상태 확인 중 오류 발생:", error);
+        }
+      }
+
+      /**
        * 리뷰 데이터를 HTML로 렌더링
        * @param {Array} reviews - 서버에서 가져온 리뷰 데이터
        */
-      function renderReviews(reviews) {
+       function renderReviews(reviews) {
         const reviewList = document.getElementById("review-list");
         reviewList.innerHTML = ""; // 기존 내용을 초기화
-
+      
         reviews.forEach((review) => {
           const reviewBox = document.createElement("div");
           reviewBox.classList.add("review-box");
-
+      
+          // reviewPhoto가 null인지 확인하고, null이 아니면 이미지를 포함
+          const photoHTML = review.reviewPhoto
+            ? `<div class="review-photo">
+                 <img src="/review/${review.reviewPhoto}" alt="리뷰 사진" />
+               </div>`
+            : ""; // reviewPhoto가 null이면 빈 문자열
+      
           reviewBox.innerHTML = `
             <div class="review-info">
               <h2 class="store-name">${review.restaurantName}</h2>
-              <div class="review-photo">
-                <img src="${review.reviewPhoto}" alt="리뷰 사진" />
-              </div>
+              ${photoHTML} <!-- 사진 HTML 추가 -->
               <div class="review-rating">
                 <strong>맛:</strong> ${"★".repeat(review.tasteRating)}<br>
                 <strong>재방문:</strong> ${"★".repeat(review.revisitRating)}<br>
@@ -122,9 +156,10 @@
           reviewList.appendChild(reviewBox);
         });
       }
+      
 
-      // 페이지 로드 시 리뷰 데이터 가져오기
-      document.addEventListener("DOMContentLoaded", fetchReviews);
+      // 페이지 로드 시 로그인 상태 확인
+      document.addEventListener("DOMContentLoaded", checkAuthStatus);
     </script>
   </body>
 </html>
