@@ -78,6 +78,33 @@ button,
   display: flex;
   flex-direction: column;
   gap: 15px;
+  overflow-x: auto; /* 가로 스크롤 활성화 */
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  max-width: 100%; /* 부모 요소의 크기를 제한 */
+  width: 100%; /* 반응형 크기 설정 */
+}
+.info-section::-webkit-scrollbar {
+  height: 6px; /* 스크롤바 높이 (가로 방향) */
+  background-color: #f0f0f0; /* 스크롤 트랙 배경색 */
+  border-radius: 3px;
+}
+
+/* 스크롤바 손잡이 */
+.info-section::-webkit-scrollbar-thumb {
+  background-color: #6d63e5; /* 스크롤바 색상 */
+  border-radius: 3px; /* 손잡이 끝을 둥글게 */
+  transition: background-color 0.3s ease; /* 색상 변화 애니메이션 */
+}
+
+/* 스크롤바 손잡이 호버 상태 */
+.info-section::-webkit-scrollbar-thumb:hover {
+  background-color: #5a50d5; /* 호버 시 손잡이 색상 */
+}
+
+/* 스크롤바 트랙 */
+.info-section::-webkit-scrollbar-track {
+  background-color: #f6f2fc; /* 스크롤 트랙 색상 */
+  border-radius: 3px; /* 트랙 끝을 둥글게 */
 }
 /* 정보 박스 */
 .info-box {
@@ -87,6 +114,8 @@ button,
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 15px;
+  min-width: fit-content; /* 내용 크기에 맞게 최소 너비 유지 */
+  flex-shrink: 0; /* 요소가 줄어들지 않게 설정 */
 }
 
 /* 라벨과 콘텐츠 */
@@ -101,6 +130,9 @@ button,
   flex: 1; /* 콘텐츠는 남은 공간을 차지 */
   font-size: 16px;
   color: #333;
+  display: inline-block; /* 자식 요소를 인라인 블록으로 설정 */
+  min-width: 300px; /* 자식 요소의 최소 너비를 설정 */
+  margin-right: 15px; /* 요소 간 여백 추가 */
   overflow-wrap: break-word; /* 텍스트가 길 경우 줄바꿈 처리 */
   white-space: nowrap; /* 텍스트 줄바꿈 방지 */
   overflow: hidden; /* 넘치는 텍스트는 숨기기 */

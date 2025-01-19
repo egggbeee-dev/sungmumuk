@@ -73,7 +73,8 @@
         </div>
         <div class="info-box">
           <div class="info-label">운영시간</div>
-          <div class="info-content" id="restaurant-hours"></div>
+          <div class="info-content" id="restaurant-hours">
+          </div>
         </div>
       </div>
     </div>
@@ -245,7 +246,7 @@ document.addEventListener("DOMContentLoaded", displayRestaurantDetails);  // 페
         <img src="${
           review.review_photo
             ? `/review/${review.review_photo}`
-            : "성뭐먹1.png"
+            : "성뭐먹1.png"
         }" 
              alt="리뷰 이미지" 
              style="max-width: 100%; height: auto; max-height: 200px; object-fit: cover;">
