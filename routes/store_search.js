@@ -66,7 +66,6 @@ router.get('/', async (req, res) => {
                 recommended_menu,
                 average_rating,
                 average_price,
-                IFNULL(restaurant_image, 'default-logo.png') AS restaurant_image,
                 IFNULL(reviews, 0) AS reviews
             FROM restaurant
             ${whereClause}
@@ -79,6 +78,26 @@ router.get('/', async (req, res) => {
 
         // SQL 실행
         const [results] = await db.query(sql, params);
+
+         // 레스토랑 이미지를 별도 테이블에서 가져오기
+        const restaurantIds = results.map(r => r.restaurant_id);
+        if (restaurantIds.length > 0) {
+            const imageSql = `SELECT restaurant_id, image_url FROM restaurant_image WHERE restaurant_id IN (?);`;
+            const [imageResults] = await db.query(imageSql, [restaurantIds]);
+        
+            const imagesMap = imageResults.reduce((map, img) => {
+                map[img.restaurant_id] = img.image_url;
+                return map;
+            }, {});
+        
+            results.forEach(restaurant => {
+                restaurant.restaurant_image = imagesMap[restaurant.restaurant_id] || 'default-logo.png';
+            });
+        } else {
+            results.forEach(restaurant => {
+                restaurant.restaurant_image = 'default-logo.png';
+            });
+        }
 
         // 전체 페이지 계산
         const countSql = `SELECT COUNT(*) as total FROM restaurant ${whereClause};`;
