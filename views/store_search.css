@@ -15,6 +15,17 @@ body {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* 헤더 스타일 */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 24px;
+  color: #6c63ff;
+}
+
 /* 검색 섹션 스타일 */
 .search-section {
   padding: 40px 0;
@@ -23,114 +34,90 @@ body {
 
 .search-container {
   position: relative;
-  display: flex; /* 플렉스 레이아웃 */
-  align-items: center; /* 세로 중앙 정렬 */
-  width: 850px; /* 검색창 컨테이너 너비 */
-  margin: 0 auto; /* 중앙 정렬 */
+  display: flex;
+  align-items: center;
+  width: 850px;
+  margin: 0 auto;
 }
 
 .search-container input[type="text"] {
-  flex: 1; /* 입력 필드가 남은 공간을 채우도록 설정 */
-  padding: 15px 20px; /* 내부 여백 */
-  font-size: 1.5em; /* 글씨 크기 */
-  border: 1.5px solid #8e89f6; /* 테두리 색상 */
-  border-right: none; /* 오른쪽 테두리 제거 */
-  border-radius: 25px 0 0 25px; /* 왼쪽 모서리를 둥글게 설정 */
-  background-color: white; /* 배경색 */
-  color: black; /* 글자 색상 */
-  height: 60px; /* 입력 필드 높이 */
+  flex: 1;
+  padding: 15px 20px;
+  font-size: 1.5em;
+  border: 1.5px solid #8e89f6;
+  border-right: none;
+  border-radius: 25px 0 0 25px;
+  background-color: white;
+  color: black;
+  height: 60px;
 }
 
 .search-container .search-icon {
-  padding: 15px 30px; /* 좌우 패딩 */
-  font-size: 1.5em; /* 아이콘 크기 */
-  background-color: #c5b9f3; /* 아이콘 배경색 */
-  color: white; /* 아이콘 색상 */
-  border-radius: 0 25px 25px 0; /* 오른쪽 모서리를 둥글게 설정 */
-  cursor: pointer; /* 클릭 가능한 마우스 커서 */
-  border: 1.5px solid #8e89f6; /* 테두리 색상 */
-  border-left: none; /* 왼쪽 테두리 제거 */
-  display: flex; /* 아이콘을 중앙 정렬하기 위한 플렉스 */
-  justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  height: 60px; /* 아이콘 높이 입력 필드와 동일하게 설정 */
-  box-sizing: border-box; /* 크기 계산 포함 */
+  padding: 15px 30px;
+  font-size: 1.5em;
+  background-color: #c5b9f3;
+  color: white;
+  border-radius: 0 25px 25px 0;
+  cursor: pointer;
+  border: 1.5px solid #8e89f6;
+  border-left: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  box-sizing: border-box;
 }
 
 .search-container input::placeholder {
-  color: black; /* placeholder 색상 */
-  font-size: 1em; /* placeholder 글씨 크기 */
+  color: black;
+  font-size: 1em;
 }
 
 .search-container input[type="text"]:focus {
-  outline: none; /* 포커스 시 생기는 기본 테두리 제거 */
-  box-shadow: none; /* 추가적인 그림자 효과 제거 */
+  outline: none;
+  box-shadow: none;
 }
 
 .filter-box {
   display: flex;
   justify-content: center;
-  gap: 15px; /* 요소 간 간격 */
+  gap: 15px;
   flex-wrap: wrap;
-  margin-bottom: 20px; /* 필터 박스와 store-list 간 여백 추가 */
+  margin-bottom: 20px;
   padding: 20px;
-  border-radius: 15px; /* 모서리를 둥글게 유지 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 유지 */
-  border: 1px solid #d1c7f1; /* 테두리 유지 */
-  background-color: white; /* 배경색 */
-  max-width: 1200px; /* 필터 박스 너비 제한 */
-  margin-left: auto; /* 중앙 정렬 */
-  margin-right: auto; /* 중앙 정렬 */
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #d1c7f1;
+  background-color: white;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
   list-style: none;
 }
+
 .filter-box li {
   gap: 15px;
   display: flex;
   align-items: center;
 }
-/* 필터 내부 요소 스타일 */
+
 .filter-box label {
-  font-size: 16px; /* 기본 글자 크기 */
-  margin-right: 3px; /* label과 input/select 간격 조정 */
+  font-size: 16px;
+  margin-right: 3px;
   font-family: "Antons";
   font-weight: bold;
 }
 
 .filter-box input,
 .filter-box select {
-  padding: 5px 10px; /* 입력 필드 내부 여백 */
-  font-size: 15px; /* 기본 글자 크기 */
+  padding: 5px 10px;
+  font-size: 15px;
   border: 1px solid #b0a7f7;
   border-radius: 5px;
-  height: 35px; /* 높이 설정 */
+  height: 35px;
   width: auto;
   box-sizing: border-box;
 }
-
-/* 배너 스타일 */
-.banner {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  background-color: #ff6b6b;
-  color: white;
-  padding: 3px 8px;
-  border-radius: 5px;
-  font-size: 12px;
-}
-
-.store-item:hover {
-  background-color: #dad8d8; /* 배경색 어둡게 변경 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 약간 진하게 */
-}
-
-.top-category .store-list {
-  display: flex;
-  justify-content: center; /* 가로 중앙 정렬 */
-  gap: 20px; /* 각 가게 사이 간격 */
-}
-
-/* 페이지네이션 */
 .pagination {
   display: flex;
   justify-content: center;
@@ -158,124 +145,106 @@ body {
   color: white;
 }
 
-/*수정*/
+
 /* Store list container */
 .store-list {
   display: flex;
-  flex-direction: column; /* 세로 정렬 */
-  justify-content: center; /* 세로 방향 중앙 정렬 */
-  align-items: center; /* 가로 방향 중앙 정렬 */
-  gap: 15px; /* 각 가게 사이 간격 */
-  margin: 7px auto; /* 상하 여백 추가 및 가로 중앙 정렬 */
-  width: 100%; /* 리스트 컨테이너 너비를 100%로 설정 */
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 10px;
+  margin: 0 auto;
 }
 
 /* Store item container */
 .store-item {
-  position: relative;
-  background-color: #fff;
-  border: 1px solid #8e89f6;
+  background: #fff;
+  border: 1px solid #ddd;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 750px;
-  height: 200px;
-  display: flex; /* Flex로 요소 정렬 */
-  align-items: center;
-  padding: 20px;
-  margin: 0 auto;
-  margin-top: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 300px;
+  overflow: hidden;
+  flex: 0 0 auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
 }
 
 .store-item:hover {
-  background-color: #dad8d8;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Store image */
 .store-img {
-  width: 230px;
-  height: 180px;
+  width: 100%;
+  height: 200px;
   object-fit: cover;
-  border-radius: 5px;
-  margin-right: 20px;
+  border-bottom: 1px solid #ddd;
 }
 
 /* Store details */
 .store-details {
-  display: flex; /* Flex로 내부 요소 정렬 */
-  flex-direction: column; /* 세로 정렬 */
-  align-items: flex-start; /* 왼쪽 정렬 */
-  justify-content: flex-start; /* 요소가 위쪽으로 정렬되도록 설정 */
-  height: 100%; /* 이미지와 높이 맞춤 */
-  font-family: "Black Han Sans", sans-serif;
-  padding-top: 50px; /* 전체 내용을 더 아래로 이동 (기존 80px에서 증가) */
-  line-height: 0.5; /* 줄 간격 줄이기 (기본값은 1.5 정도) */
+  padding: 15px;
+  text-align: center;
 }
 
 .store-name {
-  font-family: "Black Han Sans", sans-serif !important;
-  font-size: 1.8em;
-  color: #8e89f6;
-  margin: 0 0 5px 0; /* 버튼과의 간격 최소화 */
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
+.store-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+/* Buttons */
 .details-button {
-  padding: 10px 20px;
   background-color: #8e89f6;
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
   cursor: pointer;
-  font-size: 1em;
-  font-family: "Anton", sans-serif;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .details-button:hover {
-  background-color: #7e5fe2;
+  background-color: #7369dc;
 }
 
-/* Wishlist and Compare buttons */
 .wishlist-button,
 .compare-button {
   position: absolute;
   right: 10px;
   background-color: #d1c7f1;
   border: none;
-  border-radius: 15px;
-  padding: 12px 18px; /* 좌우 패딩과 상하 패딩을 조금씩 늘림 */
+  border-radius: 10px;
+  padding: 10px;
   cursor: pointer;
-  font-size: 16px; /* 텍스트 크기 증가 */
-  transition: background-color 0.3s, color 0.3s;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 90px; /* 버튼 너비 증가 */
-  height: 50px; /* 버튼 높이 증가 */
-  flex-direction: column; /* 텍스트와 아이콘을 수직 정렬 */
-  text-align: center;
+  gap: 5px;
 }
+
 .wishlist-button {
-  top: 25%; /* 기존 20%에서 아래로 조정 */
+  top: 10px;
 }
 
 .compare-button {
-  top: 55%; /* 기존 60%에서 간격 조정을 위해 위로 이동 */
+  top: 60px;
 }
 
 .wishlist-button:hover,
 .compare-button:hover {
-  background-color: #7e5fe2;
+  background-color: #b8a9e6;
 }
-
-.heart-icon {
-  font-size: 20px; /* 아이콘 크기 증가 */
-  margin-bottom: 0.3px; /* 아이콘과 텍스트 사이 간격 */
-}
-
-/* 필터 박스 적용 버튼 스타일 */
 .apply-button {
   padding: 10px 20px;
   background-color: #8e89f6;
@@ -287,10 +256,11 @@ body {
   transition: background-color 0.3s ease;
   margin-top: 0px;
 }
-
 .apply-button:hover {
   background-color: #7e5fe2;
 }
+
+/* Responsive design */
 @media (max-width: 1260px) {
   .filter-box {
     max-width: inherit;
@@ -311,7 +281,15 @@ body {
   .filter-box label {
     line-height: 32px;
   }
+  .store-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .store-item {
+    width: auto;
+  }
 }
+
 @media (max-width: 768px) {
   .search-container input[type="text"] {
     font-size: 16px;
@@ -319,5 +297,9 @@ body {
   }
   .search-container .search-icon {
     padding: 15px 16px;
+  }
+  .store-list {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 }
