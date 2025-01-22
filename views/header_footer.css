@@ -7,6 +7,11 @@ body {
   background-color: #fff; /* 배경색 */
 }
 
+
+
+
+
+
 /* 영어 텍스트에 Anton 폰트 적용 */
 h1,
 h2,
@@ -139,6 +144,25 @@ button,
 .mobile-menu {
   display: none;
 }
+
+
+
+.mobile-menu.is-open {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  padding: 16px;
+  overflow-y: auto; /* 스크롤 가능 */
+}
+
+
+
 .mobile-menu .s__row {
   align-items: center;
   width: 100%;
@@ -271,4 +295,20 @@ body.is-hidden {
   .footer-logo-img {
     width: 100px;
   }
+}
+
+
+/* 메뉴 리스트 */
+.mobile-menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto; /* 스크롤 가능 */
+  max-height: calc(100vh - 60px); /* 화면 높이에서 상단 여백 제외 */
+}
+/* 클릭 비활성화 */
+.no-click a {
+  pointer-events: none; /* 클릭 동작 비활성화 */
+  cursor: default; /* 클릭 불가능한 커서로 표시 */
+  color: #ccc; /* 비활성화된 상태를 시각적으로 나타냄 */
 }
