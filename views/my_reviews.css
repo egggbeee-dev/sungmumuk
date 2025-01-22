@@ -53,20 +53,22 @@ body {
 /* 개별 리뷰 박스 */
 .review-box {
     display: flex;
-    background-color: #8E89F6;
+    position: relative; /* 수정 버튼을 오른쪽 상단에 고정하기 위해 */
+    background-color: #8e89f6;
     padding: 20px;
     border-radius: 10px;
     color: white;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px; /* 박스 간 간격 설정 */
-}
+    margin-bottom: 30px;
+  }
+  
 
 /* 리뷰 정보 섹션 */
 .review-info {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-}
+    flex: 1;
+  }
 
 /* 가게명 */
 .store-name {
@@ -80,34 +82,47 @@ body {
     height: 150px;
     object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 10px;
-}
+    margin-right: 20px;
+  }
 
 /* 평점 */
 .review-rating, .review-date {
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 20px;
     font-size: 16px;
+    margin-bottom: 10px;
 }
 
 /* 리뷰 텍스트 */
 .review-text {
     font-size: 16px;
-    line-height: 1.5;
-}
+    margin-top: 10px;
+    display: -webkit-box; /* 줄바꿈을 위해 flexbox 사용 */
+    -webkit-line-clamp: 1; /* 최대 2줄까지만 표시 */
+    -webkit-box-orient: vertical; /* 수직 정렬 설정 */
+    overflow: hidden; /* 초과 텍스트 숨김 */
+    text-overflow: ellipsis; /* '...'으로 표시 */
+    word-break: break-word; /* 긴 단어를 줄바꿈 */
+    overflow-wrap: break-word; /* 긴 단어를 줄바꿈 */
+  }
 
 /* 수정 버튼 */
-.edit-button {
+.detail-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     padding: 8px 15px;
     background-color: #6d63e5;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    align-self: flex-start;
-}
+  }
 
-.edit-button:hover {
+  .edit-button:hover {
     background-color: #5a50d5;
-}
+  }
 
 /* 모달 스타일 */
 .modal {
@@ -145,3 +160,15 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
+
+@media (max-width: 768px) {
+    .review-rating {
+      flex-direction: column; /* 가로 정렬에서 세로 정렬로 변경 */
+      align-items: flex-start; /* 왼쪽 정렬 */
+      gap: 5px; /* 간격 조정 */
+    }
+  
+    .review-rating strong {
+      display: inline-block; /* 강제 줄바꿈 방지 */
+    }
+  }

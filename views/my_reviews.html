@@ -127,39 +127,53 @@
           const reviewBox = document.createElement("div");
           reviewBox.classList.add("review-box");
       
-          // reviewPhoto가 null인지 확인하고, null이 아니면 이미지를 포함
+          // reviewPhoto가 존재할 경우만 HTML 추가
           const photoHTML = review.reviewPhoto
             ? `<div class="review-photo">
                  <img src="/review/${review.reviewPhoto}" alt="리뷰 사진" />
                </div>`
-            : ""; // reviewPhoto가 null이면 빈 문자열
+            : "";
       
           reviewBox.innerHTML = `
             <div class="review-info">
-              <h2 class="store-name">${review.restaurantName}</h2>
-              ${photoHTML} <!-- 사진 HTML 추가 -->
-              <div class="review-rating">
-                <strong>맛:</strong> ${"★".repeat(review.tasteRating)}<br>
-                <strong>재방문:</strong> ${"★".repeat(review.revisitRating)}<br>
-                <strong>접근성:</strong> ${"★".repeat(review.accessRating)}
+              <div class="review-header">
+                <h2 class="store-name">${review.restaurantName}</h2>
               </div>
-              <p class="review-date"><strong>작성일:</strong> ${review.createdAt}</p>
-              <p class="review-text">${review.reviewText}</p>
-              <button
-                class="edit-button"
-                onclick="goToEditPage('${review.restaurantName}', ${review.tasteRating}, ${review.revisitRating}, ${review.accessRating}, '${review.reviewText}')"
-              >
-                수정
+              <div class="review-content">
+                ${photoHTML}
+                <div class="review-details">
+                  <div class="review-rating">
+                    <strong>맛:</strong> ${"★".repeat(review.tasteRating)}
+                    <strong>재방문:</strong> ${"★".repeat(review.revisitRating)}
+                    <strong>접근성:</strong> ${"★".repeat(review.accessRating)}
+                  </div>
+                  <div class="review-text">
+                    ${review.reviewText}
+                  </div>
+                  <div class="review-date">
+                  <strong>작성일:</strong> ${review.createdAt}
+                </div>
+                </div>
+              </div>
+              <button class="detail-button" onclick="goToReviewDetailPage('${review.reviewId}')">
+                자세히 보기
               </button>
             </div>
           `;
+      
           reviewList.appendChild(reviewBox);
         });
       }
       
-
       // 페이지 로드 시 로그인 상태 확인
       document.addEventListener("DOMContentLoaded", checkAuthStatus);
+
+      //리뷰 페이지 이동
+        function goToReviewDetailPage(reviewId) {
+          const url = `/store_review.html?id=${reviewId}`;
+          window.location.href = url;
+        }
+    
     </script>
   </body>
 </html>
