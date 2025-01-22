@@ -107,7 +107,7 @@
         let currentUserId = null; // 현재 로그인한 사용자 ID
         let postAuthorId = null; // 게시글 작성자 ID
 
-        //await checkAuthStatus();
+        await checkAuthStatus();
         await loadPost(postId);
         await loadComments(postId);
 
