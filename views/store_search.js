@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const storeId = event.target.getAttribute("data-restaurant-id");
             if (storeId) {
                 console.log("Button clicked, redirecting to store details with ID:", storeId);
-                window.location.href = `http://localhost:8001/store_details?id=${storeId}`;
+                window.location.href = `/store_details?id=${storeId}`;
             }
         }
     });
