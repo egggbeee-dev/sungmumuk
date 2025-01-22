@@ -34,20 +34,16 @@
         <h2>개인정보</h2>
         <div class="profile-details">
           <div class="info-group">
-            <label>생년월일:</label>
-            <div class="info-content" id="birthdate">test1</div>
+            <label>닉네임:</label>
+            <div class="info-content" id="nickname">수아</div>
           </div>
           <div class="info-group">
-            <label>성함:</label>
-            <div class="info-content" id="name">test2</div>
-          </div>
-          <div class="info-group">
-            <label>연락처:</label>
-            <div class="info-content" id="contact">test3</div>
+            <label>이메일:</label>
+            <div class="info-content" id="email">202201@sungshin.ac.kr</div>
           </div>
           <div class="info-group">
             <label>학과:</label>
-            <div class="info-content" id="department">test4</div>
+            <div class="info-content" id="department">Ai융합학부</div>
           </div>
         </div>
       </div>
@@ -148,7 +144,7 @@
         container.innerHTML = reviews
           .map(review => `
             <div class="reviews-box">
-              <img src="/review/${review.review_photo || '/images/default-image.jpg'}" alt="${review.restaurant_name}" class="review-image" />
+              ${review.review_photo ? `<img src="/review/${review.review_photo}" alt="${review.restaurant_name}" class="review-image" />` : ''}
               <div class="reviews-content">
                 <h3 class="restaurant-name">${review.restaurant_name}</h3>
                 <p class="reviews-text">${review.review_text}</p>
@@ -163,24 +159,8 @@
             </div>
           `)
           .join('');
-
       }
       
-      
-      // 예시 데이터를 설정하여 동적으로 정보 표시
-      const profileData = {
-        birthdate: "1995-06-15",
-        name: "홍길동",
-        contact: "010-1234-5678",
-        department: "컴퓨터공학과",
-      };
-
-      // 각 정보 항목에 값을 설정
-      document.getElementById("birthdate").textContent = profileData.birthdate;
-      document.getElementById("name").textContent = profileData.name;
-      document.getElementById("contact").textContent = profileData.contact;
-      document.getElementById("department").textContent =
-        profileData.department;
     </script>
   </body>
 </html>
