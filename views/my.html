@@ -155,8 +155,8 @@
                   <span>접근성:</span> ${'⭐'.repeat(review.access_rating)}
                 </div>
                 <p class="reviews-date">작성일: ${new Date(review.created_at).toLocaleDateString()}</p>
-                <a href="/store_details?id=${review.review_id}" class="detail-button">자세히 보기</a>
               </div>
+              <a href="/store_review.html?id=${review.review_id}" class="detail-button">자세히 보기</a>
             </div>
           `)
           .join('');

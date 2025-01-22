@@ -79,7 +79,7 @@ body {
 .reviews-container h2 {
   font-size: 24px;
   margin-bottom: 15px;
-  text-align: center;
+  text-align: left;
 }
 
 .favorites-list {
@@ -89,7 +89,7 @@ body {
 .favorite-store {
   display: flex;
   align-items: center; /* 세로 가운데 정렬 */
-  background-color: #ffffff; /* 보라색 배경 */
+  background-color: #ffffff; 
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
@@ -154,14 +154,14 @@ body {
 }
 
 .reviews-box {
-  display: flex; /* 이미지와 텍스트를 가로로 배치 */
-  align-items: center; /* 텍스트를 이미지와 수직 중앙 정렬 */
-  background-color: #ffffff;
+  display: flex;
+  align-items: center; /* 세로 가운데 정렬 */
+  background-color: #ffffff; 
   border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 20px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  padding: 15px;
+  position: relative; /* 버튼 위치를 조정하기 위해 추가 */
 }
 
 .review-image {
@@ -190,7 +190,8 @@ body {
 }
 .reviews-text {
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* 최대 2줄까지 표시 */
+  width : 80%;
+  -webkit-line-clamp: 1; /* 최대 2줄까지 표시 */
   -webkit-box-orient: vertical;
   overflow: hidden; /* 넘치는 텍스트를 숨김 */
   text-overflow: ellipsis; /* 생략 표시 (...) */
@@ -203,7 +204,7 @@ body {
 .reviews-ratings {
   font-size: 14px;
   color: #666;
-  margin-bottom: 8px;
+  text-align: left;
 }
 
 .reviews-date {
@@ -277,7 +278,7 @@ body {
   .reviews-box {
     flex-direction: column; /* 가로에서 세로 배열로 변경 */
     align-items: center; /* 중앙 정렬 */
-    text-align: center; /* 텍스트 정렬 변경 */
+    text-align: left; /* 텍스트 정렬 변경 */
     padding: 10px; /* 내부 여백 추가 */
   }
 
