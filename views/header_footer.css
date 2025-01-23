@@ -306,9 +306,13 @@ body.is-hidden {
   overflow-y: auto; /* 스크롤 가능 */
   max-height: calc(100vh - 60px); /* 화면 높이에서 상단 여백 제외 */
 }
-/* 클릭 비활성화 */
-.no-click a {
-  pointer-events: none; /* 클릭 동작 비활성화 */
-  cursor: default; /* 클릭 불가능한 커서로 표시 */
-  color: #ccc; /* 비활성화된 상태를 시각적으로 나타냄 */
+.no-click > a {
+  pointer-events: none; /* 부모 링크 비활성화 */
+  cursor: default;
+}
+
+.no-click .submenu a {
+  pointer-events: auto; /* 하위 메뉴는 클릭 가능 */
+  cursor: pointer; /* 일반 커서 */
+  color: #8e89f6; /* 활성 상태 색상 */
 }
