@@ -1,0 +1,7 @@
+CREATE TABLE email_verifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE, -- 이메일 주소
+    code VARCHAR(6) NOT NULL,           -- 인증번호
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성 시간
+    expires_at TIMESTAMP                -- 만료 시간
+);
