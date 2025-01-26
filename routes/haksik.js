@@ -1,27 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2');
+const pool = require('../config/db'); // 데이터베이스 연결 모듈
 
-// MySQL 데이터베이스 연결 설정
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '1234',
-  database: 'sungmumuk',
-});
 
-// 데이터베이스 연결 확인
-db.connect((err) => {
-  if (err) {
-    console.error('MySQL 연결 실패:', err.message);
-  } else {
-    console.log('MySQL 연결 성공');
-  }
-});
 
 // 게시글 목록 조회 API (GET /free/posts)
 router.get('/posts', (req, res) => {
-  const query = 'SELECT * FROM haksik_posts ORDER BY created_at DESC';
+  const query = `
+  SELECT * FROM posts 
+  WHERE board_type = 'haksik'
+  ORDER BY created_at DESC
+`;
+
   db.query(query, (err, results) => {
     if (err) {
       console.error('Database error:', err);
@@ -35,10 +26,12 @@ router.get('/posts', (req, res) => {
 router.get('/posts/:id', (req, res) => {
   const postId = req.params.id;
   const query = `
-    SELECT p.*, u.nickname AS author, u.id AS author_id
-    FROM haksik_posts p
-    JOIN users u ON p.user_id = u.id
-    WHERE p.post_id = ?`;
+  SELECT p.*, u.nickname AS author, u.id AS author_id
+  FROM posts p
+  JOIN users u ON p.user_id = u.id
+  WHERE p.post_id = ? AND p.board_type = 'haksik'
+`;
+
 
   db.query(query, [postId], (err, results) => {
     if (err) {
@@ -63,8 +56,10 @@ router.post('/posts/:id/comments', (req, res) => {
   }
 
   const query = `
-    INSERT INTO haksik_comments (post_id, user_id, content, created_at, likes)
-    VALUES (?, ?, ?, NOW(), 0)`;
+  INSERT INTO comments (post_id, user_id, content, created_at, likes)
+  VALUES (?, ?, ?, NOW(), 0)
+`;
+
 
   db.query(query, [postId, userId, content], (err, result) => {
     if (err) {
@@ -80,11 +75,13 @@ router.post('/posts/:id/comments', (req, res) => {
 router.get('/posts/:id/comments', (req, res) => {
   const postId = req.params.id;
   const query = `
-    SELECT c.comment_id, c.content, c.created_at, c.likes, u.nickname AS author
-    FROM haksik_comments c
-    LEFT JOIN users u ON c.user_id = u.id
-    WHERE c.post_id = ?
-    ORDER BY c.created_at DESC`;
+  SELECT c.comment_id, c.content, c.created_at, c.likes, u.nickname AS author
+  FROM comments c
+  LEFT JOIN users u ON c.user_id = u.id
+  WHERE c.post_id = ?
+  ORDER BY c.created_at DESC
+`;
+
 
   db.query(query, [postId], (err, results) => {
     if (err) {
@@ -98,8 +95,12 @@ router.get('/posts/:id/comments', (req, res) => {
 // 댓글 좋아요 API (POST /free/comments/:id/like)
 router.post('/comments/:id/like', (req, res) => {
   const commentId = req.params.id;
+  const updateQuery = `
+  UPDATE comments 
+  SET likes = likes + 1 
+  WHERE comment_id = ?
+`;
 
-  const updateQuery = 'UPDATE haksik_comments SET likes = likes + 1 WHERE comment_id = ?';
   db.query(updateQuery, [commentId], (err) => {
     if (err) {
       console.error('Database error:', err);
@@ -119,7 +120,12 @@ router.put('/posts/:id', (req, res) => {
     return res.status(400).json({ message: '내용을 입력하세요.' });
   }
 
-  const query = 'UPDATE haksik_posts SET content = ? WHERE post_id = ? AND user_id = ?';
+  const query = `
+  UPDATE posts 
+  SET content = ? 
+  WHERE post_id = ? AND user_id = ? AND board_type = 'haksik'
+`;
+
   db.query(query, [content, postId, userId], (err, results) => {
     if (err) {
       console.error('Database error:', err);
@@ -140,7 +146,10 @@ router.delete('/posts/:id', (req, res) => {
   const userId = req.user.id;
 
   // 댓글 삭제 후 게시글 삭제
-  const deleteCommentsQuery = 'DELETE FROM haksik_comments WHERE post_id = ?';
+  const deleteCommentsQuery = `
+  DELETE FROM comments 
+  WHERE post_id = ?
+`;
   db.query(deleteCommentsQuery, [postId], (err) => {
     if (err) {
       console.error('댓글 삭제 중 오류 발생:', err);
@@ -148,7 +157,10 @@ router.delete('/posts/:id', (req, res) => {
     }
 
     // 댓글 삭제 후 게시글 삭제
-    const deletePostQuery = 'DELETE FROM haksik_posts WHERE post_id = ? AND user_id = ?';
+    const deletePostQuery = `
+  DELETE FROM posts 
+  WHERE post_id = ? AND user_id = ? AND board_type = 'haksik'
+`;
     db.query(deletePostQuery, [postId, userId], (err, result) => {
       if (err) {
         console.error('게시글 삭제 중 오류 발생:', err);
@@ -172,9 +184,11 @@ router.get('/search', (req, res) => {
   }
 
   const searchQuery = `
-  SELECT * FROM haksik_posts
-  WHERE title LIKE ? OR content LIKE ?
-  ORDER BY created_at DESC`;
+  SELECT * FROM posts
+  WHERE board_type = 'haksik' AND (title LIKE ? OR content LIKE ?)
+  ORDER BY created_at DESC
+`;
+
 
   db.query(searchQuery, [`%${query}%`, `%${query}%`], (err, results) => {
     if (err) {
@@ -186,3 +200,4 @@ router.get('/search', (req, res) => {
 });
 
 module.exports = router;
+
