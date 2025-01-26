@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            const response = await fetch('/free/posts', {
+            const response = await fetch('/free_new/free/posts', {
                 method: 'POST',
                 body: formData,
             });
@@ -203,6 +203,6 @@ searchInput.addEventListener('keyup', function (event) {
 });
 
     // 초기 실행
-    //checkAuthStatus(); // 인증 상태 확인
+    checkAuthStatus(); // 인증 상태 확인
     loadPosts(); // 서버에서 게시물 가져오기
 });
