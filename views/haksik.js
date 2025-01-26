@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     const postList = document.getElementById('post-list');
     const newPostBtn = document.getElementById('new-post-btn');
@@ -204,6 +205,6 @@ searchInput.addEventListener('keyup', function (event) {
 });
 
     // 초기 실행
-    //checkAuthStatus(); // 인증 상태 확인
+    checkAuthStatus(); // 인증 상태 확인
     loadPosts(); // 서버에서 게시물 가져오기
 });
