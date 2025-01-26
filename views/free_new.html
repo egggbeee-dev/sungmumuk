@@ -4,35 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 작성</title>
-     <link rel="icon" href="성뭐먹3.png" type="image/png">
+    <link rel="icon" href="성뭐먹3.png" type="image/png">
     <link rel="stylesheet" href="community_new.css">
-    <link rel="stylesheet" href="header_footer.css"> <!-- 헤더와 푸터 스타일 -->
+    <link rel="stylesheet" href="header_footer.css">
     <script src="free_new.js" defer></script>
-    <script src="header_footer.js" defer></script> <!-- 헤더 및 푸터 동적 로드 -->
-    <!-- Google Fonts -->
+    <script src="header_footer.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 </head>
 <body>
-        <!-- Header Placeholder -->
-        <div id="header-placeholder"></div>
+    <div id="header-placeholder"></div>
 
-    
-        <div class="page-header">
+    <div class="page-header">
         게시글 작성하기
-        </div>
-       
-        <div class="navigation">
-            <a href="index.html">홈</a>
-            <a href="haksik.html">학식 게시판</a>
-            <a href="free.html">자유 게시판</a>
-        </div>
-        
-<body>
+    </div>
+
+    <div class="navigation">
+        <a href="index.html">홈</a>
+        <a href="haksik.html">학식 게시판</a>
+        <a href="free.html">자유 게시판</a>
+    </div>
 
     <main>
-       
-        <form id="new-post-form" enctype="multipart/form-data" method="POST">
+        <form id="new-post-form" action="/free_new/free/posts" enctype="multipart/form-data" method="POST">
             <label for="new-post-category">말머리 :</label>
             <select id="new-post-category" name="category">
                 <option value="[맛집탐방]">[맛집탐방]</option>
@@ -40,50 +34,68 @@
                 <option value="[여행 중 맛집 발견]">[여행 중 맛집 발견]</option>
                 <option value="[아쉬워요]">[아쉬워요]</option>
             </select>
-            
+
             <label for="new-post-title">제목 :</label>
             <input type="text" id="new-post-title" name="title" placeholder="제목을 입력하세요" required />
-            
+
             <label for="new-post-content">게시물 :</label>
             <textarea id="new-post-content" name="content" rows="5" placeholder="게시물 내용을 입력하세요..." required></textarea>
-            
+
             <label for="new-post-image">이미지 첨부 :</label>
             <input type="file" id="new-post-image" name="image" accept="image/*">
-            
+
             <button id="submit-post" type="submit">작성 완료</button>
         </form>
     </main>
-<!-- Footer Placeholder -->
-<div id="footer-placeholder"></div>
 
-<script src="header_footer.js"></script>
+    <div id="footer-placeholder"></div>
 
     <script>
         document.getElementById('new-post-form').addEventListener('submit', async function(event) {
-            event.preventDefault(); // 기본 폼 제출 방지
-            
-            const formData = new FormData(this); // 폼 데이터를 가져옴
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            formData.append('board_type', 'free');
+
+            // 콘솔 로그: 전송 데이터 확인
+            console.log('폼 데이터:', {
+                title: formData.get('title'),
+                content: formData.get('content'),
+                category: formData.get('category'),
+                image: formData.get('image'),
+                board_type: formData.get('board_type'),
+            });
 
             try {
-                const response = await fetch('/free_new/posts', {
+                const response = await fetch('/free/posts', {
                     method: 'POST',
                     body: formData
                 });
 
+                // 콘솔 로그: 서버 응답 상태 확인
+                console.log('서버 응답 상태:', response.status);
+
                 if (response.ok) {
+                    const responseData = await response.json();
+                    console.log('서버 응답 데이터:', responseData);
+
                     alert('게시물이 성공적으로 저장되었습니다.');
-                    window.location.href = '/free.html'; // 게시글 저장 후 free.html로 리디렉션
+                    window.location.href = '/free.html';
                 } else {
                     const errorData = await response.json();
+                    console.error('서버 에러 데이터:', errorData);
                     alert(errorData.message || '게시물 저장에 실패했습니다.');
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('통신 중 오류 발생:', error);
                 alert('서버와의 통신 중 문제가 발생했습니다.');
             }
         });
+
+        // 추가 콘솔 로그: DOM 로드 완료 확인
+        console.log('게시글 작성 페이지 DOM이 완전히 로드되었습니다.');
     </script>
- <script src="media_query.js"></script>
-    <!-- 반응형 -->
-  </body>
+
+    <script src="media_query.js"></script>
+</body>
 </html>
