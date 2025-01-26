@@ -1,28 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2');
+//const mysql = require('mysql2');
+const pool = require('../config/db'); // 데이터베이스 연결 모듈
 
-// MySQL 데이터베이스 연결 설정
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '1234',
-  database: 'sungmumuk',
-});
-
-// 데이터베이스 연결 확인
-db.connect((err) => {
-  if (err) {
-    console.error('MySQL 연결 실패:', err.message);
-  } else {
-    console.log('MySQL 연결 성공');
-  }
-});
 
 // 게시글 목록 조회 API (GET /free/posts)
 router.get('/posts', (req, res) => {
-  const query = 'SELECT * FROM free_posts ORDER BY created_at DESC';
-  db.query(query, (err, results) => {
+  const query = 'SELECT * FROM posts WHERE board_type = "free" ORDER BY created_at DESC';
+  pool.query(query, (err, results) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ message: '게시물 조회에 실패했습니다.' });
@@ -35,12 +20,14 @@ router.get('/posts', (req, res) => {
 router.get('/posts/:id', (req, res) => {
   const postId = req.params.id;
   const query = `
-    SELECT p.*, u.nickname AS author, u.id AS author_id
-    FROM free_posts p
-    JOIN users u ON p.user_id = u.id
-    WHERE p.post_id = ?`;
+  SELECT p.*, u.nickname AS author, u.id AS author_id
+  FROM posts p
+  JOIN users u ON p.user_id = u.id
+  WHERE p.post_id = ? AND p.board_type = "free"
+`;
 
-  db.query(query, [postId], (err, results) => {
+
+  pool.query(query, [postId], (err, results) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ message: '게시물 조회에 실패했습니다.' });
@@ -63,10 +50,12 @@ router.post('/posts/:id/comments', (req, res) => {
   }
 
   const query = `
-    INSERT INTO free_comments (post_id, user_id, content, created_at, likes)
-    VALUES (?, ?, ?, NOW(), 0)`;
+  INSERT INTO comments (post_id, user_id, content, created_at, likes)
+  VALUES (?, ?, ?, NOW(), 0)
+`;
 
-  db.query(query, [postId, userId, content], (err, result) => {
+
+  pool.query(query, [postId, userId, content], (err, result) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ message: '댓글 작성에 실패했습니다.' });
@@ -80,13 +69,15 @@ router.post('/posts/:id/comments', (req, res) => {
 router.get('/posts/:id/comments', (req, res) => {
   const postId = req.params.id;
   const query = `
-    SELECT c.comment_id, c.content, c.created_at, c.likes, u.nickname AS author
-    FROM free_comments c
-    LEFT JOIN users u ON c.user_id = u.id
-    WHERE c.post_id = ?
-    ORDER BY c.created_at DESC`;
+  SELECT c.comment_id, c.content, c.created_at, c.likes, u.nickname AS author
+  FROM comments c
+  LEFT JOIN users u ON c.user_id = u.id
+  WHERE c.post_id = ?
+  ORDER BY c.created_at DESC
+`;
 
-  db.query(query, [postId], (err, results) => {
+
+  pool.query(query, [postId], (err, results) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ message: '댓글 조회에 실패했습니다.' });
@@ -98,9 +89,9 @@ router.get('/posts/:id/comments', (req, res) => {
 // 댓글 좋아요 API (POST /free/comments/:id/like)
 router.post('/comments/:id/like', (req, res) => {
   const commentId = req.params.id;
+  const updateQuery = 'UPDATE comments SET likes = likes + 1 WHERE comment_id = ?';
 
-  const updateQuery = 'UPDATE free_comments SET likes = likes + 1 WHERE comment_id = ?';
-  db.query(updateQuery, [commentId], (err) => {
+  pool.query(updateQuery, [commentId], (err) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ message: '좋아요 처리 중 오류가 발생했습니다.' });
@@ -119,8 +110,9 @@ router.put('/posts/:id', (req, res) => {
     return res.status(400).json({ message: '내용을 입력하세요.' });
   }
 
-  const query = 'UPDATE free_posts SET content = ? WHERE post_id = ? AND user_id = ?';
-  db.query(query, [content, postId, userId], (err, results) => {
+  const query = 'UPDATE posts SET content = ? WHERE post_id = ? AND user_id = ? AND board_type = "free"';
+
+  pool.query(query, [content, postId, userId], (err, results) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ message: '게시글 수정에 실패했습니다.' });
@@ -140,16 +132,18 @@ router.delete('/posts/:id', (req, res) => {
   const userId = req.user.id;
 
   // 댓글 삭제 후 게시글 삭제
-  const deleteCommentsQuery = 'DELETE FROM free_comments WHERE post_id = ?';
-  db.query(deleteCommentsQuery, [postId], (err) => {
+  const deleteCommentsQuery = 'DELETE FROM comments WHERE post_id = ?';
+
+  pool.query(deleteCommentsQuery, [postId], (err) => {
     if (err) {
       console.error('댓글 삭제 중 오류 발생:', err);
       return res.status(500).json({ message: '댓글 삭제에 실패했습니다.' });
     }
 
     // 댓글 삭제 후 게시글 삭제
-    const deletePostQuery = 'DELETE FROM free_posts WHERE post_id = ? AND user_id = ?';
-    db.query(deletePostQuery, [postId, userId], (err, result) => {
+    const deletePostQuery = 'DELETE FROM posts WHERE post_id = ? AND user_id = ? AND board_type = "free"';
+
+    pool.query(deletePostQuery, [postId, userId], (err, result) => {
       if (err) {
         console.error('게시글 삭제 중 오류 발생:', err);
         return res.status(500).json({ message: '게시글 삭제에 실패했습니다.' });
@@ -173,11 +167,13 @@ router.get('/search', (req, res) => {
   }
 
   const searchQuery = `
-  SELECT * FROM free_posts
-  WHERE title LIKE ? OR content LIKE ?
-  ORDER BY created_at DESC`;
+  SELECT * FROM posts
+  WHERE board_type = "free" AND (title LIKE ? OR content LIKE ?)
+  ORDER BY created_at DESC
+`;
 
-  db.query(searchQuery, [`%${query}%`, `%${query}%`], (err, results) => {
+
+  pool.query(searchQuery, [`%${query}%`, `%${query}%`], (err, results) => {
     if (err) {
       console.error('검색 중 오류 발생:', err);
       return res.status(500).json({ message: '검색 중 오류가 발생했습니다.' });
