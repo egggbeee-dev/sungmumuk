@@ -6,7 +6,7 @@ const session = require('express-session');
 const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const db = require('./config/db');
+const pool = require('./config/db');
 
 // 인증 미들웨어와 라우터 가져오기
 const { ensureAuthenticated } = require('./middlewares/auth');
@@ -25,6 +25,7 @@ const storeDetailsRouter = require('./routes/store_details');
 const signupRouter = require('./routes/signup');
 const loginRouter = require('./routes/login');
 const freeRouter = require('./routes/free');
+const freeNewRouter = require('./routes/free_new');
 const myInquiryRouter  = require('./routes/my_inquiry')
 const situationRouter = require('./routes/situation');
 const newRouter = require('./routes/new'); 
@@ -41,7 +42,8 @@ const authRoutes = require('./routes/auth'); // auth.js 파일 경로
 const myReviewRouter = require('./routes/my_review')
 const nodemailer = require("nodemailer"); //이메일 인증
 const email = require('./routes/email');
-
+const haksikRouter = require('./routes/haksik');
+const haksikNewRouter = require('./routes/haksik_new');
 
 app.set('port', process.env.PORT || 80);
 app.set('view engine', 'html');
@@ -74,8 +76,11 @@ app.use(
 );
 
 // 보호된 경로 설정
-app.use('/free/posts', ensureAuthenticated); // 로그인된 사용자만 접근 가능
+app.use('/free/posts', freeRouter); 
+app.use('/free', ensureAuthenticated, freeRouter); 
+
 app.use('/free/comments', ensureAuthenticated); // 댓글도 보호 경로로 설정
+app.use('/haksik', ensureAuthenticated, haksikRouter); // 학식 게시판 라우터
 
 // 라우터 연결
 app.use('/inquiry', inquiryRouter); 
@@ -85,7 +90,7 @@ app.use('/api/login', loginRouter);
 app.use('/store_details', storeDetailsRouter);
 app.use('/menu', menuRouter);
 app.use('/', compareRouter);
-app.use('/free', ensureAuthenticated, freeRouter);
+app.use('/free_new', freeNewRouter);
 app.use('/', favoritesRouter);
 app.use('/my-inquiry', myInquiryRouter);
 app.use('/situation', situationRouter);
@@ -99,7 +104,6 @@ app.use('/', randomRouter);
 app.use('/', affiliatesRouter);
 app.use('/', indexRouter);
 app.use('/store_search', storeSearchRouter);
-app.use('/auth', authRoutes); 
 app.use('/my_reviews', ensureAuthenticated, myReviewRouter);
 app.use('/api/email', email); //이메일 추가
 
