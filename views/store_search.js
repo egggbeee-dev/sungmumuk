@@ -280,7 +280,7 @@ async function initializeWishlistButtons() {
 
     async function addCompareToServer(storeIds) {
         try {
-            const response = await fetch("/api/compare", {
+            const response = await fetch("/store_search/api/compare", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ storeIds }),
@@ -293,4 +293,51 @@ async function initializeWishlistButtons() {
             console.error("비교함 추가 중 오류 발생:", err);
         }
     }
+
+    // 랜덤 데이터 가져오기
+async function fetchRandomRestaurants() {
+    try {
+        const response = await fetch("/api/restaurants/random"); // 백엔드에서 랜덤 데이터를 가져오는 API 호출
+        if (!response.ok) throw new Error("랜덤 데이터를 가져오는데 실패했습니다.");
+
+        const { restaurants } = await response.json();
+        renderRestaurants(restaurants); // 랜덤 데이터를 렌더링
+    } catch (error) {
+        console.error("랜덤 데이터 로드 중 오류 발생:", error);
+        alert("랜덤 데이터를 불러오는 중 문제가 발생했습니다.");
+    }
+}
+
+// 렌더링 함수
+function renderRestaurants(restaurants) {
+    const storeList = document.getElementById("store-list");
+
+    if (!restaurants || restaurants.length === 0) {
+        storeList.innerHTML = "<p>표시할 식당 데이터가 없습니다.</p>";
+        return;
+    }
+
+    storeList.innerHTML = restaurants
+        .map(
+            (store) => `
+        <div class="store-item">
+            <img src="${store.restaurant_image || '/uploads/default-logo.png'}" alt="${store.restaurant_name}" class="store-img">
+            <div class="store-details">
+                <p class="store-name">${store.restaurant_name}</p>
+                <p class="store-menu">추천 메뉴: ${store.recommended_menu || '추천 메뉴 없음'}</p>
+                <p class="store-price">평균 가격: ${store.average_price || '정보 없음'}</p>
+                <p class="store-rating">평점: ${store.average_rating || '0.0'} (${store.reviews || '0'} 리뷰)</p>
+                <button class="details-button" data-restaurant-id="${store.restaurant_id}">자세히 보기</button>
+            </div>
+        </div>
+        `
+        )
+        .join("");
+}
+
+// 초기 화면에 랜덤 데이터를 로드
+document.addEventListener("DOMContentLoaded", () => {
+    fetchRandomRestaurants(); // 랜덤 데이터를 가져와 렌더링
+});
+
 });

@@ -59,19 +59,36 @@ router.get('/', async (req, res) => {
         const whereClause = filters.length > 0 ? `WHERE ${filters.join(' AND ')}` : '';
 
         // SQL 쿼리 생성
-        const sql = `
-            SELECT 
-                restaurant_id,
-                restaurant_name,
-                recommended_menu,
-                average_rating,
-                average_price,
-                IFNULL(reviews, 0) AS reviews
-            FROM restaurant
-            ${whereClause}
-            ${orderBy}
-            LIMIT ${limit} OFFSET ${offset};
-        `;
+        let sql;
+        if (!query.trim()) {
+            sql = `
+                SELECT 
+                    restaurant_id,
+                    restaurant_name,
+                    recommended_menu,
+                    average_rating,
+                    average_price,
+                    IFNULL(reviews, 0) AS reviews
+                FROM restaurant
+                ORDER BY RAND()
+                LIMIT ${limit} OFFSET ${offset};
+            `;
+        } else {
+            // 검색어가 있는 경우 기존 로직 실행
+            sql = `
+                SELECT 
+                    restaurant_id,
+                    restaurant_name,
+                    recommended_menu,
+                    average_rating,
+                    average_price,
+                    IFNULL(reviews, 0) AS reviews
+                FROM restaurant
+                ${whereClause}
+                ${orderBy}
+                LIMIT ${limit} OFFSET ${offset};
+            `;
+        }
 
         console.log('Generated SQL:', sql); // SQL 디버깅
         console.log('Params:', params); // 파라미터 디버깅
@@ -111,5 +128,6 @@ router.get('/', async (req, res) => {
         res.status(500).json({ error: '서버 오류가 발생했습니다.' });
     }
 });
+  
 
 module.exports = router;
