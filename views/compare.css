@@ -111,6 +111,24 @@ th {
   right: 10px;
 }
 
+.remove-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.remove-button:hover {
+  background-color: #e60000;
+}
+
 .register-button:hover {
   background-color: #5e4f9c; /* 버튼 호버시 어두운 보라색 */
 }

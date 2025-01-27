@@ -280,7 +280,7 @@ async function initializeWishlistButtons() {
 
     async function addCompareToServer(storeIds) {
         try {
-            const response = await fetch("/store_search/api/compare", {
+            const response = await fetch("/api/compare", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ storeIds }),

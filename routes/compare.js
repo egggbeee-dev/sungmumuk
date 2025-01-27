@@ -35,7 +35,7 @@ router.get('/compare', ensureAuthenticated, async (req, res) => {
         `;
         const [rows] = await pool.query(query, [userId]);
         if (rows.length === 0) {
-            return res.status(404).json({ message: '비교함에 추가된 가게가 없습니다.' });
+            return res.status(200).json({ message: '비교함에 추가된 가게가 없습니다.' });
         }
         res.json(rows);
     } catch (error) {
@@ -71,6 +71,33 @@ router.post('/api/compare', ensureAuthenticated, async (req, res) => {
             return res.status(400).json({ message: '이미 비교함에 있는 가게입니다.' });
         }
         console.error('비교함 추가 오류:', error);
+        res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+    }
+});
+
+// /compare/remove POST 요청
+router.post('/compare/remove', ensureAuthenticated, async (req, res) => {
+    const { restaurantId } = req.body; // 삭제할 레스토랑 ID
+    const userId = req.user.id; // 현재 사용자 ID
+
+    if (!restaurantId) {
+        return res.status(400).json({ message: '레스토랑 ID가 필요합니다.' });
+    }
+
+    try {
+        const deleteQuery = `
+            DELETE FROM compare
+            WHERE user_id = ? AND restaurant_id = ?
+        `;
+        const [result] = await pool.query(deleteQuery, [userId, restaurantId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: '비교함에 해당 가게가 없습니다.' });
+        }
+
+        res.status(200).json({ message: '가게가 비교함에서 삭제되었습니다.' });
+    } catch (error) {
+        console.error('비교함 삭제 오류:', error);
         res.status(500).json({ message: '서버 오류가 발생했습니다.' });
     }
 });
