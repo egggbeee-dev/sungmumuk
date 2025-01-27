@@ -30,24 +30,27 @@
         <h1>마이 페이지</h1>
       </div>
 
-      <!-- Profile Section -->
-      <div class="profile-section">
-        <h2>개인정보</h2>
-        <div class="profile-details">
-          <div class="info-group">
-            <label>닉네임:</label>
-            <div class="info-content" id="nickname">수아</div>
-          </div>
-          <div class="info-group">
-            <label>이메일:</label>
-            <div class="info-content" id="email">202201@sungshin.ac.kr</div>
-          </div>
-          <div class="info-group">
-            <label>학과:</label>
-            <div class="info-content" id="department">Ai융합학부</div>
-          </div>
-        </div>
+  <!-- Profile Section -->
+  <div class="profile-section">
+    <h2>개인정보</h2>
+    <div class="profile-details">
+      <div class="info-group">
+        <label>닉네임:</label>
+        <div class="info-content" id="nickname"></div>
       </div>
+      <div class="info-group">
+        <label>이메일:</label>
+        <div class="info-content" id="email"></div>
+      </div>
+      <div class="info-group">
+        <label>학과:</label>
+        <div class="info-content" id="department"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/profile.js"></script>
+
 
       <div class="favorites-container">
         <h2>내가 찜한 가게</h2>
@@ -161,6 +164,26 @@
           `)
           .join('');
       }
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          const response = await fetch('my/profile');
+          if (!response.ok) {
+            throw new Error('Failed to fetch profile data');
+          }
+      
+          const data = await response.json();
+      
+          // DOM 업데이트
+          document.getElementById('nickname').textContent = data.nickname || '정보 없음';
+          document.getElementById('email').textContent = data.email || '정보 없음';
+          document.getElementById('department').textContent = data.department || '정보 없음';
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
+          alert('프로필 정보를 불러오는데 실패했습니다.');
+        }
+      });
+      
       
     </script>
   </body>
