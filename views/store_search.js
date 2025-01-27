@@ -108,6 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             activateWishlistButtons();
             activateCompareButtons();
+            initializeWishlistButtons(); 
         } catch (err) {
             console.error("데이터를 불러오는 중 오류 발생:", err);
             alert("서버와의 통신 중 문제가 발생했습니다.");
@@ -196,6 +197,32 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("찜 삭제 중 오류 발생:", err);
         }
     }
+
+    // 찜 버튼 초기화 함수
+async function initializeWishlistButtons() {
+    try {
+        // 사용자의 찜 목록 조회
+        const response = await fetch("/api/user-favorites");
+        if (!response.ok) throw new Error("찜 데이터를 가져오는 중 오류 발생");
+
+        const data = await response.json();
+        const favoriteStoreIds = data.favoriteStoreIds || []; // 사용자의 찜한 가게 ID 배열
+
+        // 찜 버튼 상태 업데이트
+        const wishlistButtons = document.querySelectorAll(".wishlist-button");
+        wishlistButtons.forEach((button) => {
+            const storeId = parseInt(button.dataset.storeId, 10);
+            if (favoriteStoreIds.includes(storeId)) {
+                button.classList.add("active"); // 활성화 상태로 변경
+                const heartIcon = button.querySelector(".heart-icon");
+                heartIcon.textContent = "💜"; // 보라색 하트
+            }
+        });
+    } catch (err) {
+        console.error("찜 버튼 초기화 중 오류 발생:", err);
+    }
+}
+
 
     // 비교 버튼 활성화 함수
     function activateCompareButtons() {
