@@ -42,6 +42,7 @@ const myReviewRouter = require('./routes/my_review')
 const nodemailer = require("nodemailer"); //이메일 인증
 const email = require('./routes/email');
 const freeNewRouter = require('./routes/free_new');
+const myRouter = require('./routes/my');
 
 app.set('port', process.env.PORT || 80);
 app.set('view engine', 'html');
@@ -104,6 +105,7 @@ app.use('/auth', authRoutes);
 app.use('/my_reviews', ensureAuthenticated, myReviewRouter);
 app.use('/api/email', email); //이메일 추가
 app.use('/free_new',freeNewRouter);
+app.use('/my', myRouter);
 
 // 정적 HTML 파일 제공 라우트
 app.get('/', (req, res) => {

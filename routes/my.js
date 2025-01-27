@@ -29,4 +29,29 @@ router.get('/profile',  ensureAuthenticated,async (req, res) => {
   }
 });
 
+router.post("/profile/update", ensureAuthenticated, async (req, res) => {
+  const userId = req.user.id; // 인증된 사용자 ID 가져오기
+  const { nickname, department } = req.body; // 클라이언트에서 전달된 데이터
+
+  try {
+    console.log("Updating user:", { id: userId, nickname, department });
+
+    // SQL 업데이트 실행
+    const [result] = await pool.query(
+      "UPDATE users SET nickname = ?, department = ? WHERE id = ?",
+      [nickname, department, userId]
+    );
+
+    // 업데이트된 행이 없을 경우 (id가 없는 경우)
+    if (result.affectedRows === 0) {
+      return res.status(404).send({ success: false, message: "사용자를 찾을 수 없습니다." });
+    }
+
+    res.send({ success: true, message: "정보가 업데이트되었습니다." });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).send({ success: false, message: "업데이트 중 오류가 발생했습니다." });
+  }
+});
+
 module.exports = router;

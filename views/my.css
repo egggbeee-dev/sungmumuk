@@ -33,6 +33,7 @@ body {
 
 /* Profile Section 스타일 */
 .profile-section {
+  position: relative;
   background-color: #a391ff;
   color: white;
   padding: 30px;
@@ -41,12 +42,40 @@ body {
 }
 
 .profile-details {
+  position: relative;
   background-color: white;
   color: #6c63ff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   font-size: 18px;
+}
+.hidden{
+  display:none;
+}
+.edit-button,
+#save-button{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #6d63e5; /* 보라색 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-button:hover,
+#save-button:hover {
+  background-color: #6c1bb6;
+}
+
+.profile-content p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #333;
 }
 
 .info-group {
