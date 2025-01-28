@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-
-
   // header_footer.html을 불러와 동적으로 삽입
   fetch("header_footer.html")
     .then((response) => {
@@ -105,22 +102,29 @@ function updateLoginStatus(isLoggedIn, nickname) {
   const userStatus = document.getElementById("user-status");
   const loginLogout = document.getElementById("login-logout");
   const loginLogoutMobile = document.getElementById("login-logout-mobile");
+  const profileView = document.getElementById("profile-view");
+  const mobileProfileView = document.getElementById("mobile-profile-view"); // 모바일 메뉴의 프로필 보기
 
   if (userStatus && loginLogout) {
     if (isLoggedIn) {
       userStatus.textContent = `안녕하세요! ${nickname}님이 로그인 중입니다.`;
       loginLogout.innerHTML = `<a href="#" class="logout-link">로그아웃</a>`;
       loginLogoutMobile.innerHTML = `<a href="#" class="mobile-menu__step2 logout-link">로그아웃</a>`;
+      if (profileView) profileView.style.display = "block"; // PC 메뉴 프로필 보기 표시
+      if (mobileProfileView) mobileProfileView.style.display = "block"; // 모바일 메뉴 프로필 보기 표시
       addLogoutEvent(); // 로그아웃 이벤트 추가
     } else {
       userStatus.textContent = `더 많은 기능을 이용하려면 로그인이 필요합니다.`;
       loginLogout.innerHTML = `<a href="login.html">로그인/회원가입</a>`;
       loginLogoutMobile.innerHTML = `<a href="login.html" id="login-logout-mobile" class="mobile-menu__step2">로그인</a>`;
+      if (profileView) profileView.style.display = "none"; // PC 메뉴 프로필 보기 숨김
+      if (mobileProfileView) mobileProfileView.style.display = "none"; // 모바일 메뉴 프로필 보기 숨김
     }
   } else {
     console.error("User status or login/logout element not found in DOM.");
   }
 }
+
 
 // 로그아웃 이벤트 추가
 function addLogoutEvent() {
