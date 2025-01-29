@@ -5,7 +5,7 @@ const pool = require('../config/db'); // 데이터베이스 연결 설정
 
 // 게시글 목록 조회 API (GET /free/posts)
 router.get('/posts', async (req, res) => {
-  const query = 'SELECT * FROM posts ORDER BY created_at DESC';
+  const query = 'SELECT * FROM posts WHERE board_type = "free" ORDER BY created_at DESC';
 
   try {
     const [results] = await pool.query(query);
@@ -21,9 +21,9 @@ router.get('/posts/:id', async (req, res) => {
   const postId = req.params.id;
   const query = `
     SELECT p.*, u.nickname AS author, u.id AS author_id
-    FROM free_posts p
+    FROM posts p
     JOIN users u ON p.user_id = u.id
-    WHERE p.post_id = ?`;
+    WHERE p.post_id = ? AND p.board_type = "free"`;
 
   try {
     const [results] = await pool.query(query, [postId]);
@@ -48,8 +48,9 @@ router.post('/posts/:id/comments', ensureAuthenticated, async (req, res) => {
   }
 
   const query = `
-    INSERT INTO free_comments (post_id, user_id, content, created_at, likes)
-    VALUES (?, ?, ?, NOW(), 0)`;
+  INSERT INTO comments (post_id, user_id, content, created_at, likes)
+  VALUES (?, ?, ?, NOW(), 0)`;
+
 
   try {
     const [result] = await pool.query(query, [postId, userId, content]);
@@ -64,11 +65,12 @@ router.post('/posts/:id/comments', ensureAuthenticated, async (req, res) => {
 router.get('/posts/:id/comments', async (req, res) => {
   const postId = req.params.id;
   const query = `
-    SELECT c.comment_id, c.content, c.created_at, c.likes, u.nickname AS author
-    FROM free_comments c
-    LEFT JOIN users u ON c.user_id = u.id
-    WHERE c.post_id = ?
-    ORDER BY c.created_at DESC`;
+  SELECT c.comment_id, c.content, c.created_at, c.likes, u.nickname AS author
+  FROM comments c
+  LEFT JOIN users u ON c.user_id = u.id
+  WHERE c.post_id = ?
+  ORDER BY c.created_at DESC`;
+
 
   try {
     const [results] = await pool.query(query, [postId]);
@@ -82,7 +84,7 @@ router.get('/posts/:id/comments', async (req, res) => {
 // 댓글 좋아요 API (POST /free/comments/:id/like)
 router.post('/comments/:id/like', ensureAuthenticated, async (req, res) => {
   const commentId = req.params.id;
-  const query = 'UPDATE free_comments SET likes = likes + 1 WHERE comment_id = ?';
+  const query = 'UPDATE comments SET likes = likes + 1 WHERE comment_id = ?';
 
   try {
     await pool.query(query, [commentId]);
@@ -103,7 +105,8 @@ router.put('/posts/:id', ensureAuthenticated, async (req, res) => {
     return res.status(400).json({ message: '내용을 입력하세요.' });
   }
 
-  const query = 'UPDATE posts SET content = ? WHERE post_id = ? AND user_id = ?';
+  const query = 'UPDATE posts SET content = ? WHERE post_id = ? AND user_id = ? AND board_type = "free"';
+
 
   try {
     const [results] = await pool.query(query, [content, postId, userId]);
@@ -122,8 +125,9 @@ router.delete('/posts/:id', ensureAuthenticated, async (req, res) => {
   const postId = req.params.id;
   const userId = req.user.id;
 
-  const deleteCommentsQuery = 'DELETE FROM free_comments WHERE post_id = ?';
-  const deletePostQuery = 'DELETE FROM free_posts WHERE post_id = ? AND user_id = ?';
+  const deleteCommentsQuery = 'DELETE FROM comments WHERE post_id = ?';
+  const deletePostQuery = 'DELETE FROM posts WHERE post_id = ? AND user_id = ? AND board_type = "free"';
+
 
   try {
     await pool.query(deleteCommentsQuery, [postId]);
@@ -148,9 +152,10 @@ router.get('/search', async (req, res) => {
   }
 
   const searchQuery = `
-    SELECT * FROM free_posts
-    WHERE title LIKE ? OR content LIKE ?
-    ORDER BY created_at DESC`;
+  SELECT * FROM posts
+  WHERE board_type = "free" AND (title LIKE ? OR content LIKE ?)
+  ORDER BY created_at DESC`;
+
 
   try {
     const [results] = await pool.query(searchQuery, [`%${query}%`, `%${query}%`]);
