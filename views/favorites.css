@@ -1,6 +1,6 @@
 /* 공통 스타일 */
 body {
-  font-family: "Black Han Sans", "Anton", sans-serif;
+  font-family: "Do Hyeon" !important;
   margin: 0;
   padding: 0;
   background-color: #ffebff; /* 배경색 */
@@ -22,14 +22,23 @@ h1 {
   text-align: center;
   margin-top: 20px;
   width: 100%;
-  font-family: "Do Hyeon" !important;
+  font-family: "Black Han Sans", "Anton", sans-serif;
   display: block; /* 블록 요소로 설정 */
 }
 .container {
   max-width: 1000px; /* 최대 너비 설정 */
   margin: 0 auto; /* 가운데 정렬 */
   padding: 20px; /* 내부 여백 */
-  text-align: left; /* 내부 모든 텍스트 가운데 정렬 */
+  text-align: center; /* 내부 모든 텍스트 중앙 정렬 */
+}
+
+/* 찜한 가게 목록을 감싸는 컨테이너 */
+#favorites-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 20px;
 }
 
 /* 검색 섹션 */
@@ -64,21 +73,29 @@ h1 {
   background-color: #5a50d5;
 }
 
+
+/* 개별 가게 카드 스타일 */
 .store-box {
-  margin-bottom: 20px; /* 박스 간격 */
   display: flex;
+  flex-direction: column;
   align-items: center;
   background-color: #8e89f6; /* 보라색 배경 */
+  padding: 20px;
+  border-radius: 15px;
+  color: black;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 280px; /* 줄에 여러 개 배치 가능하도록 조정 */
+  text-align: center;
+  position: relative;
+}
+
+/* 내부 컨텐츠 */
+.store-content {
+  background-color: white;
   padding: 15px;
   border-radius: 10px;
-  color: white;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 90%; /* 부모 요소 너비에 맞춤 */
-  max-width: 800px; /* 가로 최대 크기 제한 */
-  margin: 0 auto 20px; /* 수평 중앙 정렬 및 간격 */
+  width: 100%;
+  text-align: center;
 }
 
 .store-box:hover {
@@ -86,36 +103,40 @@ h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
 }
 
+/* 체크박스 위치 조정 */
 .store-toggle {
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  margin-left: auto;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
 }
 
+/* 이미지 스타일 */
 .store-image {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px; /* 적절한 높이 설정 */
+  object-fit: cover;
   border-radius: 10px;
-  margin-right: 20px;
+  margin-bottom: 10px;
 }
 
+/* 가게 정보 스타일 */
 .store-info {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  text-align: left; /* 정보 왼쪽 정렬 */
+  text-align: center;
 }
 
 .store-info h2 {
+  font-size: 22px;
+  color: black; /* 제목도 검정 */
   margin-bottom: 10px;
-  color: #ffffff;
-  font-size: 20px;
 }
 
 .store-info p {
-  margin: 3px 0;
   font-size: 16px;
+  color: black; /* 본문 검정 */
 }
 
 /* 버튼 섹션 */
@@ -204,6 +225,7 @@ header.favorite-title-box {
   .store-box {
     flex-direction: column; /* 작은 화면에서는 세로 정렬 */
     align-items: center; /* 컨텐츠 가운데 정렬 */
+    width: 45%; 
   }
 
   .store-image {
@@ -212,9 +234,15 @@ header.favorite-title-box {
     margin-bottom: 10px; /* 텍스트와 간격 추가 */
     margin-right: 0; /* 오른쪽 마진 제거 */
   }
+  #favorites-container {
+    justify-content: space-around;
+}
 }
 
 @media (max-width: 450px) {
+  .store-box {
+    width: 100%; /* 화면이 더 작아지면 한 개씩 표시 */
+}
   .store-image {
     width: 100%; /* 화면이 더 작아지면 너비를 100%로 설정 */
     height: auto; /* 비율을 유지하며 높이 조정 */

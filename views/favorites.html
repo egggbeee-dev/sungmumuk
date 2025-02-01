@@ -87,10 +87,9 @@
      * @param {Array} stores - 가게 데이터 배열
      */
      function renderFavorites(stores) {
-        console.log('렌더링할 데이터:', stores); // 전달된 데이터를 확인
     
         const container = document.getElementById('favorites-container');
-        container.style.display = 'block'; // 컨테이너 표시
+        container.style.display = 'flex'; // 컨테이너 표시
     
         // 가게 데이터를 HTML로 렌더링
         container.innerHTML = stores.map(store => {
@@ -106,8 +105,9 @@
     
             // HTML 템플릿 반환
             return `
-                <div class="store-box" data-url="/store_details?id=${store.restaurant_id}">
-                    <img src="${representativeImage}" alt="${store.restaurant_name} 이미지" class="store-image">
+            <div class="store-box" data-url="/store_details?id=${store.restaurant_id}">
+                <img src="${representativeImage}" alt="${store.restaurant_name} 이미지" class="store-image">
+                <div class="store-content">
                     <div class="store-info">
                         <h2 class="store-name">${store.restaurant_name}</h2>
                         <p><strong>카테고리:</strong> ${store.category}</p>
@@ -117,6 +117,7 @@
                     </div>
                     <input type="checkbox" class="store-toggle" data-store-id="${store.restaurant_id}">
                 </div>
+            </div>
             `;
         }).join(''); // 결과를 하나의 HTML 문자열로 병합
     }
