@@ -103,22 +103,29 @@ function updateLoginStatus(isLoggedIn, nickname) {
   const loginLogout = document.getElementById("login-logout");
   const loginLogoutMobile = document.getElementById("login-logout-mobile");
   const profileView = document.getElementById("profile-view");
-  const mobileProfileView = document.getElementById("mobile-profile-view"); // 모바일 메뉴의 프로필 보기
+  const mobileProfileView = document.getElementById("mobile-profile-view");
+  const mobileSignupButton = document.getElementById("mobile-signup-button");
+
 
   if (userStatus && loginLogout) {
     if (isLoggedIn) {
       userStatus.textContent = `안녕하세요! ${nickname}님이 로그인 중입니다.`;
       loginLogout.innerHTML = `<a href="#" class="logout-link">로그아웃</a>`;
       loginLogoutMobile.innerHTML = `<a href="#" class="mobile-menu__step2 logout-link">로그아웃</a>`;
-      if (profileView) profileView.style.display = "block"; // PC 메뉴 프로필 보기 표시
-      if (mobileProfileView) mobileProfileView.style.display = "block"; // 모바일 메뉴 프로필 보기 표시
+
+      if (profileView) profileView.style.display = "block"; // PC 프로필 보기 표시
+      if (mobileProfileView) mobileProfileView.style.display = "block"; // 모바일 프로필 보기 표시
+      if (mobileSignupButton) mobileSignupButton.style.display = "none"; // 로그인 시 모바일 회원가입 버튼 숨기기
+
       addLogoutEvent(); // 로그아웃 이벤트 추가
     } else {
       userStatus.textContent = `더 많은 기능을 이용하려면 로그인이 필요합니다.`;
       loginLogout.innerHTML = `<a href="login.html">로그인/회원가입</a>`;
       loginLogoutMobile.innerHTML = `<a href="login.html" id="login-logout-mobile" class="mobile-menu__step2">로그인</a>`;
-      if (profileView) profileView.style.display = "none"; // PC 메뉴 프로필 보기 숨김
-      if (mobileProfileView) mobileProfileView.style.display = "none"; // 모바일 메뉴 프로필 보기 숨김
+
+      if (profileView) profileView.style.display = "none"; // PC 프로필 보기 숨김
+      if (mobileProfileView) mobileProfileView.style.display = "none"; // 모바일 프로필 보기 숨김
+      if (mobileSignupButton) mobileSignupButton.style.display = "block"; // 로그아웃 시 모바일 회원가입 버튼 표시
     }
   } else {
     console.error("User status or login/logout element not found in DOM.");
