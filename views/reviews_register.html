@@ -48,10 +48,11 @@
           enctype="multipart/form-data"
         >
           <input type="hidden" id="restaurant-id" name="restaurant_id" />
-          <label for="storeName">가게명:</label>
           <input type="text" id="storeName" name="restaurant_name" readonly />
+          <label>이 가게에 대한 상세한 평가를 해주세요.</label>
 
           <!-- 맛 평점 -->
+          <div class="rating-container">
           <label for="tasteRating" class="taste-label">맛</label>
           <div id="taste-rating" class="star-rating">
             <span data-value="1">★</span>
@@ -60,9 +61,11 @@
             <span data-value="4">★</span>
             <span data-value="5">★</span>
           </div>
+          </div>
           <input type="hidden" id="tasteRating" name="taste_rating" value="0" />
 
           <!-- 접근성 평점 -->
+          <div class="rating-container">
           <label for="accessRating" class="access-label">접근성</label>
           <div id="access-rating" class="star-rating">
             <span data-value="1">★</span>
@@ -70,6 +73,7 @@
             <span data-value="3">★</span>
             <span data-value="4">★</span>
             <span data-value="5">★</span>
+          </div>
           </div>
           <input
             type="hidden"
@@ -79,6 +83,7 @@
           />
 
           <!-- 재방문 의사 평점 -->
+          <div class="rating-container">
           <label for="revisitRating" class="revisit-label">재방문 의사</label>
           <div id="revisit-rating" class="star-rating">
             <span data-value="1">★</span>
@@ -87,38 +92,48 @@
             <span data-value="4">★</span>
             <span data-value="5">★</span>
           </div>
+          </div>
           <input
             type="hidden"
             id="revisitRating"
             name="revisit_rating"
             value="0"
           />
-          <label for="checkPrice">가격(1인):</label>
-          <div id="price-options">
-          <label>
-            <input type="radio" name="price" value="10000" /> 10,000원 이하
-          </label>
-          <label>
-            <input type="radio" name="price" value="20000" /> 10,000원 ~ 20,000원 
-          </label>
-          <label>
-            <input type="radio" name="price" value="30000" /> 20,000원 이상
-          </label>
-        </div>
-        <input type="hidden" id="selectedPrice" name="selected_price" value="" />
-
-          <label for="reviewPhoto" class="form-label">사진 :</label>
-          <input type="file" id="reviewPhoto" name="review_photo" multiple />
-
-          <label for="reviewText">후기:</label>
-          <textarea
+          <div class="price-container">
+            <label for="checkPrice">가격(1인):</label>
+            <div id="price-options">
+              <label>
+                <input type="radio" name="price" value="10000" /> 10,000원 이하
+              </label>
+              <label>
+                <input type="radio" name="price" value="20000" /> 10,000원 ~ 20,000원 
+              </label>
+              <label>
+                <input type="radio" name="price" value="30000" /> 20,000원 이상
+              </label>
+            </div>
+            <input type="hidden" id="selectedPrice" name="selected_price" value="" />
+          </div>
+          
+           <!-- 텍스트 리뷰 -->
+            <textarea
             id="reviewText"
             name="review_text"
             rows="4"
-            placeholder="추천하는 메뉴와 가격 등 자유롭게 후기를 작성해주세요!"
+            placeholder="음식에 대한 솔직한 리뷰를 남겨주세요. (10자 이상)"
           ></textarea>
 
-          <button type="submit">저장</button>
+          <!--이미지 등록-->
+          <div class="custom-file-upload">
+            <label for="reviewPhoto" class="custom-upload-button">
+              <img src="camera-icon.png" alt="카메라 아이콘" class="upload-icon" />
+            </label>
+            <input type="file" id="reviewPhoto" name="review_photo" multiple hidden />
+          </div>
+          
+          
+          
+          <button type="submit" class="submit-button">등록 완료</button>
         </form>
       </div>
     </div>
@@ -242,6 +257,17 @@
             alert("리뷰 저장 중 오류 발생");
           }
         });
+
+        const fileInput = document.getElementById("reviewPhoto");
+const customButton = document.querySelector(".custom-upload-button");
+
+fileInput.addEventListener("change", () => {
+  if (fileInput.files.length > 0) {
+    customButton.textContent = `${fileInput.files.length}개의 파일 선택됨`;
+  } else {
+    customButton.textContent = "이미지 등록";
+  }
+});
     </script>
     <!-- Footer Placeholder -->
     <div id="footer-placeholder"></div>
