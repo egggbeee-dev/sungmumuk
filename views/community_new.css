@@ -1,6 +1,6 @@
 /* 기본 스타일 */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f5f5fa;
@@ -10,7 +10,7 @@ body {
   text-align: center;
   color: #7a69c4;
   font-size: 30px;
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 20px 0;
   background-color: #f4e7f9;
@@ -30,7 +30,7 @@ body {
   padding: 10px 20px;
   color: #7a69c4; /* 텍스트 색상 */
   text-decoration: none; /* 밑줄 제거 */
-  font-family: "Anton", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   font-size: 23px; /* 링크 폰트 크기 */
   transition: color 0.3s ease, transform 0.2s ease;
 }
