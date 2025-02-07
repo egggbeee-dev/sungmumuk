@@ -1,6 +1,6 @@
 /* 한국어는 Black Han Sans, 영어는 Anton 적용 */
 body {
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
   background-color: white !important; /* 배경색 */
@@ -104,7 +104,7 @@ header h1 {
 .filter-box label {
   font-size: 16px;
   margin-right: 3px;
-  font-family: "Antons";
+  font-family: "Noto Sans KR", sans-serif;
   font-weight: bold;
 }
 
