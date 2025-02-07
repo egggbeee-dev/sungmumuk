@@ -1,5 +1,5 @@
 .body {
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #ffebff; /* 배경색 */
@@ -12,7 +12,7 @@ h3,
 .banner-text h2,
 button,
 .sort-button {
-  font-family: "Anton", sans-serif; /* 영어 폰트 적용 */
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 
@@ -140,7 +140,7 @@ a {
 .menu-button p {
   margin: 0;
   font-size: 1.2em; /* 텍스트 크기 */
-  font-family: "Black Han Sans", sans-serif; /* Black Han Sans 폰트 적용 */
+  font-family: "Noto Sans KR", sans-serif;
   color: white;
   text-align: center;
 }
@@ -284,7 +284,7 @@ a {
 /* 가게 정보 스타일 */
 .store-details {
   text-align: left; /* 텍스트 왼쪽 정렬 */
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 가게 이름 스타일 */
@@ -309,7 +309,7 @@ a {
   border-radius: 10px;
   cursor: pointer;
   font-size: 1em;
-  font-family: "Anton", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   transition: background-color 0.3s;
 }
 /* 클릭 불가능한 메뉴들에만 비활성화 적용 */
