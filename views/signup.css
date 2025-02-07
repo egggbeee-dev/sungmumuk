@@ -1,6 +1,6 @@
 /* 기본 설정 */
 body {
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #ffebff; /* 배경색 */
@@ -14,7 +14,7 @@ h3,
 .banner-text h2,
 button,
 .sort-button {
-  font-family: "Anton", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 공통 초기화 */
