@@ -1,7 +1,7 @@
 
 /* 한국어는 Black Han Sans, 영어는 Anton 적용 */
 body {
-    font-family: 'Black Han Sans', sans-serif;
+    font-family: "Noto Sans KR", sans-serif;
     margin: 0;
     padding: 0;
     background-color: #FFEBFF; /* 배경색 */
@@ -9,12 +9,12 @@ body {
   
   /* 영어 텍스트에 Anton 폰트 적용 */
   h1, h2, h3, .banner-text h2, button, .sort-button {
-    font-family: 'Anton', sans-serif; /* 영어 폰트 적용 */
+    font-family: "Noto Sans KR", sans-serif;
   }
   
 /* 기본 스타일 */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: "Noto Sans KR", sans-serif;
     background-color: #f5f5f5;
     text-align: center;
     margin: 0;
