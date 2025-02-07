@@ -8,7 +8,7 @@ body, .post, .post a {
 .post a {
   font-weight: bold;        /* 제목을 볼드 처리 */
   font-size: 18px;  
-  font-family: 'Nanum Gothic', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 
     /* 제목 크기 2포인트 키우기 */
 }
@@ -18,7 +18,7 @@ body, .post, .post a {
   font-weight: bold;        /* 말머리를 볼드 처리 */
   font-size: 14px;          /* 말머리 크기 4포인트 키우기 */
   color: black;             /* 말머리 색상도 블랙으로 */
-  font-family: 'Nanum Gothic', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 기존 검색바 및 버튼 스타일 유지 */
@@ -67,7 +67,7 @@ body, .post, .post a {
 }
 
 body {
-  font-family: 'Black Han Sans', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #FFEBFF;
@@ -75,11 +75,11 @@ body {
 }
 
 h1, h2, h3, .banner-text h2, button, .sort-button {
-  font-family: 'Anton', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   background-color: #f5f5f5;
   text-align: center;
   margin: 0;
@@ -162,7 +162,7 @@ button:hover {
     align-items: center;
     height: 100vh;
     background-color: #f9f9f9;
-    font-family: 'Nanum Gothic', sans-serif;
+    font-family: "Noto Sans KR", sans-serif;
 }
 
 #login-message-container div {
@@ -180,7 +180,7 @@ button:hover {
     font-size: 18px;
     font-weight: normal;
     margin-bottom: 20px;
-    font-family: 'Black Han Sans', sans-serif;
+    font-family: "Noto Sans KR", sans-serif;
 }
 
 #login-message-container a {
