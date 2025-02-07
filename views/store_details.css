@@ -1,6 +1,6 @@
 /* 한국어는 Black Han Sans, 영어는 Anton 적용 */
 body {
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #ffebff; /* 배경색 */
@@ -13,7 +13,7 @@ h3,
 .banner-text h2,
 button,
 .sort-button {
-  font-family: "Anton", sans-serif; /* 영어 폰트 적용 */
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 가게명 텍스트 색상 */
