@@ -8,7 +8,7 @@
 /* 배경 설정 */
 body {
   background-color: #ffebff;
-  font-family: "Anton", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 컨테이너 설정 */
@@ -31,7 +31,7 @@ h1 {
   text-align: center;
   margin-top: 20px;
   width: 100%;
-  font-family: "Do Hyeon" !important;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 #login-message {
@@ -67,7 +67,7 @@ textarea {
   border: 1px solid #8e89f6;
   border-radius: 4px;
   font-size: 16px;
-  font-family: "Anton", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 폼 내부 요소는 원래대로 좌측 정렬 */
@@ -87,7 +87,7 @@ button {
   border: none;
   padding: 15px 30px;
   font-size: 18px;
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   margin-top: 30px; /* 버튼을 박스 아래로 내림 */
   cursor: pointer;
   border-radius: 4px;
@@ -102,7 +102,7 @@ button:hover {
 
 /* 한국어는 Black Han Sans, 영어는 Anton 적용 */
 body {
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #ffebff; /* 배경색 */
@@ -115,7 +115,7 @@ h3,
 .banner-text h2,
 button,
 .sort-button {
-  font-family: "Anton", sans-serif; /* 영어 폰트 적용 */
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 문의 아이템 박스 스타일 */
