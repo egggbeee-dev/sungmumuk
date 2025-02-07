@@ -1,6 +1,6 @@
 /* 공통 스타일 */
 body {
-  font-family: "Do Hyeon" !important;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #ffebff; /* 배경색 */
@@ -12,7 +12,7 @@ h3,
 .banner-text h2,
 button,
 .sort-button {
-  font-family: "Anton", sans-serif; /* 영어 폰트 적용 */
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 h1 {
@@ -22,7 +22,7 @@ h1 {
   text-align: center;
   margin-top: 20px;
   width: 100%;
-  font-family: "Black Han Sans", "Anton", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   display: block; /* 블록 요소로 설정 */
 }
 .container {
