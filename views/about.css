@@ -1,6 +1,6 @@
 /* 전체 스타일 */
 body {
-  font-family: "Arial", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -362,7 +362,7 @@ body {
   text-align: center;
   color: #7a69c4; /* 연보라색 텍스트 */
   font-size: 30px; /* 글씨 크기 조정 */
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 20px 0;
   background-color: #f4e7f9; /* 연보라 배경색 */
