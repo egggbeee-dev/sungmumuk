@@ -49,7 +49,7 @@
   border: none;
   color: white;
   cursor: pointer;
-  font-family: "Anton", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   font-size: 1em;
   border-radius: 5px;
   display: inline-block;
@@ -165,7 +165,7 @@ a {
   background-color: #ffebff; /* 배경색 */
   text-align: left;
   padding: 20px 40px;
-  font-family: "Anton", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 .top3-section h2 {
@@ -190,7 +190,7 @@ a {
   font-size: 1.2em;
   border-radius: 25px;
   cursor: pointer;
-  font-family: "Black Han Sans", sans-serif !important;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 가게 리스트 */
@@ -225,7 +225,7 @@ a {
 
 .store-details {
   text-align: left; /* 텍스트 왼쪽 정렬 */
-  font-family: "Black Han Sans", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 .store-name {
@@ -248,7 +248,7 @@ a {
   border-radius: 10px;
   cursor: pointer;
   font-size: 1em;
-  font-family: "Anton", sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   transition: background-color 0.3s;
 }
 .top-category .store-list {
@@ -279,7 +279,7 @@ a {
 
 .menu-button p {
   font-size: 1.2em; /* 버튼 아래 텍스트 크기 */
-  font-family: Noto Sans Korean;
+  font-family: "Noto Sans KR", sans-serif;
   color: #fff;
 }
 
