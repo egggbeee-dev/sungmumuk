@@ -160,8 +160,8 @@ document.addEventListener('DOMContentLoaded', function () {
             newPostForm.style.display = 'none'; // 작성 폼 숨기기
             renderPosts(); // 게시물 목록 갱신
         } catch (error) {
-            console.error('게시물 저장 오류:', error);
-            alert('게시물 저장 중 오류가 발생했습니다.');
+            //console.error('게시물 저장 오류:', error);
+            //alert('게시물 저장 중 오류가 발생했습니다.');
         }
     });
 
