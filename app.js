@@ -24,7 +24,6 @@ const menuRouter = require('./routes/menu');
 const storeDetailsRouter = require('./routes/store_details');
 const signupRouter = require('./routes/signup');
 const loginRouter = require('./routes/login');
-const freeRouter = require('./routes/free');
 const myInquiryRouter  = require('./routes/my_inquiry')
 const situationRouter = require('./routes/situation');
 const newRouter = require('./routes/new'); 
@@ -41,8 +40,11 @@ const authRoutes = require('./routes/auth'); // auth.js 파일 경로
 const myReviewRouter = require('./routes/my_review')
 const nodemailer = require("nodemailer"); //이메일 인증
 const email = require('./routes/email');
+const freeRouter = require('./routes/free');
 const freeNewRouter = require('./routes/free_new');
 const myRouter = require('./routes/my');
+const haksikRouter = require('./routes/haksik');
+const haksikNewRouter = require('./routes/haksik_new');
 
 app.set('port', process.env.PORT || 80);
 app.set('view engine', 'html');
@@ -78,6 +80,9 @@ app.use(
 app.use('/free/posts', ensureAuthenticated); // 로그인된 사용자만 접근 가능
 app.use('/free_new/posts', ensureAuthenticated); // 로그인된 사용자만 접근 가능
 app.use('/free/comments', ensureAuthenticated); // 댓글도 보호 경로로 설정
+app.use('/haksik/posts', ensureAuthenticated, ); // 학식 게시판 라우터
+app.use('/haksik_new/posts', ensureAuthenticated); // 학식 게시판 라우터
+app.use('/haksik/comments', ensureAuthenticated); // 학식 게시판 라우터
 
 // 라우터 연결
 app.use('/inquiry', inquiryRouter); 
@@ -87,7 +92,6 @@ app.use('/api/login', loginRouter);
 app.use('/store_details', storeDetailsRouter);
 app.use('/menu', menuRouter);
 app.use('/', compareRouter);
-app.use('/free', ensureAuthenticated, freeRouter);
 app.use('/', favoritesRouter);
 app.use('/my-inquiry', myInquiryRouter);
 app.use('/situation', situationRouter);
@@ -104,8 +108,11 @@ app.use('/store_search', storeSearchRouter);
 app.use('/auth', authRoutes); 
 app.use('/my_reviews', ensureAuthenticated, myReviewRouter);
 app.use('/api/email', email); //이메일 추가
-app.use('/free_new',freeNewRouter);
 app.use('/my', myRouter);
+app.use('/free', ensureAuthenticated, freeRouter);
+app.use('/free_new',freeNewRouter);
+app.use('/haksik', haksikRouter)
+app.use('/haksik_new',haksikNewRouter);
 
 // 정적 HTML 파일 제공 라우트
 app.get('/', (req, res) => {
