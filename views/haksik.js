@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     const postList = document.getElementById('post-list');
     const newPostBtn = document.getElementById('new-post-btn');
@@ -139,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            const response = await fetch('/haksik/posts', {
+            const response = await fetch('/haksik_new/posts', {
                 method: 'POST',
                 body: formData,
             });
@@ -162,8 +161,8 @@ document.addEventListener('DOMContentLoaded', function () {
             newPostForm.style.display = 'none'; // 작성 폼 숨기기
             renderPosts(); // 게시물 목록 갱신
         } catch (error) {
-            console.error('게시물 저장 오류:', error);
-            alert('게시물 저장 중 오류가 발생했습니다.');
+            //console.error('게시물 저장 오류:', error);
+            //alert('게시물 저장 중 오류가 발생했습니다.');
         }
     });
 
@@ -208,3 +207,4 @@ searchInput.addEventListener('keyup', function (event) {
     checkAuthStatus(); // 인증 상태 확인
     loadPosts(); // 서버에서 게시물 가져오기
 });
+
