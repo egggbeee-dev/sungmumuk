@@ -52,8 +52,8 @@ router.get('/', async (req, res) => {
         }
 
         // 페이징 처리
-        const limit = 10; // 페이지당 10개
-        const offset = (parseInt(page, 10) - 1 || 0) * limit;
+        const limit = 12; // 페이지당 10개
+        const offset = (parseInt(page, 12) - 1 || 0) * limit;
 
         // WHERE 절 생성
         const whereClause = filters.length > 0 ? `WHERE ${filters.join(' AND ')}` : '';
