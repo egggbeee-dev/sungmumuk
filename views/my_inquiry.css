@@ -175,8 +175,22 @@ button,
 .inquiry-response {
   font-size: 16px;
   color: #333;
-  line-height: 1.5; /* 가독성을 위한 줄 간격 */
+  line-height: 1.5;
+  margin-bottom: 10px;
 }
+.admin-response{
+  margin-bottom: 10px;
+}
+
+.admin-reply{
+  display: block;
+}
+.reply-input {
+  width: 100%; /* 가로 최대 길이 */
+  height: 60px;
+  overflow-y: auto;
+}
+
 @media (max-width: 1024px) {
   .inquiry-title-box {
     padding-top: 110px;

@@ -11,6 +11,7 @@ router.get('/status', (req, res) => {
                 user: {
                     id: req.session.user.id,
                     nickname: req.session.user.nickname,
+                    isAdmin : req.session.user.isAdmin,
                 },
             });
         } else {

@@ -42,6 +42,7 @@ router.post('/', async (req, res) => {
             id: user.id,
             username: user.username,
             nickname: user.nickname,
+            isAdmin : user.is_admin,
         };
 
         console.log('로그인 성공:', req.session.user);
@@ -61,6 +62,7 @@ router.post('/', async (req, res) => {
                 id: user.id,
                 username: user.username,
                 nickname: user.nickname,
+                isAdmin : user.is_admin,
             },
             additionalInfo: {
                 lastLoginTime: user.last_login_time || '정보 없음',
