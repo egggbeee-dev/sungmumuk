@@ -5,6 +5,35 @@
   box-sizing: border-box;
 }
 
+/* 제목 섹션 스타일 */
+.page-header {
+  text-align: center;
+  color: #7a69c4; /* 연보라색 텍스트 */
+  font-size: 30px; /* 글씨 크기 조정 */
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+  padding: 20px 0;
+  background-color: #f4e7f9; /* 연보라 배경색 */
+  border-bottom: 1px solid #e6e6fa;
+}
+
+/* 문의사항 배너 스타일 */
+.inquiry-banner {
+  position: fixed; /* 스크롤 시에도 고정 */
+  bottom: 70px; /* 화면 아래에서 20px 위로 */
+  right: 30px; /* 화면 오른쪽에서 20px 안쪽으로 */
+  background-color: #7a69c4; /* 보라색 배경 */
+  color: white; /* 흰색 텍스트 */
+  padding: 10px 20px; /* 내부 여백 */
+  border-radius: 30px; /* 둥근 테두리 */
+  font-size: 23px; /* 텍스트 크기 */
+  text-align: center;
+  cursor: pointer; /* 클릭 가능하도록 포인터 표시 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 1000; /* 다른 요소 위에 표시 */
+}
+
 /* 배경 설정 */
 body {
   background-color: #ffebff;
@@ -175,22 +204,8 @@ button,
 .inquiry-response {
   font-size: 16px;
   color: #333;
-  line-height: 1.5;
-  margin-bottom: 10px;
+  line-height: 1.5; /* 가독성을 위한 줄 간격 */
 }
-.admin-response{
-  margin-bottom: 10px;
-}
-
-.admin-reply{
-  display: block;
-}
-.reply-input {
-  width: 100%; /* 가로 최대 길이 */
-  height: 60px;
-  overflow-y: auto;
-}
-
 @media (max-width: 1024px) {
   .inquiry-title-box {
     padding-top: 110px;
