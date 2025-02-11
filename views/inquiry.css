@@ -11,6 +11,17 @@ body {
   font-family: "Noto Sans KR", sans-serif;
 }
 
+.page-header {
+  text-align: center;
+  color: #7a69c4; /* 연보라색 텍스트 */
+  font-size: 30px; /* 글씨 크기 조정 */
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+  padding: 20px 0;
+  background-color: #f4e7f9; /* 연보라 배경색 */
+  border-bottom: 1px solid #e6e6fa;
+}
+
 /* 컨테이너 설정 */
 .container {
   display: flex;
@@ -112,8 +123,9 @@ button,
   text-align: center;
   margin-left: auto;
   margin-right: auto;
-  font-size: 17px;
-  margin-top: 20px; /* 간격 추가 */
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 10px; /* 간격 추가 */
 }
 
 /* 팝업 창 스타일 */
@@ -166,6 +178,8 @@ button,
   .store_register p {
     display: flex;
     flex-direction: column;
+    font-weight: bold;
+ 
   }
   #inquiryForm {
     width: 100%;
