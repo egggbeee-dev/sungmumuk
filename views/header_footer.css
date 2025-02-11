@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #fff; /* 배경색 */
+  font-weight: bold; /* 또는 700 */
 }
 
 
@@ -138,8 +139,6 @@ button,
   display: none;
 }
 
-
-
 .mobile-menu.is-open {
   display: flex;
   flex-direction: column;
@@ -153,8 +152,6 @@ button,
   padding: 16px;
   overflow-y: auto; /* 스크롤 가능 */
 }
-
-
 
 .mobile-menu .s__row {
   align-items: center;
