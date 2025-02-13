@@ -21,9 +21,6 @@
     <!-- 제목 섹션 -->
     <div class="page-header">나의 문의 내역</div>
 
-    <div class="inquiry-banner" onclick="location.href='inquiry.html'">
-        문의하기
-      </div>
     <div
       id="login-message"
       style="display: none; text-align: center; margin-top: 20px"
@@ -42,74 +39,128 @@
     <!-- Load Header, Footer, and Inquiry Data -->
     <script src="header_footer.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-          try {
-              // 로그인 상태 확인
-              const authResponse = await fetch('/auth/status');
-              const authStatus = await authResponse.json();
-  
-              if (!authStatus.loggedIn) {
-                  // 비로그인 상태 처리
-                  console.log("인증 상태 확인: 비로그인 사용자입니다.");
-                  document.getElementById('login-message').style.display = 'block';
-              } else {
-                  // 로그인된 상태
-                  console.log("인증 상태 확인: 로그인된 사용자입니다.");
-  
-                  // Fetch inquiries from the API
-                  const response = await fetch('/my-inquiry');
-                  if (!response.ok) {
-                      throw new Error('Network response was not ok ' + response.statusText);
-                  }
-  
-                  const data = await response.json();
-                  const container = document.querySelector('.inquiry-container');
-  
-                  if (data.length === 0) {
-                      container.innerHTML = `<p class="no-inquiries">현재 문의 내역이 없습니다.</p>`;
-                      return;
-                  }
-  
-                  container.innerHTML = data.map(inquiry => `
-                      <div class="inquiry-item">
-                          <div class="inquiry-header">
-                              <h2 class="inquiry-title">${inquiry.title}</h2>
-                              <span class="inquiry-status ${inquiry.status === '답변 완료' ? '답변완료' : '답변대기'}">
-                                  ${inquiry.status}
-                              </span>
-                          </div>
-                          <div class="inquiry-details">
-                              <p>문의일: <span class="inquiry-date">${formatDate(inquiry.created_at)}</span></p>
-                              <p class="inquiry-response-date">답변일: 
-                                  <span class="response-date">${inquiry.answered_at || '답변 대기 중'}</span>
-                              </p>
-                          </div>
-                          <div class="inquiry-response">
-                              <p>문의 내용:</p>
-                              <p>${inquiry.content}</p>
-                          </div>
-                      </div>
-                  `).join('');
-              }
-          } catch (error) {
-              console.error('Error loading inquiries:', error);
-              const container = document.querySelector('.inquiry-container');
-              container.innerHTML = `<p class="error-message">문의 데이터를 불러오는 중 문제가 발생했습니다. 나중에 다시 시도해주세요.</p>`;
-          }
-      });
-      function formatDate(dateString) {
-          const options = { 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric', 
-              hour: '2-digit', 
-              minute: '2-digit' 
-          };
-          const date = new Date(dateString);
-          return date.toLocaleDateString('ko-KR', options);
-      }
-      
-  </script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const authResponse = await fetch('/auth/status');
+                const authStatus = await authResponse.json();
+                console.log("인증 상태 확인:", authStatus); // 🔍 확인 로그 추가
+        
+                if (!authStatus.loggedIn) {
+                    document.getElementById('login-message').style.display = 'block';
+                    return;
+                }
+        
+                const response = await fetch('/my-inquiry');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+        
+                const data = await response.json();
+                const container = document.querySelector('.inquiry-container');
+        
+                if (data.length === 0) {
+                    container.innerHTML = `<p class="no-inquiries">현재 문의 내역이 없습니다.</p>`;
+                    return;
+                }
+        
+                container.innerHTML = data.map(inquiry => `
+                    <div class="inquiry-item" data-inquiry-id="${inquiry.inquiry_id}">
+                        <div class="inquiry-header">
+                            <h2 class="inquiry-title">${inquiry.title}</h2>
+                            <span class="inquiry-status ${inquiry.status === '답변 완료' ? '답변완료' : '답변대기'}">
+                                ${inquiry.status}
+                            </span>
+                        </div>
+                        <div class="inquiry-details">
+                            <p>문의일: <span class="inquiry-date">${formatDate(inquiry.created_at)}</span></p>
+                            <p class="inquiry-response-date">답변일: 
+                                <span class="response-date">${inquiry.answered_at ? formatDate(inquiry.answered_at) : '답변 대기 중'}</span>
+                            </p>
+                        </div>
+                        <div class="inquiry-response">
+                            <p><strong>문의 내용:</strong></p>
+                            <p>${inquiry.content}</p>
+                        </div>
+                        ${inquiry.answer && inquiry.answer.trim() ? `
+                            <div class="admin-response">
+                                <p><strong>관리자 답변:</strong></p>
+                                <p>${inquiry.answer}</p>
+                            </div>
+                        ` : ''}
+                        <div class="admin-reply" style="display: none;">
+                            <textarea class="reply-input" placeholder="답변을 입력하세요"></textarea>
+                            <button class="submit-reply">답변 등록</button>
+                        </div>
+                    </div>
+                `).join('');
+        
+                // ✅ 관리자 계정일 경우만 답변 입력란 표시
+                if (authStatus.user.isAdmin === 1) { // 🔍 authStatus.user.isAdmin → authStatus.isAdmin으로 변경
+                    document.querySelectorAll('.admin-reply').forEach(replyBox => {
+                        replyBox.style.display = "block";
+                    });
+        
+                    document.querySelectorAll('.submit-reply').forEach(button => {
+                        button.addEventListener('click', async (event) => {
+                            const inquiryItem = event.target.closest('.inquiry-item');
+                            const inquiryId = inquiryItem.getAttribute('data-inquiry-id');
+                            const replyText = inquiryItem.querySelector('.reply-input').value.trim();
+        
+                            if (!replyText) {
+                                alert('답변을 입력해주세요.');
+                                return;
+                            }
+        
+                            console.log(`🔍 문의 ID: ${inquiryId}, 답변 내용: "${replyText}"`); // 🛠 디버깅용 로그
+        
+                            try {
+                                const replyResponse = await fetch(`/my-inquiry/admin/reply/${inquiryId}`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ answer: replyText })
+                                });
+        
+                                const result = await replyResponse.json();
+                                console.log("✅ 서버 응답:", result); // 🛠 서버 응답 확인
+        
+                                if (!replyResponse.ok) {
+                                    throw new Error('답변 등록 실패');
+                                }
+        
+                                alert('답변이 등록되었습니다.');
+                                location.reload();
+                            } catch (error) {
+                                console.error('답변 등록 중 오류 발생:', error);
+                                alert('답변 등록 중 문제가 발생했습니다.');
+                            }
+                        });
+                    });
+                }
+        
+            } catch (error) {
+                console.error('Error loading inquiries:', error);
+                document.querySelector('.inquiry-container').innerHTML =
+                    `<p class="error-message">문의 데이터를 불러오는 중 문제가 발생했습니다. 나중에 다시 시도해주세요.</p>`;
+            }
+        });
+        
+        function formatDate(dateString) {
+            if (!dateString) return ''; // 날짜가 없을 경우 빈 문자열 반환
+        
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                timeZone: 'Asia/Seoul' // 한국 시간 적용
+            };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ko-KR', options);
+        }
+        
+        </script>
+        
 
     <!-- 반응형 -->
   </body>
