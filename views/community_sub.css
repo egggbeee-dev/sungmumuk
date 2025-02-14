@@ -1,9 +1,12 @@
-/* 포스트 전체 글씨 색상 블랙으로 변경 */
-body,
-.post,
-.post a {
-  color: black;
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffebff;
+  color: #000;
+  text-align: center;
 }
+
 
 /* 말머리 및 제목 스타일 */
 .post a {
@@ -23,34 +26,43 @@ body,
 }
 
 /* 기존 검색바 및 버튼 스타일 유지 */
+
+
+
 .search-bar {
-  display: inline-flex;
-  align-items: center;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  margin-left: 350px;
 }
 
 .search-bar input {
   width: 400px;
-  padding: 20px;
+  padding: 10px;
   border: 2px solid #c5b9f3;
   border-radius: 5px 0 0 5px;
   outline: none;
 }
 
+
 .search-bar button {
-  height: 39px;
-  padding: 20px 30px;
+  padding: 10px 20px;
   background-color: #c5b9f3;
   border: none;
-  border-radius: 0;
+  border-radius: 0 5px 5px 0;
   cursor: pointer;
 }
 
-.new-post-form {
-  margin: 0;
-  margin-left: 20px;
-  font-size: 14px;
-}
 
+#new-post-form {
+  width: 50%;
+  margin: 20px auto;
+  padding: 10px;
+  border: 2px solid #c5b9f3;
+  border-radius: 5px;
+  background-color: #ffffff;
+  display: none;
+}
 #new-post-btn {
   background-color: #c5b9f3;
   color: #fff;
@@ -60,6 +72,8 @@ body,
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
   font-weight: bold;
+  margin-right: 200px;
+  margin-top: 20px;
 }
 
 #new-post-btn:hover {
@@ -67,51 +81,13 @@ body,
   transform: scale(1.05);
 }
 
-body {
-  font-family: "Noto Sans KR", sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #ffebff;
-  color: #000;
-}
-
-h1,
-h2,
-h3,
-.banner-text h2,
-button,
-.sort-button {
-  font-family: "Noto Sans KR", sans-serif;
-}
-
-body {
-  font-family: "Noto Sans KR", sans-serif;
-  background-color: #f5f5f5;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-}
-
-.search-bar {
-  margin: 20px auto;
-  display: flex;
-  justify-content: center;
-}
-
-.search-bar input {
-  width: 300px;
+#new-post-form input,
+#new-post-form textarea {
+  width: 100%;
+  margin-bottom: 10px;
   padding: 10px;
-  border: 2px solid #c5b9f3;
-  border-radius: 5px 0 0 5px;
-  outline: none;
-}
-
-.search-bar button {
-  padding: 10px 20px;
-  background-color: #c5b9f3;
-  border: none;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 #post-list {
@@ -130,24 +106,6 @@ body {
   transition: all 0.3s ease;
 }
 
-#new-post-form {
-  width: 50%;
-  margin: 20px auto;
-  padding: 10px;
-  border: 2px solid #c5b9f3;
-  border-radius: 5px;
-  background-color: #ffffff;
-  display: none;
-}
-
-#new-post-form input,
-#new-post-form textarea {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
 
 button {
   background-color: #c5b9f3;
@@ -215,4 +173,17 @@ button:hover {
   #post-list {
     width: calc(100% - 32px);
   }
+}
+
+
+/* 제목 섹션 스타일 */
+.page-header {
+  text-align: center;
+  color: #7a69c4; /* 연보라색 텍스트 */
+  font-size: 30px; /* 글씨 크기 조정 */
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+  padding: 20px 0;
+  background-color: #f4e7f9; /* 연보라 배경색 */
+  border-bottom: 1px solid #e6e6fa;
 }
