@@ -6,24 +6,6 @@ body {
   background-color: #ffebff; /* 배경색 */
 }
 
-/* 영어 텍스트에 Anton 폰트 적용 */
-h1,
-h2,
-h3,
-.banner-text h2,
-button,
-.sort-button {
-  font-family: "Noto Sans KR", sans-serif;
-}
-
-/* 기본 스타일 */
-body {
-  font-family: "Noto Sans KR", sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f9;
-}
-
 /* 컨테이너 및 헤더 */
 .container {
   max-width: 1000px;
@@ -103,10 +85,10 @@ body {
   color: white;
   margin-bottom: 30px;
 }
-
+.profile-section h2,
 .favorites-container h2,
 .reviews-container h2 {
-  font-size: 24px;
+  font-size: 30px;
   margin-bottom: 15px;
   text-align: left;
 }
@@ -249,7 +231,7 @@ body {
   .profile-section h2,
   .favorites-container h2,
   .reviews-container h2 {
-    font-size: 20px;
+    font-size: 30px;
   }
 }
 
@@ -298,11 +280,6 @@ body {
     position: static; /* 위치 속성을 기본값으로 설정 */
   }
 
-  .favorites-container h2,
-  .reviews-container h2 {
-    font-size: 20px; /* 섹션 제목 폰트 크기 축소 */
-    margin-bottom: 20px; /* 간격 조정 */
-  }
 
   .reviews-box {
     flex-direction: column; /* 가로에서 세로 배열로 변경 */
@@ -338,4 +315,14 @@ body {
   .reviews-date {
     font-size: 10px; /* 날짜 폰트 크기 축소 */
   }
+}
+
+.page-header {
+  text-align: center;
+  color: #7a69c4; /* 연보라색 텍스트 */
+  font-size: 30px; /* 글씨 크기 조정 */
+  margin: 0;
+  padding: 20px 0;
+  background-color: #f4e7f9; /* 연보라 배경색 */
+  border-bottom: 1px solid #e6e6fa;
 }
