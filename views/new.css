@@ -6,16 +6,18 @@ body {
   background-color: #ffebff; /* 배경색 */
 }
 
-/* 영어 텍스트에 Anton 폰트 적용 */
-h1,
-h2,
-h3,
-.banner-text h2,
-button,
-.sort-button {
-  font-family: "Noto Sans KR", sans-serif;
-}
 
+/* 제목 섹션 스타일 */
+.page-header {
+  text-align: center;
+  color: #7a69c4; /* 연보라색 텍스트 */
+  font-size: 30px; /* 글씨 크기 조정 */
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+  padding: 20px 0;
+  background-color: #f4e7f9; /* 연보라 배경색 */
+  border-bottom: 1px solid #e6e6fa;
+}
 
 .sort-button {
   margin-top: 50px;
@@ -39,6 +41,7 @@ button,
   justify-content: center;
   gap: 20px; /* 각 가게 상자 사이 간격 */
   margin-bottom: 40px;
+  margin-top : 20px;
 }
 
 .new-store-item {
