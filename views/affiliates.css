@@ -7,17 +7,18 @@ body {
   text-align: center;
 }
 
-/* 영어 텍스트에 Anton 폰트 적용 */
-h1,
-h2,
-h3,
-.banner-text h2,
-button,
-.sort-button {
+
+/* 제목 섹션 스타일 */
+.page-header {
+  text-align: center;
+  color: #7a69c4; /* 연보라색 텍스트 */
+  font-size: 30px; /* 글씨 크기 조정 */
   font-family: "Noto Sans KR", sans-serif;
-
+  margin: 0;
+  padding: 20px 0;
+  background-color: #f4e7f9; /* 연보라 배경색 */
+  border-bottom: 1px solid #e6e6fa;
 }
-
 
 .container {
   margin: 50px auto;
