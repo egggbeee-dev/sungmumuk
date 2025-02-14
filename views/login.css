@@ -6,16 +6,6 @@ body {
   background-color: #ffebff; /* 배경색 */
 }
 
-/* 영어 텍스트에 Anton 폰트 적용 */
-h1,
-h2,
-h3,
-.banner-text h2,
-button,
-.sort-button {
-  font-family: "Noto Sans KR", sans-serif;
-}
-
 
 /* 로그인 섹션 */
 
@@ -23,11 +13,6 @@ button,
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-body {
-  font-family: "Noto Sans KR", sans-serif;
-  background-color: #f9f0ff;
 }
 
 
