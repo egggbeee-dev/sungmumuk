@@ -6,14 +6,6 @@ body {
   background-color: #ffebff; /* 배경색 */
 }
 
-/* 영어 텍스트에 Anton 폰트 적용 */
-h2,
-h3,
-.banner-text h2,
-button,
-.sort-button {
-  font-family: "Noto Sans KR", sans-serif;
-}
 
 h1 {
   color: #8e89f6;
@@ -25,11 +17,16 @@ h1 {
   font-family: "Noto Sans KR", sans-serif;
   display: block; /* 블록 요소로 설정 */
 }
-.container {
-  max-width: 1000px; /* 최대 너비 설정 */
-  margin: 0 auto; /* 가운데 정렬 */
-  padding: 20px; /* 내부 여백 */
-  text-align: center; /* 내부 모든 텍스트 중앙 정렬 */
+/* 제목 섹션 스타일 */
+.page-header {
+  text-align: center;
+  color: #7a69c4; /* 연보라색 텍스트 */
+  font-size: 30px; /* 글씨 크기 조정 */
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+  padding: 20px 0;
+  background-color: #f4e7f9; /* 연보라 배경색 */
+  border-bottom: 1px solid #e6e6fa;
 }
 
 /* 찜한 가게 목록을 감싸는 컨테이너 */
@@ -48,6 +45,7 @@ h1 {
   align-items: center;
   gap: 5px;
   margin-bottom: 20px;
+  margin-top : 20px;
 }
 
 #search-input {
@@ -84,7 +82,7 @@ h1 {
   border-radius: 15px;
   color: black;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  width: 280px; /* 줄에 여러 개 배치 가능하도록 조정 */
+  width: 300px; /* 줄에 여러 개 배치 가능하도록 조정 */
   text-align: center;
   position: relative;
 }
@@ -146,6 +144,7 @@ h1 {
   align-items: center; /* 수직 중앙 정렬 */
   margin-top: 30px;
   gap: 20px; /* 버튼 간의 간격 */
+  margin-bottom: 30px;
 }
 
 .action-buttons button {
