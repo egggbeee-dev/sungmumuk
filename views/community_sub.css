@@ -33,7 +33,7 @@ body {
   margin: 20px auto;
   display: flex;
   justify-content: center;
-  margin-left: 350px;
+  margin-left: 100px;
 }
 
 .search-bar input {
@@ -90,6 +90,7 @@ body {
   border-radius: 5px;
 }
 
+
 #post-list {
   width: 50%;
   margin: 0 auto;
@@ -101,7 +102,7 @@ body {
   margin: 10px 0;
   padding: 10px;
   border-radius: 5px;
-  color: #000000;
+  color: #000;
   text-align: left;
   transition: all 0.3s ease;
 }
@@ -175,15 +176,30 @@ button:hover {
   }
 }
 
-
-/* 제목 섹션 스타일 */
 .page-header {
   text-align: center;
   color: #7a69c4; /* 연보라색 텍스트 */
   font-size: 30px; /* 글씨 크기 조정 */
-  font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 20px 0;
   background-color: #f4e7f9; /* 연보라 배경색 */
   border-bottom: 1px solid #e6e6fa;
+}
+
+
+/* 새글 작성 배너 스타일 */
+.new-banner {
+  position: fixed; /* 스크롤 시에도 고정 */
+  bottom: 70px; /* 화면 아래에서 20px 위로 */
+  right: 30px; /* 화면 오른쪽에서 20px 안쪽으로 */
+  background-color: #7a69c4; /* 보라색 배경 */
+  color: white; /* 흰색 텍스트 */
+  padding: 10px 20px; /* 내부 여백 */
+  border-radius: 30px; /* 둥근 테두리 */
+  font-size: 23px; /* 텍스트 크기 */
+  text-align: center;
+  cursor: pointer; /* 클릭 가능하도록 포인터 표시 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 1000; /* 다른 요소 위에 표시 */
 }
