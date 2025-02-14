@@ -6,25 +6,18 @@ body {
     background-color: #FFEBFF; /* 배경색 */
   }
   
-  /* 영어 텍스트에 Anton 폰트 적용 */
-  h1, h2, h3, .banner-text h2, button, .sort-button {
-    font-family: "Noto Sans KR", sans-serif;
+ 
+
+  .page-header {
+    text-align: center;
+    color: #7a69c4; /* 연보라색 텍스트 */
+    font-size: 30px; /* 글씨 크기 조정 */
+    margin: 0;
+    padding: 20px 0;
+    background-color: #f4e7f9; /* 연보라 배경색 */
+    border-bottom: 1px solid #e6e6fa;
   }
   
-  .page-title {
-    text-align: center; /* 제목을 가운데로 정렬 */
-    color: #8E89F6; /* 연보라색 적용 */
-    font-size: 1.3em; /* 제목 글자 크기 */
-    margin-bottom: 20px; /* 아래쪽 여백 */
-}
-
-/* 기본 스타일 */
-body {
-  font-family: "Noto Sans KR", sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-}
 
 /* 컨테이너 및 헤더 */
 .container {
@@ -54,7 +47,7 @@ body {
 .review-box {
     display: flex;
     position: relative; /* 수정 버튼을 오른쪽 상단에 고정하기 위해 */
-    background-color: #8e89f6;
+    background-color: #9b97f1;
     padding: 20px;
     border-radius: 10px;
     color: white;
@@ -72,7 +65,7 @@ body {
 
 /* 가게명 */
 .store-name {
-    font-size: 20px;
+    font-size: 25px;
     margin-bottom: 10px;
 }
 
@@ -113,7 +106,7 @@ body {
     top: 10px;
     right: 10px;
     padding: 8px 15px;
-    background-color: #6d63e5;
+    background-color: #7b73da;
     color: white;
     border: none;
     border-radius: 5px;
@@ -172,3 +165,4 @@ body {
       display: inline-block; /* 강제 줄바꿈 방지 */
     }
   }
+
