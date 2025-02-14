@@ -128,16 +128,21 @@
   border-radius: 5px;
 }
 
+/* 댓글 입력 칸 스타일 */
 #comment-input {
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 10px;
-  padding: 10px;
-  font-size: 14px;
+  width: 700px; /* 너비 */
+  min-height: 50px; /* 최소 높이 */
+  max-height: 200px; /* 최대 높이 (선택 사항) */
+  padding: 10px; /* 내부 여백 */
+  font-size: 18px; /* 글자 크기 */
+  line-height: 1.5; /* 줄 간격 */
   border-radius: 5px;
   border: 1px solid #c5b9f3;
-  resize: vertical;
+  resize: none; /* 세로 크기 조절 가능 */
+  overflow-y: auto; /* 내용이 많아지면 스크롤 표시 */
+  box-sizing: border-box; /* 패딩 포함 */
 }
+
 
 /* 메인 콘텐츠를 박스 안에 담기 */
 main {
@@ -166,17 +171,6 @@ main {
   width: 100%;
 }
 
-/* 댓글 입력 칸 스타일 */
-#comment-input {
-  width: 700px; /* 너비 700px로 고정 */
-  height: 50px; /* 높이 40px로 고정 */
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 5px;
-  border: 1px solid #c5b9f3;
-  resize: none; /* 크기 변경 불가 */
-  margin-bottom: 0;
-}
 
 /* 댓글 작성 버튼 스타일 */
 #submit-comment-btn {
@@ -198,8 +192,9 @@ main {
 
 /* 댓글 리스트 스타일 */
 #comments-list {
-  margin-top: 20px;
+
   text-align: left;
+  margin: 20px 30px 0; /* 위: 20px, 좌우: 20px, 아래: 0 */
 }
 
 .comment {
@@ -247,4 +242,17 @@ main {
   #submit-comment-btn {
     min-width: 110px;
   }
+}
+
+
+/* 제목 섹션 스타일 */
+.page-header {
+  text-align: center;
+  color: #7a69c4; /* 연보라색 텍스트 */
+  font-size: 30px; /* 글씨 크기 조정 */
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+  padding: 20px 0;
+  background-color: #f4e7f9; /* 연보라 배경색 */
+  border-bottom: 1px solid #e6e6fa;
 }
