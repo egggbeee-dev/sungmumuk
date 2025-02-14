@@ -8,21 +8,22 @@
     <link rel="stylesheet" href="community_post.css" />
     <!-- 게시글 스타일 -->
     <link rel="stylesheet" href="header_footer.css" />
-    <!-- 헤더와 푸터 스타일 -->
  <!-- 스타일 -->
  <link
  href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
  rel="stylesheet"
 />
-
     <script src="header_footer.js" defer></script>
-    <!-- 헤더 및 푸터 동적 로드 -->
+
   </head>
   <body>
     <!-- 헤더 동적 로드 -->
     <div id="header-placeholder"></div>
+          <!-- 제목 섹션 -->
+          <div class="page-header">자유 게시판</div>
 
     <main>
+
       <section id="post-details" style="text-align: left; margin: 20px">
         <!-- 카테고리와 제목을 같은 줄에 배치 -->
         <div
@@ -56,6 +57,7 @@
         <p style="margin-top: 10px">작성일: <span id="post-date"></span></p>
       </section>
 
+
       <a href="/free.html" class="back-btn">← 목록으로 돌아가기</a>
 
       <!-- 게시글 수정/삭제 버튼 -->
@@ -76,7 +78,7 @@
     </main>
 
     <section id="comments-section">
-      <h3>댓글</h3>
+      <h3><br><br>댓글</h3>
       <!-- 댓글 작성 영역 -->
       <div class="comment-input-container">
         <textarea id="comment-input" placeholder="댓글을 입력하세요"></textarea>
@@ -86,14 +88,6 @@
       <div id="comments-list"></div>
       <!-- "댓글이 없습니다." 메시지가 여기 표시됩니다. -->
     </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-logo">
-        <img src="성뭐먹2.png" alt="Logo" class="footer-logo-img" />
-      </div>
-      <div class="footer-info"></div>
-    </footer>
 
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
@@ -198,36 +192,36 @@
 
 
       async function loadPost(postId) {
-        try {
-          const response = await fetch(`/free/posts/${postId}`);
-          const post = await response.json();
+    try {
+        const response = await fetch(`/free/posts/${postId}`);
+        const post = await response.json();
 
-          console.log(post); // 전체 post 객체 확인
-          console.log(post.image_url); // 이미지 URL 확인
+        document.getElementById("post-title").textContent = post.title;
+        document.getElementById("post-author").textContent = `작성자: ${post.author}`;
+        document.getElementById("post-content").textContent = post.content;
+        document.getElementById("post-category").textContent = post.category;
 
-          document.getElementById("post-title").textContent = post.title;
-          document.getElementById(
-            "post-author"
-          ).textContent = `작성자: ${post.author}`;
-          document.getElementById("post-content").textContent = post.content;
-          document.getElementById("post-date").textContent = new Date(
-            post.created_at
-          ).toLocaleString();
-          document.getElementById("post-category").textContent = post.category;
+        // 작성일 포맷 변경
+        const createdDate = new Date(post.created_at);
+        const formattedDate = `${createdDate.getFullYear().toString()}년 
+            ${String(createdDate.getMonth() + 1).padStart(2, "0")}월 
+            ${String(createdDate.getDate()).padStart(2, "0")}일 
+            ${String(createdDate.getHours()).padStart(2, "0")}시 
+            ${String(createdDate.getMinutes()).padStart(2, "0")}분`;
 
-          postAuthorId = post.user_id;
+        document.getElementById("post-date").textContent = formattedDate;
 
-          if (post.image_url) {
+        postAuthorId = post.user_id;
+
+        if (post.image_url) {
             const postImage = document.getElementById("post-image");
-            postImage.src = post.image_url; // 서버에서 반환된 이미지 경로
+            postImage.src = post.image_url;
             postImage.style.display = "block";
-          } else {
-            console.warn("이미지 URL이 존재하지 않습니다.");
-          }
-        } catch (error) {
-          console.error("게시글 데이터 로드 오류:", error);
         }
-      }
+    } catch (error) {
+        console.error("게시글 데이터 로드 오류:", error);
+    }
+}
 
       async function loadComments(postId) {
         try {
