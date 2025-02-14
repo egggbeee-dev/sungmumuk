@@ -20,6 +20,8 @@
   <body>
     <!-- 헤더 동적 로드 -->
     <div id="header-placeholder"></div>
+         <!-- 제목 섹션 -->
+         <div class="page-header">학식 게시판</div>
 
     <main>
       <section id="post-details">
@@ -187,38 +189,38 @@
           console.error("로그인 상태 확인 오류:", error);
         }
       }
-
       async function loadPost(postId) {
-        try {
-          const response = await fetch(`/haksik/posts/${postId}`);
-          const post = await response.json();
+    try {
+        const response = await fetch(`/free/posts/${postId}`);
+        const post = await response.json();
 
-          console.log(post); // 전체 post 객체 확인
-          console.log(post.image_url); // 이미지 URL 확인
+        document.getElementById("post-title").textContent = post.title;
+        document.getElementById("post-author").textContent = `작성자: ${post.author}`;
+        document.getElementById("post-content").textContent = post.content;
+        document.getElementById("post-category").textContent = post.category;
 
-          document.getElementById("post-title").textContent = post.title;
-          document.getElementById(
-            "post-author"
-          ).textContent = `작성자: ${post.author}`;
-          document.getElementById("post-content").textContent = post.content;
-          document.getElementById("post-date").textContent = new Date(
-            post.created_at
-          ).toLocaleString();
-          document.getElementById("post-category").textContent = post.category;
+        // 작성일 포맷 변경
+        const createdDate = new Date(post.created_at);
+        const formattedDate = `${createdDate.getFullYear().toString().slice(2)}년 
+            ${String(createdDate.getMonth() + 1).padStart(2, "0")}월 
+            ${String(createdDate.getDate()).padStart(2, "0")}일 
+            ${String(createdDate.getHours()).padStart(2, "0")}시 
+            ${String(createdDate.getMinutes()).padStart(2, "0")}분`;
 
-          postAuthorId = post.user_id;
+        document.getElementById("post-date").textContent = formattedDate;
 
-          if (post.image_url) {
+        postAuthorId = post.user_id;
+
+        if (post.image_url) {
             const postImage = document.getElementById("post-image");
-            postImage.src = post.image_url; // 서버에서 반환된 이미지 경로
+            postImage.src = post.image_url;
             postImage.style.display = "block";
-          } else {
-            console.warn("이미지 URL이 존재하지 않습니다.");
-          }
-        } catch (error) {
-          console.error("게시글 데이터 로드 오류:", error);
         }
-      }
+    } catch (error) {
+        console.error("게시글 데이터 로드 오류:", error);
+    }
+}
+
 
       async function loadComments(postId) {
         try {
