@@ -39,10 +39,14 @@
                 const authStatus = await authResponse.json();
         
                 if (!authStatus.loggedIn) {
-                    alert('비교함은 로그인 후 이용 가능합니다.');
-                    window.location.href = '/login.html';
-                    return;
+                    const userResponse = confirm('비교함은 로그인 후 이용 가능합니다.');
+                    if (userResponse) {
+                        window.location.href = '/login.html'; // 로그인 페이지로 이동
+                    } else {
+                        window.history.back(); // 이전 페이지로 이동
+                    }
                 }
+                
         
                 const response = await fetch('/compare');
                 if (!response.ok) throw new Error('데이터 가져오기에 실패했습니다.');

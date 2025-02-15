@@ -26,10 +26,6 @@
       id="login-message"
       style="display: none; text-align: center; margin-top: 20px"
     >
-      <p>
-        커뮤니티를 보려면
-        <a href="login.html" style="color: blue">로그인</a> 해주세요!
-      </p>
     </div>
 
     <div class="search-bar-container">
@@ -68,17 +64,13 @@
             const authStatus = await response.json();
 
             if (!authStatus.loggedIn) {
-              loginMessage.style.display = "block";
-              postList.style.display = "none";
-              newPostBtn.style.display = "none";
-              searchBar.style.display = "none";
-            } else {
-              loginMessage.style.display = "none";
-              postList.style.display = "block";
-              newPostBtn.style.display = "inline-block";
-              searchBar.style.display = "flex";
-              currentUserId = authStatus.userId; // 로그인된 사용자 ID 저장
-              loadPosts();
+              const userResponse = confirm("자유 게시판은 로그인 후 이용 가능합니다.");
+              if (userResponse) {
+                  window.location.href = "/login.html"; // 로그인 페이지로 이동
+              } else {
+                  window.history.back(); // 이전 페이지로 이동
+              }
+              return; // 이후 코드 실행 방지
             }
           } catch (error) {
             console.error("로그인 상태 확인 오류:", error);

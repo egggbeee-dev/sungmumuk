@@ -25,10 +25,6 @@
       id="login-message"
       style="display: none; text-align: center; margin-top: 20px"
     >
-      <p>
-        나의 문의 내역을 보고싶다면
-        <a href="login.html" style="color: blue">로그인</a> 해주세요!
-      </p>
     </div>
     <!-- Main Inquiry Content -->
     <div class="inquiry-container"></div>
@@ -45,10 +41,16 @@
                 const authStatus = await authResponse.json();
                 console.log("인증 상태 확인:", authStatus); // 🔍 확인 로그 추가
         
-                if (!authStatus.loggedIn) {
-                    document.getElementById('login-message').style.display = 'block';
-                    return;
+                
+            if (!authStatus.loggedIn) {
+                const userResponse = confirm("나의 문의 내역은 로그인 후 사용 가능합니다.");
+                if (userResponse) {
+                    window.location.href = "/login.html"; // 로그인 페이지로 이동
+                } else {
+                    window.history.back(); // 이전 페이지로 이동
                 }
+                return; // 이후 코드 실행 방지
+            }
         
                 const response = await fetch('/my-inquiry');
                 if (!response.ok) {

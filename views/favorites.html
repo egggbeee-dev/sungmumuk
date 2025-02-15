@@ -31,9 +31,6 @@
 
 
     <!-- 가게 목록 섹션-->
-    <div id="login-message" style="display: none; text-align: center; margin-top: 20px;">
-        <p>찜한 가게를 보려면 <a href="login.html" style="color: blue;">로그인</a> 해주세요!</p>
-    </div>
     <div id="favorites-container" style="display: none;"></div>
 
     <!-- 하단 버튼 섹션 -->
@@ -58,12 +55,12 @@
             const authStatus = await authResponse.json();
     
             if (!authStatus.loggedIn) {
-                console.log("비로그인 사용자입니다.");
-                document.getElementById('login-message').style.display = 'block';
-                document.querySelectorAll('.action-buttons button').forEach(button => {
-                    button.style.display = 'none';
-                });
-                return;
+                const userResponse = confirm('찜한 가게는 로그인 후 이용 가능합니다.');
+                if (userResponse) {
+                    window.location.href = '/login.html'; // 로그인 페이지로 이동
+                } else {
+                    window.history.back(); // 이전 페이지로 이동
+                }
             }
     
             console.log("로그인된 사용자입니다.");
