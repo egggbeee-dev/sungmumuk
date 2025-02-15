@@ -135,7 +135,7 @@
           })
             .then((response) => response.json())
             .then((data) => {
-              alert(data.message || "인증번호가 전송되었습니다.");
+              alert(data.message || "인증번호가 전송되었습니다. 10분내로 입력해주세요.");
             })
             .catch((error) => {
               console.error("인증번호 요청 오류:", error);
