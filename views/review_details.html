@@ -5,97 +5,330 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Restaurant Page</title>
     <link rel="icon" href="성뭐먹3.png" type="image/png" />
-    <link rel="stylesheet" href="review_details.css" />
+    <link rel="stylesheet" href="store_details.css" />
     <!-- 기존 CSS 파일을 링크 -->
     <link rel="stylesheet" href="header_footer.css" />
- <!-- 스타일 -->
-   <!-- 스타일 -->
-   <link
-   href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
-   rel="stylesheet"
- />
+    <!-- 헤더와 푸터 스타일 -->
+    <!-- Google Fonts -->
+    <!-- 스타일 -->
+    <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+    rel="stylesheet"
+  />
   </head>
   <body>
     <!-- Header Placeholder -->
     <div id="header-placeholder"></div>
 
-    <!-- Review Details -->
-    <div class="review-details-container"></div>
+    <!-- Main Content -->
+    <div class="container">
+      <!-- 가게 정보 -->
+      <header class="header">
+        <h1 id="restaurant-name"></h1>
+      </header>
+      <!-- 이미지 슬라이드쇼 섹션 -->
+      <div class="image-section">
+        <button class="slide-button prev" onclick="changeSlide(-1)">&#10094;</button>
+        <div class="store-image-container" id="restaurant-image-container">
+            <!-- 이미지가 JavaScript에서 동적으로 추가될 예정 -->
+        </div>
+        <button class="slide-button next" onclick="changeSlide(1)">&#10095;</button>
+    </div>
 
-    <script src="header_footer.js"></script>
+      <div class="info-section">
+        <div class="info-box">
+          <div class="info-label">주소</div>
+          <div class="info-content" id="restaurant-address"></div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">캠퍼스 위치</div>
+          <div class="info-content" id="restaurant-campus"></div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">평점</div>
+          <div class="info-content" id="restaurant-rating"></div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">카테고리</div>
+          <div class="info-content" id="restaurant-category"></div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">평균 가격(1인)</div>
+          <div class="info-content" id="restaurant-price"></div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">기타</div>
+          <div class="info-content" id="restaurant-features"></div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">제휴</div>
+          <div class="info-content" id="restaurant-partnership"></div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">연락처</div>
+          <div class="info-content" id="restaurant-contact"></div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">운영시간</div>
+          <div class="info-content" id="restaurant-hours">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 리뷰 섹션 -->
+    <div class="review-section">
+      <div class="review-header">
+        <h2>리뷰</h2>
+        <button class="review-register-button" onclick="redirectToReviewPage()">
+          리뷰 작성하기
+        </button>
+      </div>
+
+      <!-- 리뷰 목록 -->
+      <div class="review-list" id="review-list"></div>
+
+      <!-- 페이지네이션 -->
+      <div class="pagination">
+        <button id="prevPageButton" onclick="changePage(-1)" disabled>
+          이전
+        </button>
+        <span id="currentPageLabel">1</span>
+        <button id="nextPageButton" onclick="changePage(1)">다음</button>
+      </div>
+    </div>
+
     <script>
       const urlParams = new URLSearchParams(window.location.search);
-      const reviewId = urlParams.get("reviewId");
+      const storedID = urlParams.get("id");
 
-      if (!reviewId) {
-        // 리뷰 ID가 없을 경우 샘플 데이터 표시
-        const sampleReview = getSampleReview();
-        renderReviewDetails(sampleReview);
-      } else {
-        // 리뷰 ID가 있을 경우 데이터베이스에서 가져오거나 예외 처리
-        fetchReviewDetails(reviewId);
+      let currentPage = 1;
+      const reviewsPerPage = 10;
+      let imageUrls = [];  // imageUrls 전역 변수로 선언
+      let currentSlideIndex = 0;  // 현재 슬라이드 인덱스
+
+      async function displayRestaurantDetails() {
+        try {
+          const storeId = new URLSearchParams(window.location.search).get("id");
+          const response = await fetch(`/store_details/data?id=${storeId}`);
+          const restaurant = await response.json();
+          imageUrls = restaurant.images || []; // 이미지 URL 배열 설정
+
+    updateSlideShow(); // 이미지 슬라이드 업데이트 호출
+          document.querySelector("#restaurant-name").textContent =
+            restaurant.restaurant_name;
+          document.querySelector("#restaurant-address").textContent =
+            restaurant.address;
+          document.querySelector("#restaurant-campus").textContent =
+            restaurant.campus;
+          document.querySelector(
+            "#restaurant-rating"
+          ).textContent = `${restaurant.average_rating} / 5.00`;
+          document.querySelector("#restaurant-category").textContent =
+            restaurant.category;
+            document.querySelector("#restaurant-price").textContent =
+           restaurant.average_price + "원";
+          document.querySelector("#restaurant-features").innerHTML = `
+                    혼밥 : ${restaurant.solo_meal ? "가능" : "불가능"} <br>
+                    단체 : ${restaurant.group_meal ? "가능" : "불가능"} <br>
+                    카공 : ${restaurant.cafe_study ? "가능" : "불가능"} <br>
+                    가성비 : ${restaurant.good_price ? "좋음" : "보통"} <br>
+                    분위기 : ${restaurant.good_mood ? "좋음" : "보통"} <br>
+                    심야 : ${restaurant.late_night ? "가능" : "불가능"} <br>
+                `;
+
+          document.querySelector("#restaurant-contact").textContent =
+            restaurant.contact_number;
+          document.querySelector("#restaurant-partnership").textContent =
+            restaurant.partnership;
+          const hoursHTML = `
+                    <div>월요일: ${restaurant.opening_hours_mon || "휴무"}</div>
+                    <div>화요일: ${restaurant.opening_hours_tue || "휴무"}</div>
+                    <div>수요일: ${restaurant.opening_hours_wed || "휴무"}</div>
+                    <div>목요일: ${restaurant.opening_hours_thu || "휴무"}</div>
+                    <div>금요일: ${restaurant.opening_hours_fri || "휴무"}</div>
+                    <div>토요일: ${restaurant.opening_hours_sat || "휴무"}</div>
+                    <div>일요일: ${restaurant.opening_hours_sun || "휴무"}</div>
+                `;
+          document.querySelector("#restaurant-hours").innerHTML = hoursHTML;
+        } catch (error) {
+          console.error("가게 정보를 불러오는 중 오류 발생:", error);
+        }
       }
+      // 이미지 슬라이드 업데이트
+      function updateSlideShow() {
+  const container = document.getElementById("restaurant-image-container");
+  container.innerHTML = "";  // 기존 이미지 제거
+  currentSlideIndex = 0;  // 슬라이드 인덱스 초기화
 
-      async function fetchReviewDetails(id) {
-    try {
-      const response = await fetch(`/api/reviews/${id}`);
-      if (!response.ok) throw new Error("리뷰 데이터를 가져오는 중 오류 발생");
+  imageUrls.forEach((url, index) => {
+    const imgElement = document.createElement("img");
+    imgElement.src = url;
+    imgElement.className = "store-image";
+    imgElement.style.display = index === 0 ? "block" : "none"; // 첫 번째 이미지만 보이게 설정
+    container.appendChild(imgElement);
+  });
 
-      const review = await response.json();
-      renderReviewDetails(review);
-    } catch (error) {
-      console.error(error);
-      document.body.innerHTML = "<p>리뷰 데이터를 가져오는 중 오류가 발생했습니다.</p>";
-    }
-  }
+  updateButtonVisibility();  // 버튼 상태 업데이트 호출
+}
 
-    
+function updateButtonVisibility() {
+  document.querySelector(".prev").disabled = currentSlideIndex === 0;
+  document.querySelector(".next").disabled = currentSlideIndex === imageUrls.length - 1;
+}
 
-      function renderReviewDetails(review) {
-        const container = document.querySelector(".review-details-container");
-        container.innerHTML = `
-          <div class="review-header">
-              <h2>${review.restaurant_name || "알 수 없는 레스토랑"}</h2>
-              <p>${review.reviewer || "익명"}</p>
-             <p>작성 시간: ${new Intl.DateTimeFormat('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-              }).format(new Date(review.created_at))}</p>
-          </div>
-          ${
-            review.review_photo
-              ? `<img src="/review/${review.review_photo}" alt="리뷰 이미지" class="review-image">`
-              : "<p></p>"
-          }
-          <div class="ratings">
-              <p>맛: ${generateStars(review.taste_rating)}</p>
-              <p>접근성: ${generateStars(review.access_rating)}</p>
-              <p>재방문: ${generateStars(review.revisit_rating)}</p>
-          </div>
-          <p class="content">
-              ${review.review_text || "내용이 없습니다."}
-          </p>
-          <div class="button-container">
-              <button onclick="location.href='recent_reviews.html?page=1'" 
-                      style="padding: 10px 20px; background-color: #8E89F6; color: #fff; border: none; border-radius: 6px; font-size: 1em; cursor: pointer; font-weight: bold;">
-                  목록으로 돌아가기
-              </button>
-          </div>
-        `;
-      }
+// 슬라이드 이동 함수
+function changeSlide(direction) {
+  const slides = document.querySelectorAll(".store-image");
+  if (slides.length === 0) return;
+
+  slides[currentSlideIndex].style.display = "none";
+  currentSlideIndex += direction;
+
+  // 인덱스가 범위를 넘어가지 않게 제한
+  if (currentSlideIndex < 0) currentSlideIndex = 0;
+  if (currentSlideIndex >= slides.length) currentSlideIndex = slides.length - 1;
+
+  slides[currentSlideIndex].style.display = "block";
+  updateButtonVisibility(); // 버튼 상태 업데이트
+}
+document.addEventListener("DOMContentLoaded", displayRestaurantDetails);  // 페이지 로드 시 이미지 슬라이드 시작
+
+
+      async function loadReviews() {
+            try {
+                const response = await fetch(`/store_details/reviews?id=${storedID}`);
+                const reviews = await response.json();
+
+                if (reviews.length === 0) {
+                    document.getElementById('review-list').innerHTML = "<p>아직 등록된 리뷰가 없습니다.</p>";
+                    document.getElementById('prevPageButton').disabled = true;
+                    document.getElementById('nextPageButton').disabled = true;
+                    return;
+                }
+
+                renderReviews(reviews);
+            } catch (error) {
+                console.error('리뷰 데이터를 불러오는 중 오류 발생:', error);
+                document.getElementById('review-list').innerHTML = "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
+            }
+        }
 
       function generateStars(rating) {
-        const maxStars = 5;
+        const maxStars = 5; // 최대 별 개수
         let stars = "";
+
         for (let i = 1; i <= maxStars; i++) {
-          stars += i <= rating ? "⭐" : "☆";
+          stars += i <= rating ? "⭐" : "☆"; // 채운 별과 빈 별
         }
+
         return stars;
       }
+
+      function renderReviews(reviews) {
+        const reviewList = document.getElementById("review-list");
+        reviewList.innerHTML = "";
+
+        const startIndex = (currentPage - 1) * reviewsPerPage;
+        const endIndex = Math.min(startIndex + reviewsPerPage, reviews.length);
+        const currentReviews = reviews.slice(startIndex, endIndex);
+
+        currentReviews.forEach((review) => {
+          const reviewItem = document.createElement("div");
+          reviewItem.className = "review-item";
+          reviewItem.setAttribute("data-id", review.review_id); // 리뷰 ID를 설정
+
+          const reviewPhotoHTML = `
+    <div class="review-photo">
+        <img src="${
+          review.review_photo
+            ? `/review/${review.review_photo}`
+            : "성뭐먹1.png"
+        }" 
+             alt="리뷰 이미지" 
+             style="max-width: 100%; height: auto; max-height: 200px; object-fit: cover;">
+    </div>`;
+
+          reviewItem.innerHTML = `
+            ${reviewPhotoHTML}
+            <div class="review-text">
+                <strong>맛: ${generateStars(review.taste_rating)}</strong><br>
+                <strong>접근성: ${generateStars(
+                  review.access_rating
+                )}</strong><br>
+                <strong>재방문: ${generateStars(
+                  review.revisit_rating
+                )}</strong><br>
+                <div class="review-snippet">
+                     ${review.review_text}
+                </div>
+                <span style="color: gray; font-size: 0.8em;"> ${
+                  review.reviewer || "익명"
+                } </span><br>
+              <span style="color: gray; font-size: 0.8em;">작성일: ${formatDate(review.created_at)}</span>
+
+            </div>
+        `;
+
+          // 클릭 이벤트 추가
+          reviewItem.addEventListener("click", () => {
+            handleReviewClick(review.review_id);
+          });
+
+          reviewList.appendChild(reviewItem);
+        });
+
+        document.getElementById("prevPageButton").disabled = currentPage === 1;
+        document.getElementById("nextPageButton").disabled =
+          endIndex >= reviews.length;
+        document.getElementById("currentPageLabel").textContent = currentPage;
+      }
+
+      function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // 0-based index이므로 +1
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${year}년 ${month}월 ${day}일 ${hours}시 : ${minutes}분`;
+}
+
+      function changePage(direction) {
+        currentPage += direction;
+        loadReviews();
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        displayRestaurantDetails();
+        loadReviews();
+      });
+
+      function redirectToReviewPage() {
+        const restaurantName =
+          document.getElementById("restaurant-name").textContent;
+        if (storedID && restaurantName) {
+          window.location.href = `/reviews_register.html?storeName=${encodeURIComponent(
+            restaurantName
+          )}&id=${storedID}`;
+        } else {
+          alert("가게 정보를 확인할 수 없습니다.");
+        }
+      }
+
+      function handleReviewClick(reviewId) {
+        // 리뷰 상세 페이지로 이동
+        window.location.href = `/store_review.html?id=${reviewId}`;
+      }
+      console.log('imageUrls:', imageUrls);  // imageUrls 배열 내용 출력
+
     </script>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script src="header_footer.js"></script>
 
     <!-- 반응형 -->
   </body>
