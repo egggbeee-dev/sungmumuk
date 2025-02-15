@@ -7,15 +7,16 @@ const pool = require('../config/db');
 router.post('/', async (req, res) => {
     const { username, password, nickname } = req.body;
 
-    // 이메일 형식 및 도메인 확인 (정규식)
-    const emailPattern = /^[^\s@]+@sungshin\.ac\.kr$/;
-    if (!emailPattern.test(username)) {
-        return res.status(400).json({ message: '아이디는 @sungshin.ac.kr 이메일만 사용 가능합니다.' });
-    }
-
+    // 입력값 검증
     if (!username || !password || !nickname) {
         console.log('빈 필드 확인:', { username, password, nickname });
         return res.status(400).json({ message: '모든 필드를 채워주세요.' });
+    }
+
+    // 이메일 형식 및 도메인 확인 (정규식)
+    const emailPattern = /^[^\s@]+@sungshin\.ac\.kr$/;
+    if (!emailPattern.test(username)) {
+        return res.status(400).json({ message: '@sungshin.ac.kr 이메일을 사용해주세요.' });
     }
 
     console.log('Received data:', { username, password, nickname }); // 데이터 확인
@@ -36,3 +37,4 @@ router.post('/', async (req, res) => {
 });
 
 module.exports = router;
+
