@@ -2,228 +2,118 @@ body {
   font-family: "Noto Sans KR", sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #ffebff;
+  background: #fff;
 }
 
-
+/* 리뷰 상세 컨테이너 */
 .review-details-container {
-  width: 45%;
-  margin: 20px auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  margin: 40px auto;
+  background: rgb(248, 236, 254);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.review-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-  padding-left: 0; /* 닉네임을 왼쪽 끝으로 이동 */
-}
 
+/* 제목 */
 h3 {
-  margin: 0 0 20px 0; /* 가게명과 내용 사이 여백 */
-  padding-left: 0%; /* 글자 시작점과 동일한 위치 */
-  font-size: 1.5em;
-  color: #333;
+  margin-bottom: 16px;
+  font-size: 1.8em;
+  color: #5a4fcf;
+  text-align: center;
 }
 
+/* 내용 */
 .content {
-  margin: 0 0 20px 0; /* 가게명과 내용 사이 여백 */
-  padding-left: 25%; /* 글자 시작점과 동일한 위치 */
   font-size: 1.2em;
   color: #333;
+  margin-bottom: 16px;
+  text-align: justify;
 }
+
+/* 버튼 */
 .edit-button,
 .delete-button {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 12px 24px;
   margin: 5px;
-  border: 2px solid #8e89f6;
+  border: none;
   border-radius: 8px;
-  background-color: #fff !important; /* 기본 배경 강제 적용 */
-  color: #8e89f6 !important; /* 글씨 색상 강제 적용 */
   font-size: 1em;
   font-weight: bold;
-  text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.edit-button:hover,
-.delete-button:hover {
-  background-color: #8e89f6 !important; /* 호버 배경색 강제 적용 */
-  color: #fff !important; /* 호버 글씨 색상 강제 적용 */
+.edit-button {
+  background: #8e89f6;
+  color: white;
+}
+
+.edit-button:hover {
+  background: #6c77d4;
 }
 
 .delete-button {
-  border-color: #f44336 !important; /* 삭제 버튼 테두리 강제 적용 */
-  color: #f44336 !important; /* 삭제 버튼 글씨 강제 적용 */
+  background: #f44336;
+  color: white;
 }
 
 .delete-button:hover {
-  background-color: #f44336 !important; /* 삭제 버튼 호버 배경색 강제 적용 */
-  color: #fff !important; /* 삭제 버튼 호버 글씨 강제 적용 */
+  background: #d32f2f;
 }
 
-.ratings {
-  margin: 10px 0;
-  padding-left: 25%; /* 글자와 동일한 정렬 */
-}
-
-.ratings p {
-  margin: 5px 0;
-}
-
-.review-image {
-  width: 40%; /* 이미지 크기 */
-  border-radius: 8px;
-  margin: 20px 0; /* 상하 여백 */
-  display: block;
-  padding-left: 25%; /* 글자 시작점과 동일한 정렬 */
-}
-
-.back-button {
-  display: inline-block;
-  padding: 5px 15px; /* 버튼 내부 여백 설정 */
-  border: 2px solid #8e89f6; /* 테두리 */
-  background: transparent;
-  color: #8e89f6;
-  text-align: center;
-  border-radius: 4px; /* 모서리 둥글게 */
-  cursor: pointer;
-  font-size: 1em; /* 글씨 크기 유지 */
-  line-height: normal; /* 텍스트 위치 조정 */
-  height: auto; /* 버튼 높이 글자에 맞춤 */
-  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
-  box-sizing: border-box; /* 패딩과 테두리를 포함한 크기 계산 */
-  width: fit-content; /* 버튼 크기를 텍스트 크기에 맞춤 */
-}
-
-.back-button:hover {
-  background: #8e89f6;
-  color: #fff;
-}
-
-.button-container {
-  text-align: right; /* 버튼을 오른쪽 끝으로 정렬 */
-}
-
+/* 별점 */
 .star-rating {
   display: flex;
   justify-content: center;
-  gap: 5px;
+  gap: 6px;
 }
+
 .star {
-  font-size: 30px;
+  font-size: 32px;
   color: #ccc;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.3s ease;
 }
+
 .star.selected {
-  color: gold;
+  background: linear-gradient(135deg, #ffcc00, #ff9900);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* 제목 스타일 */
-.edit-review-container h3 {
-  text-align: center; /* 가운데 정렬 */
-  color: #8e89f6; /* 파란색 */
-  margin-bottom: 20px;
-  font-size: 1.5em; /* 큰 제목 크기 */
-  font-weight: bold;
+/* 이미지 */
+.review-image {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 12px;
+  margin: 16px auto;
+  display: block;
 }
 
-/* 레이블 스타일 */
-.edit-review-container label {
-  font-weight: bold; /* 강조 */
-  display: block; /* 블록 형태로 */
-  margin-bottom: 10px; /* 아래 여백 추가 */
-}
-
-/* 텍스트 입력과 파일 업로드 스타일 */
-.edit-review-container textarea,
-.edit-review-container input[type="file"] {
-  width: 100%; /* 전체 너비 */
-  padding: 10px; /* 내부 여백 */
-  border-radius: 6px; /* 모서리 둥글게 */
-  border: 1px solid #ddd; /* 연한 테두리 */
-  margin-bottom: 20px; /* 아래 여백 */
-  font-size: 1em; /* 적당한 글씨 크기 */
-}
-
-/* 별점 컨테이너 */
-.star-rating {
-  display: flex;
-  gap: 5px; /* 별 사이 간격 */
-  justify-content: flex-start; /* 왼쪽 정렬 */
-  margin-bottom: 20px; /* 아래 여백 */
-}
-
-/* 버튼 스타일 */
-.edit-review-container button {
-  padding: 10px 20px; /* 버튼 크기 조정 */
-  border: none; /* 테두리 제거 */
-  border-radius: 6px; /* 모서리 둥글게 */
-  cursor: pointer; /* 클릭 가능한 포인터 */
-  font-size: 1em; /* 글씨 크기 */
-  font-weight: bold; /* 강조 */
-  transition: all 0.3s ease; /* 부드러운 효과 */
-  margin-right: 10px; /* 버튼 간격 */
-}
-
-/* 수정 완료 버튼 */
-.edit-review-container button:first-of-type {
-  background-color: #8e89f6; /* 파란색 배경 */
-  color: #fff; /* 흰색 글씨 */
-}
-
-.edit-review-container button:first-of-type:hover {
-  background-color: #6c77d4; /* 더 어두운 파란색 */
-}
-
-/* 취소 버튼 */
-.edit-review-container button:last-of-type {
-  background-color: #f44336; /* 빨간색 배경 */
-  color: #fff; /* 흰색 글씨 */
-}
-
-.edit-review-container button:last-of-type:hover {
-  background-color: #d32f2f; /* 더 어두운 빨간색 */
-}
-
-/* 가게명 스타일 */
-#storeName {
-  display: block; /* 블록으로 설정 */
-  padding: 10px;
-  background-color: #f5f5f5; /* 연한 회색 배경 */
-  border-radius: 6px; /* 모서리 둥글게 */
-  margin-bottom: 20px; /* 아래 여백 */
-  font-size: 1em;
-}
-
-
-@media (max-width: 1024px) {
-  .review-details-container {
-    margin-top: 80px;
-    width: calc(100% - 32px);
-  }
-}
+/* 반응형 스타일 */
 @media (max-width: 768px) {
-  .review-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+  .review-details-container {
+    width: 90%;
+    padding: 20px;
   }
-  .review-header > * {
-    margin: 0;
+
+  h3 {
+    font-size: 1.5em;
   }
-  .review-details-container > * {
-    padding-left: 0;
+
+  .content {
+    font-size: 1em;
+  }
+
+  .edit-button,
+  .delete-button {
+    width: 100%;
+    text-align: center;
   }
 }
