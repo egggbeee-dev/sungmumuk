@@ -202,3 +202,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Menu button or mobile menu not found.");
   }
 });
+
+// 닉네임 업데이트 함수
+function updateHeaderNickname(newNickname) {
+  const userStatus = document.getElementById("user-status");
+  if (userStatus) {
+      userStatus.textContent = `안녕하세요! ${newNickname}님이 로그인 중입니다.`;
+  }
+}
