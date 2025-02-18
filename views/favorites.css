@@ -205,6 +205,30 @@ header.favorite-title-box {
   margin: 0;
   text-align: center;
 }
+
+.no-favorites-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.no-favorites-box a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.no-favorites-box a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   .action-buttons {
     gap: 8px;

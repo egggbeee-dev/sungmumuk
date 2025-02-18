@@ -27,8 +27,10 @@
         <input type="text" id="search-input" placeholder="가게명 또는 카테고리로 검색" onkeypress="handleKeyPress(event)">
         <button id="search-button" onclick="searchStores()">🔍</button>
     </div>
-
-
+    <!-- 가게 목록이 없을 경우 -->
+    <div id="no-favorites-message" class="no-favorites-box" style="display: none;">
+        <p>찜한 식당이 없습니다. <a href="/store_search.html?query=">식당을 보러 가볼까요?</a></p>
+    </div>
 
     <!-- 가게 목록 섹션-->
     <div id="favorites-container" style="display: none;"></div>
@@ -50,16 +52,15 @@
         console.log('DOMContentLoaded 이벤트 실행');
     
         try {
-            // 로그인 상태 확인
             const authResponse = await fetch('/auth/status');
             const authStatus = await authResponse.json();
     
             if (!authStatus.loggedIn) {
                 const userResponse = confirm('찜한 가게는 로그인 후 이용 가능합니다.');
                 if (userResponse) {
-                    window.location.href = '/login.html'; // 로그인 페이지로 이동
+                    window.location.href = '/login.html';
                 } else {
-                    window.history.back(); // 이전 페이지로 이동
+                    window.history.back();
                 }
             }
     
@@ -71,8 +72,10 @@
     
                 if (data.length > 0) {
                     renderFavorites(data);
+                    document.getElementById('no-favorites-message').style.display = 'none';
                 } else {
-                    document.getElementById('favorites-container').innerHTML = "<p>찜한 가게가 없습니다.</p>";
+                    document.getElementById('favorites-container').style.display = 'none';
+                    document.getElementById('no-favorites-message').style.display = 'block';
                 }
             } else {
                 console.error('API 요청 실패:', response.statusText);
@@ -80,7 +83,7 @@
         } catch (error) {
             console.error('로그인 상태 확인 또는 데이터 가져오기 중 오류 발생:', error);
         }
-    });
+    });    
     
     /**
      * 찜한 가게 데이터를 화면에 렌더링하는 함수
@@ -155,9 +158,8 @@
         }
     
         const selectedIds = Array.from(toggles).map(toggle => {
-            const id = parseInt(toggle.dataset.storeId, 10);
-            return id;
-        });        
+            return parseInt(toggle.dataset.storeId, 10);
+        });
     
         try {
             const response = await fetch('/api/remove-favorites', {
@@ -168,10 +170,8 @@
     
             console.log('응답 상태:', response.status); // 디버깅
             if (response.ok) {
-                toggles.forEach(toggle => {
-                    toggle.closest('.store-box').remove();
-                });
                 alert('선택한 가게가 찜 목록에서 삭제되었습니다.');
+                window.location.reload(); // ✅ 삭제 후 새로고침
             } else {
                 const errorData = await response.json();
                 console.error('서버 오류:', errorData); // 디버깅
@@ -181,7 +181,8 @@
             console.error('통신 오류:', error); // 디버깅
             alert('서버와 통신 중 문제가 발생했습니다.');
         }
-    }    
+    }
+    
 
     // 비교함으로 가기 기능
     async function goToCompare() {
