@@ -210,3 +210,21 @@ function updateHeaderNickname(newNickname) {
       userStatus.textContent = `안녕하세요! ${newNickname}님이 로그인 중입니다.`;
   }
 }
+
+// 세션 갱신 함수
+function refreshSession() {
+  fetch("/auth/refresh-session", { method: "POST" })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("세션 갱신 성공:", data.message);
+      checkLoginStatus(); // ✅ 로그인 상태 다시 확인하여 헤더 업데이트
+    })
+    .catch((error) => {
+      console.error("Error refreshing session:", error);
+    });
+}

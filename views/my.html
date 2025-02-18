@@ -214,43 +214,47 @@
       
 
       // 변경된 정보 저장
-async function saveChanges() {
-  const nickname = document.getElementById("nickname-input").value;
-  const department = document.getElementById("department-input").value;
-
-  try {
-      const response = await fetch("/my/profile/update", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nickname, department })
-      });
-
-      const result = await response.json();
-      if (result.success) {
-          alert("정보가 성공적으로 업데이트되었습니다.");
-
-          // ✅ 헤더의 닉네임을 즉시 업데이트
-          updateHeaderNickname(nickname);
-
-          // ✅ 페이지 새로고침 없이 마이페이지 UI도 업데이트
-          document.getElementById("nickname-display").textContent = nickname;
-          document.getElementById("nickname-input").classList.add("hidden");
-          document.getElementById("nickname-display").classList.remove("hidden");
-
-          document.getElementById("department-display").textContent = department;
-          document.getElementById("department-input").classList.add("hidden");
-          document.getElementById("department-display").classList.remove("hidden");
-
-          document.querySelector(".edit-button").classList.remove("hidden");
-          document.getElementById("save-button").classList.add("hidden");
-      } else {
-          alert(result.message);
-      }
-  } catch (error) {
-      console.error("Error saving profile changes:", error);
-      alert("정보 업데이트 중 오류가 발생했습니다.");
-  }
-}
+      async function saveChanges() {
+        const nickname = document.getElementById("nickname-input").value;
+        const department = document.getElementById("department-input").value;
+    
+        try {
+            const response = await fetch("/my/profile/update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ nickname, department })
+            });
+    
+            const result = await response.json();
+            if (result.success) {
+                alert("정보가 성공적으로 업데이트되었습니다.");
+    
+                // ✅ 헤더의 닉네임을 즉시 업데이트
+                updateHeaderNickname(nickname);
+    
+                // ✅ 세션을 새로고침하여 변경된 닉네임 반영
+                refreshSession();
+    
+                // ✅ 페이지 새로고침 없이 마이페이지 UI도 업데이트
+                document.getElementById("nickname-display").textContent = nickname;
+                document.getElementById("nickname-input").classList.add("hidden");
+                document.getElementById("nickname-display").classList.remove("hidden");
+    
+                document.getElementById("department-display").textContent = department;
+                document.getElementById("department-input").classList.add("hidden");
+                document.getElementById("department-display").classList.remove("hidden");
+    
+                document.querySelector(".edit-button").classList.remove("hidden");
+                document.getElementById("save-button").classList.add("hidden");
+            } else {
+                alert(result.message);
+            }
+        } catch (error) {
+            console.error("Error saving profile changes:", error);
+            alert("정보 업데이트 중 오류가 발생했습니다.");
+        }
+    }
+    
     </script>
   </body>
 </html>
