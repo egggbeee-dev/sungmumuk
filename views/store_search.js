@@ -341,3 +341,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 });
+
+// 엔터 키 입력 시 검색 실행
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search-input"); // 검색 입력 필드
+    const searchButton = document.getElementById("search-button"); // 검색 버튼
+
+    if (searchInput) {
+        searchInput.addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // 기본 동작(폼 제출) 방지
+                searchButton.click(); // 검색 버튼 클릭 이벤트 실행
+            }
+        });
+    }
+  });
