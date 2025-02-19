@@ -24,11 +24,6 @@ body {
   color: black; /* 말머리 색상도 블랙으로 */
   font-family: "Noto Sans KR", sans-serif;
 }
-
-/* 기존 검색바 및 버튼 스타일 유지 */
-
-
-
 .search-bar {
   margin: 20px auto;
   display: flex;
@@ -186,12 +181,12 @@ button:hover {
   border-bottom: 1px solid #e6e6fa;
 }
 
-
 /* 새글 작성 배너 스타일 */
 .new-banner {
   position: fixed; /* 스크롤 시에도 고정 */
-  bottom: 70px; /* 화면 아래에서 20px 위로 */
-  right: 30px; /* 화면 오른쪽에서 20px 안쪽으로 */
+  bottom: 70px; /* 화면 아래에서 70px 위로 */
+  left: 50%; /* 화면의 정중앙으로 이동 */
+  transform: translateX(-50%); /* 요소 너비의 절반만큼 왼쪽으로 이동하여 정확한 중앙 정렬 */
   background-color: #7a69c4; /* 보라색 배경 */
   color: white; /* 흰색 텍스트 */
   padding: 10px 20px; /* 내부 여백 */
@@ -203,3 +198,4 @@ button:hover {
   transition: background-color 0.3s ease, transform 0.3s ease;
   z-index: 1000; /* 다른 요소 위에 표시 */
 }
+
