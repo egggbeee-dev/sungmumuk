@@ -148,6 +148,34 @@
       }, observerOptions);
 
       sections.forEach((section) => observer.observe(section));
+
+      const searchInput = document.getElementById("searchInput");
+  const textArray = ["한식", "일식", "카페", "분위기 좋은 식당"]; // 타이핑될 문구들
+  let textIndex = 0;
+  let charIndex = 0;
+  
+  function typeEffect() {
+    if (charIndex < textArray[textIndex].length) {
+      searchInput.value += textArray[textIndex].charAt(charIndex);
+      charIndex++;
+      setTimeout(typeEffect, 150);
+    } else {
+      setTimeout(eraseEffect, 1000);
+    }
+  }
+
+  function eraseEffect() {
+    if (charIndex > 0) {
+      searchInput.value = searchInput.value.slice(0, -1);
+      charIndex--;
+      setTimeout(eraseEffect, 100);
+    } else {
+      textIndex = (textIndex + 1) % textArray.length;
+      setTimeout(typeEffect, 500);
+    }
+  }
+
+  typeEffect();
     </script>
 
     <!-- 반응형 -->
