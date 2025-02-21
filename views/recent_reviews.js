@@ -65,7 +65,7 @@
   
       reviewElement.innerHTML = reviewContent;
       reviewElement.addEventListener("click", () => {
-        location.href = `review_details.html?reviewId=${review.review_id}&page=${currentPage}`;
+        location.href = `/store_review.html?id=${review.review_id}`;
       });
   
       reviewContainer.appendChild(reviewElement);
