@@ -157,6 +157,10 @@ body {
 .review-section {
   margin-top: 20px;
 }
+
+.review-text {
+  font-size: 13px;
+}
 .review-header {
   display: flex;
   justify-content: center;  /* 가로 중앙 정렬 */
@@ -181,7 +185,7 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transform: translateX(300%); /* 정확한 중앙 정렬 */
+  margin-left: auto;
   transition: background-color 0.3s ease;
 }
 
@@ -211,6 +215,7 @@ body {
 
 /* 리뷰 항목 스타일 */
 .review-list {
+  font-size: 10;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -220,7 +225,7 @@ body {
 
 .review-item {
   display: flex;
-  gap: 15px;
+  gap: 20px;
   padding: 20px;
   background-color: #f6f2fc;
   border-radius: 5px;
@@ -235,13 +240,19 @@ body {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 강조 */
 
 }
-/* 리뷰 사진 */
 .review-photo {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
+  width: 60px !important;
+  height: auto !important;
+  max-width: 60px !important;
+  max-height: 60px !important;
+  aspect-ratio: 1 / 1 !important;  /* 정사각형 유지 */
+  object-fit: cover !important;
   border-radius: 5px;
+  display: block;
+  flex-shrink: 0 !important;
 }
+
+
 
 /* 페이지네이션 */
 .pagination {
@@ -287,13 +298,18 @@ body {
     margin-bottom: 50px;
   }
   .store-image {
-    width: 100%;
-    aspect-ratio: 600/500;
-    height: auto;
+    width: 50px;
+    height: 50px;
   }
 }
 @media (max-width: 768px) {
   .review-item {
-    flex-direction: column;
+    flex-direction: row !important; /* 가로 정렬 유지 */
+    align-items: center !important; /* 사진과 텍스트 수직 정렬 */
+  }
+
+  .review-photo {
+    width: 50px !important;  
+    height: 50px !important;  
   }
 }
