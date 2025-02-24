@@ -113,9 +113,10 @@
                         <p>접근성: ${generateStars(review.access_rating)}</p>
                         <p>재방문: ${generateStars(review.revisit_rating)}</p>
                     </div>
-                    <p class="content">
-                        <h2>${review.review_text || "내용이 없습니다."}</h2>
-                    </p>
+                    <div class="content">
+                       ${review.review_text || "내용이 없습니다."}
+                    </div>
+
                     ${
                       review.isEditable
                         ? `
