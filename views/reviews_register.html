@@ -231,6 +231,18 @@
             alert("가격(1인)을 선택해주세요!");
             return; // 폼 제출 중단
           }
+          
+
+          // ⭐ 별점 선택 확인 (각각 맛, 접근성, 재방문 의사)
+    const tasteRating = document.getElementById("tasteRating").value;
+    const accessRating = document.getElementById("accessRating").value;
+    const revisitRating = document.getElementById("revisitRating").value;
+
+    if (tasteRating === "0" || accessRating === "0" || revisitRating === "0") {
+        alert("모든 별점을 선택해주세요!");
+        return; // 폼 제출 중단
+    }
+
 
           const formData = new FormData(this);
           const restaurantID = document.getElementById("restaurant-id").value;
