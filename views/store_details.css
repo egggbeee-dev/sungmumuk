@@ -14,10 +14,33 @@ body {
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
-/* 가게명 텍스트 색상 */
-#store-name {
-  color: #6a0dad;
+
+
+/* 가게명 박스 */
+.store-header {
+  background-color: #f5f1fb; /* 부드러운 연보라 */
+  padding: 10px 20px; /* 위아래 여백 조절 */
+  border-radius: 16px; /* 둥근 모서리 */
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 70%; /* 일반 화면에서 적당한 크기 */
+  max-width: 800px; /* 최대 크기 제한 */
+  min-width: 280px; /* 너무 작아지지 않도록 제한 */
+  height: auto; /* 내용에 맞게 자동 조절 */
+  margin: 20px auto; /* 중앙 정렬 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out; /* 부드러운 전환 효과 */
 }
+
+/* 가게명 글씨 */
+#restaurant-name {
+  font-size: 34px;
+  font-weight: 700;
+  color: #6D5ACF; /* 선명한 보라색 */
+}
+
 
 
 /* 이미지 섹션 */
@@ -329,5 +352,14 @@ body {
   .review-photo {
     width: 50px !important;  
     height: 50px !important;  
+  }
+
+  .store-header {
+    width: 90%; /* 모바일에서는 더 넓게 */
+    padding: 8px 16px; /* 패딩 조정 */
+  }
+
+  #restaurant-name {
+    font-size: 28px; /* 모바일에서 글씨 크기 줄이기 */
   }
 }
