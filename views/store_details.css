@@ -283,6 +283,24 @@ body {
   max-width: 200px; /* 최대 너비 설정 */
 }
 
+/* 별점 컨테이너 */
+.star-rating {
+  display: flex;
+  align-items: center; /* 텍스트와 별을 수직 정렬 */
+  gap: 4px; /* 별과 텍스트 간격 */
+}
+
+/* 기본 별 */
+.star {
+  font-size: 13px; /* 별 크기를 텍스트와 동일하게 조절 */
+  color: #d3d3d3; /* 기본 회색 */
+}
+
+/* 선택된 별 */
+.star.selected {
+  color: #ffcc00; /* 노란색 */
+}
+
 @media (max-width: 1024px) {
   .container {
     padding: 16px !important;
