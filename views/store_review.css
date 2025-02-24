@@ -18,6 +18,31 @@ body {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* 가게 이름 (보라색) */
+.review-header h2 {
+  margin-bottom: 16px;
+  font-size: 1.8em;
+  color: #7a69c4; /* 보라색 */
+  text-align: center;
+}
+
+/* 리뷰어 이름 및 작성 시간 (진한 회색) */
+#reviewer-name,
+.review-header p {
+  font-size: 1em;
+  color: #444; /* 진한 회색 */
+  text-align: center;
+}
+
+
+/* 평가 항목 (보라색) */
+.ratings p {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #7a69c4; /* 보라색 */
+}
+
+
 
 /* 제목 */
 h3 {
@@ -27,13 +52,13 @@ h3 {
   text-align: center;
 }
 
-/* 내용 */
 .content {
-  font-size: 1.2em;
-  color: #333;
-  margin-bottom: 16px;
-  text-align: justify;
+  font-size: 1.4em !important;
+  color: #444 !important;
+  margin-bottom: 16px !important;
+  text-align: justify !important;
 }
+
 
 /* 버튼 */
 .edit-button,
@@ -78,6 +103,7 @@ h3 {
 .star {
   font-size: 36px;
   color: #d3d3d3; /* 기본 회색 */
+  font-size: 1.1em;
 }
 
 /* 선택된 별 */
@@ -114,12 +140,7 @@ h3 {
     white-space: normal;
   }
 
-  .content {
-    font-size: 12px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
-  }
+ 
 
   
 
