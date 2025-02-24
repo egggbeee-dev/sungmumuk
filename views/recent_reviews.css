@@ -162,6 +162,27 @@ h1 {
   background-color: #f4e7f9; /* 연보라 배경색 */
   border-bottom: 1px solid #e6e6fa;
 }
+/* 별점 컨테이너 */
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* 별 간격 조정 */
+}
+
+/* 기본 별 */
+.star {
+  font-size: 20px; /* 텍스트 크기와 맞춤 */
+  color: #d3d3d3; /* 기본 회색 */
+}
+
+/* 선택된 별 */
+.star.selected {
+  color: #ffcc00; /* 노란색 */
+}
+
+
+
+
 
 @media (max-width: 1024px) {
   .review-container {
