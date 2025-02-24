@@ -54,7 +54,7 @@
         const maxStars = 5;
         let stars = "";
         for (let i = 1; i <= maxStars; i++) {
-          stars += i <= rating ? "★" : "☆";
+          stars += `<span class="star ${i <= rating ? "selected" : ""}">★</span>`;
         }
         return stars;
       }
