@@ -59,6 +59,18 @@ h3 {
   text-align: justify !important;
 }
 
+/* 가게 이름 링크 스타일 */
+.restaurant-link {
+  text-decoration: none;  /* 밑줄 제거 */
+  color: #6D5ACF; /* 원하는 보라색 */
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+.restaurant-link:hover {
+  color: #5a50d5; /* 약간 진한 보라색 */
+}
+
 
 /* 버튼 */
 .edit-button,
