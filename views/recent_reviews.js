@@ -75,14 +75,17 @@
   }
   
   
-    function generateStars(rating) {
-      const maxStars = 5;
-      let stars = "";
-      for (let i = 1; i <= maxStars; i++) {
-        stars += i <= rating ? "⭐" : "☆";
-      }
-      return stars;
+  function generateStars(rating) {
+    const maxStars = 5; // 최대 별 개수
+    let stars = "";
+  
+    for (let i = 1; i <= maxStars; i++) {
+      stars += `<span class="star ${i <= rating ? "selected" : ""}">★</span>`;
     }
+  
+    return stars;
+  }
+
   
     function updatePagination() {
       const totalPage = Math.ceil(reviews.length / perPage);
