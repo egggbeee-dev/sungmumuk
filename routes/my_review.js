@@ -64,7 +64,7 @@ router.get('/mypage/reviews', ensureAuthenticated, async (req, res) => {
     const [rows] = await pool.query(query, [userId]); // MySQL 쿼리 실행
 
     if (rows.length === 0) {
-      return res.status(404).json({ message: '작성된 리뷰가 없습니다.' });
+      return res.status(200).json([]);
     }
 
     console.log('가져온 리뷰 데이터:', rows);
