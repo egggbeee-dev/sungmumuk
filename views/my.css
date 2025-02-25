@@ -149,10 +149,12 @@ body {
   transition: background-color 0.3s ease-in-out;
 }
 
+.view-all-reviews,
 .view-all {
   text-align: center;
 }
 
+.view-all-reviews a,
 .view-all a {
   padding: 10px 20px;
   font-size: 16px;
@@ -162,6 +164,7 @@ body {
   border-radius: 5px;
   transition: background-color 0.3s ease-in-out;
 }
+
 .reviews-container {
   min-height: 180px; 
 }
