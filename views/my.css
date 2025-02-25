@@ -154,7 +154,6 @@ body {
 }
 
 .view-all a {
-  display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
   background-color: #6d63e5;
@@ -162,6 +161,9 @@ body {
   text-decoration: none;
   border-radius: 5px;
   transition: background-color 0.3s ease-in-out;
+}
+.reviews-container {
+  min-height: 180px; 
 }
 
 .reviews-box {
