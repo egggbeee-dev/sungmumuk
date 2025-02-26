@@ -46,8 +46,40 @@
     <div id="post-list">
       <!-- 게시물 목록이 동적으로 여기에 추가됨 -->
     </div>
+    
+    
+<!-- 사이트 안내 메시지 -->
+<div id="site-message">
+  <button id="close-message">X</button>
+  <p>환영합니다❤️ <br> 학식 게시판 좋아요와 댓글을 통해 <br> 서로 소통하며 학식 정보를 공유해요!</p>
+
+  <button id="hide-today">오늘은 더 이상 보지 않기</button>
+</div>
+
 
     <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    const messageBox = document.getElementById("site-message");
+    const closeBtn = document.getElementById("close-message");
+    const hideTodayBtn = document.getElementById("hide-today");
+
+    // localStorage에서 'hideMessage' 값 확인 (값이 있으면 숨기기)
+    if (localStorage.getItem("hideMessage") === "true") {
+      messageBox.style.display = "none";
+    }
+
+    // X 버튼 클릭 시 메시지 창 닫기 (이번만 닫힘)
+    closeBtn.addEventListener("click", function () {
+      messageBox.style.display = "none";
+    });
+
+    // "오늘은 더 이상 보지 않기" 클릭 시 하루 동안 숨기기
+    hideTodayBtn.addEventListener("click", function () {
+      localStorage.setItem("hideMessage", "true"); // 로컬스토리지에 숨김 설정 저장
+      messageBox.style.display = "none"; // 메시지 숨김
+    });
+  });
       document.addEventListener("DOMContentLoaded", function () {
         const postList = document.getElementById("post-list");
         const loginMessage = document.getElementById("login-message");
