@@ -344,3 +344,64 @@ max-height: 850px;
     font-size: 24px;
   }
 }
+
+
+  /* 사이트 안내 메시지 스타일 */
+  #site-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #8e89f6;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: clamp(12px, 4vw, 16px); /* 반응형 글씨 크기 */
+    max-width: 90%;
+    width: 300px;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  #site-message button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  #close-message {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
+  #close-message:hover,
+  #hide-today:hover {
+    color: #ffdddd;
+  }
+
+  /* 모바일 환경에서 크기 및 위치 조정 */
+  @media (max-width: 500px) {
+    #site-message {
+      bottom: 10px;
+      right: 10px;
+      width: 80%;
+      max-width: 300px;
+      font-size: 12px;
+    }
+  }
