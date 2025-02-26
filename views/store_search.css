@@ -137,7 +137,7 @@ header h1 {
 .pagination-button.disabled {
   background-color: #ccc;
   color: #fff;
-  cursor: not-allowed;
+
 }
 
 .pagination-button:not(.disabled) {
