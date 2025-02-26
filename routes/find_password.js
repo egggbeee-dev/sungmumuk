@@ -28,6 +28,9 @@ router.post("/", (req, res) => {
         const resetToken = crypto.randomBytes(16).toString("hex");
         const resetLink = `http://sungmumuk.com/reset_password?token=${resetToken}`;
 
+        // 인증번호 유효기간 설정 (10분)
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
         // 이메일 전송 설정 (Nodemailer 사용)
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -41,7 +44,7 @@ router.post("/", (req, res) => {
             from: process.env.EMAIL_USER,
             to: email,
             subject: "비밀번호 재설정 링크",
-            text: `안녕하세요.\n\n비밀번호 재설정을 위해 아래 링크를 클릭해주세요.\n\n${resetLink}`,
+            text: `안녕하세요.\n\n비밀번호 재설정을 위해 아래 링크를 클릭해주세요.\n\n${resetLink}\n\n이 링크는 10분 내에 사용해야 합니다.`,
         };
 
         // 이메일 전송
@@ -54,10 +57,10 @@ router.post("/", (req, res) => {
             console.log("이메일 전송 완료: " + info.response);
             res.send("비밀번호 재설정 링크가 이메일로 전송되었습니다.");
 
-            // DB에 토큰 저장 (유효 기간 추가 가능)
+            // DB에 토큰과 만료 시간 저장 (유효기간 적용)
             db.query(
-                "INSERT INTO password_reset_tokens (email, token, created_at) VALUES (?, ?, NOW())",
-                [email, resetToken],
+                "INSERT INTO password_reset_tokens (email, token, expires_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE token = ?, expires_at = ?",
+                [email, resetToken, expiresAt, resetToken, expiresAt],
                 (err, results) => {
                     if (err) {
                         console.log("토큰 저장 오류:", err);
@@ -69,4 +72,5 @@ router.post("/", (req, res) => {
 });
 
 module.exports = router;
+
 
