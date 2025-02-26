@@ -102,7 +102,8 @@
             const titleLink = document.createElement("a");
             titleLink.href = `/free_post.html?id=${post.post_id}`;
             titleLink.textContent = `${post.category} ${post.title}`;
-            titleLink.style.color = "blue";
+            titleLink.innerHTML = `<span style="color: #8a63d2;">${post.category}</span> <span style="color: black;">${post.title}</span>`;
+
             titleLink.style.textDecoration = "none";
             postDiv.appendChild(titleLink);
 
