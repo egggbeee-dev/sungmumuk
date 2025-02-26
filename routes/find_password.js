@@ -32,28 +32,41 @@ router.post("/", (req, res) => {
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: "your-email@gmail.com", // 발신자 이메일 주소
-                pass: "your-email-password",   // 발신자 이메일 비밀번호 (구글의 경우 앱 비밀번호 사용)
+                user: process.env.EMAIL_USER, // .env에 저장된 이메일
+                pass: process.env.EMAIL_PASS, // .env에 저장된 앱 비밀번호
             },
         });
 
         const mailOptions = {
-            from: "your-email@gmail.com",
+            from: process.env.EMAIL_USER,
             to: email,
             subject: "비밀번호 재설정 링크",
             text: `안녕하세요.\n\n비밀번호 재설정을 위해 아래 링크를 클릭해주세요.\n\n${resetLink}`,
         };
 
+        // 이메일 전송
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.log(error);
+                console.log("이메일 전송 실패:", error);
                 return res.status(500).send("이메일 전송에 실패했습니다.");
             }
 
             console.log("이메일 전송 완료: " + info.response);
             res.send("비밀번호 재설정 링크가 이메일로 전송되었습니다.");
+
+            // DB에 토큰 저장 (유효 기간 추가 가능)
+            db.query(
+                "INSERT INTO password_reset_tokens (email, token, created_at) VALUES (?, ?, NOW())",
+                [email, resetToken],
+                (err, results) => {
+                    if (err) {
+                        console.log("토큰 저장 오류:", err);
+                    }
+                }
+            );
         });
     });
 });
 
 module.exports = router;
+
