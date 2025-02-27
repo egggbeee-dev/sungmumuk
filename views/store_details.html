@@ -19,13 +19,15 @@
   <body>
     <!-- Header Placeholder -->
     <div id="header-placeholder"></div>
-
     <!-- Main Content -->
     <div class="container">
+      <button class="back-button" onclick="goBack()"> &lt; 이전 페이지로 이동</button>
+
       <!-- 가게 정보 -->
       <header class="store-header">
         <h1 id="restaurant-name"></h1>
       </header>
+      
       <!-- 이미지 슬라이드쇼 섹션 -->
       <div class="image-section">
         <button class="slide-button prev" onclick="changeSlide(-1)">&#10094;</button>
@@ -323,6 +325,9 @@ document.addEventListener("DOMContentLoaded", displayRestaurantDetails);  // 페
         window.location.href = `/store_review.html?id=${reviewId}`;
       }
       console.log('imageUrls:', imageUrls);  // imageUrls 배열 내용 출력
+      function goBack() {
+    window.history.back();
+}
 
     </script>
 
