@@ -13,8 +13,8 @@ router.get('/', async (req, res) => {
 
         // 검색 조건 추가
         if (query.trim()) {
-            filters.push('(restaurant_name LIKE ? OR recommended_menu LIKE ?)');
-            params.push(`%${query}%`, `%${query}%`);
+            filters.push('(restaurant_name LIKE ? OR recommended_menu LIKE ?OR category LIKE ?)');
+            params.push(`%${query}%`, `%${query}%`, `%${query}%`);
         }
 
         // 가격 필터 추가
