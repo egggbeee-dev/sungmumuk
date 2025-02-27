@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -27,6 +27,12 @@
         <input type="text" id="search-input" placeholder="가게명 또는 카테고리로 검색" onkeypress="handleKeyPress(event)">
         <button id="search-button" onclick="searchStores()">🔍</button>
     </div>
+  <!-- 하단 버튼 섹션 -->
+  <div class="action-buttons">
+    <button onclick="removeFromFavorites()">찜에서 삭제하기</button>
+    <button onclick="goToCompare()">비교함으로 가기</button>
+</div>
+
     <!-- 가게 목록이 없을 경우 -->
     <div id="no-favorites-message" class="no-favorites-box" style="display: none;">
         <p>찜한 식당이 없습니다. <a href="/store_search.html?query=">식당을 보러 가볼까요?</a></p>
@@ -35,11 +41,7 @@
     <!-- 가게 목록 섹션-->
     <div id="favorites-container" style="display: none;"></div>
 
-    <!-- 하단 버튼 섹션 -->
-    <div class="action-buttons">
-        <button onclick="removeFromFavorites()">찜에서 삭제하기</button>
-        <button onclick="goToCompare()">비교함으로 가기</button>
-    </div>
+
 </div>
 
 <!-- Footer Placeholder -->
@@ -248,3 +250,4 @@
     });
 </script>
 <script src="header_footer.js"></script> <!-- 헤더와 푸터 로드 -->
+ㄴ
