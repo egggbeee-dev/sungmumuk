@@ -21,8 +21,8 @@ router.get('/', async (req, res) => {
         // 가격 필터 추가
         if (price) {
             if (price === 'low') filters.push('average_price < 10000');
-            else if (price === 'mid') filters.push('average_price BETWEEN 10000 AND 30000');
-            else if (price === 'high') filters.push('average_price > 30000');
+            else if (price === 'mid') filters.push('average_price BETWEEN 10000 AND 20000');
+            else if (price === 'high') filters.push('average_price > 20000');
         }
 
         // 카페 유형 필터 추가
