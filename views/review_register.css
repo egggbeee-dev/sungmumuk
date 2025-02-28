@@ -5,16 +5,6 @@ body {
   background-color: #ffebff; /* 배경색 */
 }
 
-/* 영어 텍스트에 Anton 폰트 적용 */
-h1,
-h2,
-h3,
-.banner-text h2,
-button,
-.sort-button {
-  font-family: "Noto Sans KR", sans-serif;
-}
-
 /* 기본 스타일 */
 body {
   font-family: "Noto Sans KR", sans-serif;
@@ -171,4 +161,30 @@ button:hover {
     max-width: initial;
     box-shadow: none;
   }
+}
+.custom-upload-button {
+  background-color: #6d63e5; /* 버튼 배경색 */
+  color: white; /* 아이콘 색 */
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.custom-upload-button:hover {
+  background-color: #5a50d5; /* hover 시 색상 */
+}
+
+.upload-icon {
+  font-size: 30px; /* 아이콘 크기 */
+  margin-right: 8px; /* 아이콘과 텍스트 사이 여백 */
+}
+
+input[type="file"] {
+  display: none; /* 파일 입력 숨기기 */
 }
