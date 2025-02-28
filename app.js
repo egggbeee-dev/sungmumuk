@@ -45,6 +45,8 @@ const freeNewRouter = require('./routes/free_new');
 const myRouter = require('./routes/my');
 const haksikRouter = require('./routes/haksik');
 const haksikNewRouter = require('./routes/haksik_new');
+const findPasswordRouter = require('./routes/find_password');
+const resetPasswordRouter = require('./routes/reset_password');
 
 app.set('port', process.env.PORT || 80);
 app.set('view engine', 'html');
@@ -54,10 +56,16 @@ nunjucks.configure('views', {
 });
 
 // 미들웨어 및 정적 파일 설정
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost', 'https://sungmumuk.com'], // ✅ 로컬과 실제 웹사이트 모두 허용
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // ✅ 허용할 HTTP 메서드 추가
+  allowedHeaders: ['Content-Type', 'Authorization'], // ✅ 허용할 헤더 추가
+  credentials: true, // ✅ 쿠키 및 세션 인증 허용 (로그인 API 대비)
+}));
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
+// app.use('/reset_password', express.static(path.join(__dirname, 'views')));
 app.use('/restaurant', express.static(path.join(__dirname, 'restaurant')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/review', express.static(path.join(__dirname, 'review')));
@@ -113,6 +121,9 @@ app.use('/free', ensureAuthenticated, freeRouter);
 app.use('/free_new',freeNewRouter);
 app.use('/haksik', haksikRouter)
 app.use('/haksik_new',haksikNewRouter);
+app.use('/api/find_password', findPasswordRouter);
+app.use('/reset_password', resetPasswordRouter);
+app.use('/reset_password', express.static(path.join(__dirname, 'views')));
 
 // 정적 HTML 파일 제공 라우트
 app.get('/', (req, res) => {
