@@ -48,7 +48,7 @@
             <p>상황별 검색</p>
           </a>
         </div>
-       
+
         <div class="menu-button">
           <a href="new.html">
             <span class="menu-icon">🏠</span>
@@ -61,7 +61,7 @@
             <p>제휴</p>
           </a>
         </div>
-         <div class="menu-button">
+        <div class="menu-button">
           <a href="random.html">
             <span class="menu-icon">⚡</span>
             <p>랜덤추천</p>
@@ -133,7 +133,29 @@
         <span class="dot" onclick="currentSlide(3)"></span>
       </div>
     </section>
+<!-- 설문조사 팝업 -->
+<div id="survey-popup" class="popup-left">
+  <div class="popup-content">
+    <span class="close-btn" onclick="closePopup('survey-popup')">&times;</span>
+    <h2>설문조사 참여</h2>
+    <img src="성뭐먹3.png" alt="오른쪽 팝업 이미지">
+    <p>더 나은 서비스 제공을 위해 간단한 설문조사에 참여해주세요!</p>
+    <a href="survey.html"><button>설문조사 참여</button></a>
+    <label><input type="checkbox" id="hide-survey"> 오늘은 더 이상 보지 않기</label>
+  </div>
+</div>
 
+<!-- 사용설명서 팝업 -->
+<div id="guide-popup" class="popup-right">
+  <div class="popup-content">
+    <span class="close-btn" onclick="closePopup('guide-popup')">&times;</span>
+    <h2>사용설명서</h2>
+    <img src="성뭐먹3.png" alt="오른쪽 팝업 이미지">
+    <p>성뭐먹의 다양한 기능을 활용해 보세요!</p>
+    <a href="guide.html"><button>자세히 보기</button></a>
+    <label><input type="checkbox" id="hide-guide"> 오늘은 더 이상 보지 않기</label>
+  </div>
+</div>
     <!-- 동적 푸터 연결 -->
     <div id="footer-placeholder"></div>
 
@@ -142,33 +164,7 @@
     <!-- 동적 헤더/푸터 스크립트 -->
     <script src="main.js"></script>
     <!-- 고유 스크립트 -->
-    <script>
-      // 검색 버튼 클릭 이벤트
-        document.getElementById("search-button").addEventListener("click", () => {
-          const query = document.getElementById("search-input").value.trim();
-          if (query) {
-              window.location.href = `store_search.html?query=${encodeURIComponent(query)}`;
-          } else {
-              alert("검색어를 입력해주세요.");
-          }
-        });
-
-        // 엔터 키 입력 시 검색 실행
-        document.addEventListener("DOMContentLoaded", function () {
-          const searchInput = document.getElementById("search-input"); // 검색 입력 필드
-          const searchButton = document.getElementById("search-button"); // 검색 버튼
-
-          if (searchInput) {
-              searchInput.addEventListener("keypress", function (event) {
-                  if (event.key === "Enter") {
-                      event.preventDefault(); // 기본 동작(폼 제출) 방지
-                      searchButton.click(); // 검색 버튼 클릭 이벤트 실행
-                  }
-              });
-          }
-        });
-    
-    </script>
+    <script src="index.js"></script>
 
     <!-- 반응형 -->
   </body>
