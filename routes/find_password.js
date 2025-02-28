@@ -1,75 +1,54 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-const db = require('../config/db'); // DB 연결 설정 파일
+const express = require("express");
+const bcrypt = require("bcrypt");
+const path = require("path");
+const pool = require("../config/db"); // MySQL 연결
 const router = express.Router();
 
-// 비밀번호 재설정 링크를 이메일로 보내는 처리
-router.post('/', (req, res) => {
-    const email = req.body.email;
+// ✅ 비밀번호 재설정 HTML 제공 (GET 요청)
+router.get("/", (req, res) => {
+    const token = req.query.token;
+    console.log("🔎 요청된 토큰:", token); // 👉 로그 추가 (토큰 확인)
 
-    if (!email || !email.endsWith('@sungshin.ac.kr')) {
-        return res.status(400).send('성신여대 이메일(@sungshin.ac.kr)을 입력해 주세요.');
+    if (!token) {
+        return res.status(400).send("잘못된 요청입니다. (토큰이 없음)");
     }
 
-    // DB에서 이메일 주소 확인
-    db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
-        if (err) {
-            console.log('DB 조회 오류:', err);
-            return res.status(500).send('DB 조회 오류');
+    res.sendFile(path.join(__dirname, "../views/reset_password.html"));
+});
+
+// ✅ 비밀번호 변경 처리 (POST 요청)
+router.post("/", async (req, res) => {
+    try {
+        const { token, password } = req.body;
+        console.log("🔎 비밀번호 변경 요청 - 토큰:", token); // 👉 토큰 확인 로그 추가
+
+        if (!token || !password) {
+            return res.status(400).json({ message: "잘못된 요청입니다. (토큰 또는 비밀번호 없음)" });
         }
 
-        if (results.length === 0) {
-            return res.status(400).send('등록된 이메일이 없습니다.');
+        // ✅ MySQL에서 토큰 검증 및 이메일 가져오기
+        const [rows] = await pool.query("SELECT email FROM password_reset_tokens WHERE token = ?", [token]);
+        if (rows.length === 0) {
+            return res.status(400).json({ message: "유효하지 않은 토큰입니다." });
         }
 
-        // 고유한 비밀번호 재설정 링크 생성 (랜덤 토큰)
-        const resetToken = crypto.randomBytes(16).toString('hex');
-        const resetLink = `http://sungmumuk.com/reset_password?token=${resetToken}`;
+        console.log("✅ 유효한 토큰 확인 완료:", token); // 👉 정상적인 토큰 로그 추가
 
-        // 인증번호 유효기간 설정 (10분)
-        const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+        const userEmail = rows[0].email;
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        // 이메일 전송 설정 (Nodemailer 사용)
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
+        // ✅ 비밀번호 업데이트
+        await pool.query("UPDATE users SET password = ? WHERE email = ?", [hashedPassword, userEmail]);
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: '비밀번호 재설정 링크',
-            text: `안녕하세요.\n\n비밀번호 재설정을 위해 아래 링크를 클릭해주세요.\n\n${resetLink}\n\n이 링크는 10분 내에 사용해야 합니다.`,
-        };
+        // ✅ 사용된 토큰 삭제 (재사용 방지)
+        await pool.query("DELETE FROM password_reset_tokens WHERE token = ?", [token]);
 
-        // 이메일 전송
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log('이메일 전송 실패:', error);
-                return res.status(500).send('이메일 전송에 실패했습니다.');
-            }
+        return res.status(200).json({ message: "비밀번호가 성공적으로 변경되었습니다." });
 
-            console.log('이메일 전송 완료: ' + info.response); // 전송 성공 로그
-            res.send('비밀번호 재설정 링크가 이메일로 전송되었습니다.');
-
-            // DB에 토큰과 만료 시간 저장
-            db.query(
-                'INSERT INTO password_reset_tokens (email, token, expires_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE token = ?, expires_at = ?',
-                [email, resetToken, expiresAt, resetToken, expiresAt],
-                (err, results) => {
-                    if (err) {
-                        console.log('토큰 저장 오류:', err);
-                    }
-                }
-            );
-        });
-    });
+    } catch (error) {
+        console.error("⚠️ 비밀번호 변경 오류:", error);
+        return res.status(500).json({ message: "서버 오류 발생" });
+    }
 });
 
 module.exports = router;
-
-
