@@ -57,7 +57,7 @@ nunjucks.configure('views', {
 
 // 미들웨어 및 정적 파일 설정
 app.use(cors({
-  origin: ['http://localhost', 'https://sungmumuk.com'], // ✅ 로컬과 실제 웹사이트 모두 허용
+  origin: ['http://localhost', 'http://sungmumuk.com'], // ✅ 로컬과 실제 웹사이트 모두 허용
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // ✅ 허용할 HTTP 메서드 추가
   allowedHeaders: ['Content-Type', 'Authorization'], // ✅ 허용할 헤더 추가
   credentials: true, // ✅ 쿠키 및 세션 인증 허용 (로그인 API 대비)
