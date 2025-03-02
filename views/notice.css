@@ -7,7 +7,7 @@
     background-color: #f4e7f9; /* 연보라 배경색 */
     border-bottom: 1px solid #e6e6fa;
   }
-  
+
 body {
     font-family: 'Noto Sans KR', sans-serif;
     margin: 0;
@@ -78,4 +78,33 @@ body {
     cursor: pointer;
     margin-bottom: 10px;
     float: right;
+}
+
+.write-container {
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.write-container label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.write-container input, .write-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.write-container button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
 }
