@@ -162,27 +162,38 @@ button:hover {
     box-shadow: none;
   }
 }
-.custom-upload-button {
-  background-color: #6d63e5; /* 버튼 배경색 */
-  color: white; /* 아이콘 색 */
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 24px;
-  cursor: pointer;
+
+/* 버튼을 감싸는 컨테이너 중앙 정렬 */
+.custom-file-upload {
   display: flex;
-  align-items: center;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  width: 100%; /* 부모 컨테이너 전체 너비 사용 */
+  margin-top: 12px;
+}
+
+.custom-upload-button {
+  background: #6d5acf; /* 보라색 */
+  color: white;
+  font-size: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; /* 동그랗게 */
+  display: flex;
   justify-content: center;
-  border: none;
-  transition: background-color 0.3s ease;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-
 .custom-upload-button:hover {
-  background-color: #5a50d5; /* hover 시 색상 */
+  background: #5a4fcf;
+  transform: scale(1.1);
 }
 
+/* 아이콘 스타일 */
 .upload-icon {
-  font-size: 30px; /* 아이콘 크기 */
-  margin-right: 8px; /* 아이콘과 텍스트 사이 여백 */
+  font-size: 28px;
 }
 
 input[type="file"] {
