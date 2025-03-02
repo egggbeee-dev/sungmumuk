@@ -15,7 +15,8 @@ router.get('/', async (req, res) => {
             LEFT JOIN restaurant_image ri
             ON r.restaurant_id = ri.restaurant_id
             WHERE FIND_IN_SET('new', r.tags)
-            LIMIT 1
+            GROUP BY r.restaurant_id 
+            ORDER BY r.restaurant_id ASC
         `;
         const [rows] = await pool.query(query);
          // 한 가게에 여러 이미지가 있을 경우 첫 번째 이미지만 반환
