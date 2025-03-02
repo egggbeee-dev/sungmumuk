@@ -119,14 +119,17 @@
             placeholder="수정이들의 내돈내산 솔직한 리뷰를 남겨주세요. 어떤 메뉴를 드셨는지도 꼭 적어주세요. (10자 이상)"
           ></textarea>
 
-          <!--이미지 등록-->
+          <!-- 이미지 미리보기 컨테이너 -->
+          <div id="image-preview-container"></div>
+
+          <!-- 이미지 등록 버튼 -->
           <div class="custom-file-upload">
             <label for="reviewPhoto" class="custom-upload-button">
-              <i class="fas fa-camera" class = "upload-icon"></i>
-           
+              <i class="fas fa-camera upload-icon"></i>
             </label>
-            <input type="file" id="reviewPhoto" name="review_photo" multiple hidden />
+            <input type="file" id="reviewPhoto" name="review_photo" hidden onchange="previewImages(event)" />
           </div>
+
           
           <!-- Font Awesome CDN -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -269,16 +272,32 @@
           }
         });
 
-        const fileInput = document.getElementById("reviewPhoto");
-const customButton = document.querySelector(".custom-upload-button");
+        function previewImages(event) {
+  const imagePreviewContainer = document.getElementById("image-preview-container");
+  const fileInput = event.target;
+  const files = fileInput.files;
 
-fileInput.addEventListener("change", () => {
-  if (fileInput.files.length > 0) {
-    customButton.textContent = `${fileInput.files.length}개의 파일 선택됨`;
-  } else {
-    customButton.textContent = "이미지 등록";
-  }
-});
+  // 기존 미리보기 초기화
+  imagePreviewContainer.innerHTML = "";
+
+  if (files.length > 0) {
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const img = document.createElement("img");
+        img.className = "review-image";
+        img.src = e.target.result;
+        imagePreviewContainer.appendChild(img);
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+    
+}
+        }
+
     </script>
     <!-- Footer Placeholder -->
     <div id="footer-placeholder"></div>
