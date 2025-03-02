@@ -20,6 +20,10 @@ body {
 
 /* 가게 이름 (보라색) */
 .review-header h2 {
+  background-color: #f5f1fb; /* 부드러운 연보라 */
+  padding: 10px 20px; /* 위아래 여백 조절 */
+  border-radius: 16px; /* 둥근 모서리 */
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 16px;
   font-size: 1.8em;
   color: #7a69c4; /* 보라색 */
@@ -53,7 +57,7 @@ h3 {
 }
 
 .content {
-  font-size: 1.4em !important;
+  font-size: 17px !important;
   color: #444 !important;
   margin-bottom: 16px !important;
   text-align: justify !important;
@@ -75,15 +79,16 @@ h3 {
 /* 버튼 */
 .edit-button,
 .delete-button {
-  display: inline-block;
-  padding: 12px 24px;
-  margin: 5px;
+  flex: 1; /* 버튼이 동일한 크기로 늘어나도록 설정 */
+  padding: 14px;
   border: none;
-  border-radius: 8px;
-  font-size: 1em;
+  border-radius: 12px; /* 둥근 모서리 */
+  font-size: 1.1em;
   font-weight: bold;
+  color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease-in-out;
+  text-align: center;
 }
 
 .edit-button {
@@ -104,6 +109,42 @@ h3 {
   background: #d32f2f;
 }
 
+/* 파일 업로드 버튼 스타일 */
+.custom-file-upload {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* 업로드 버튼 디자인 */
+.custom-upload-button {
+  background: #6d5acf; /* 보라색 */
+  color: white;
+  font-size: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; /* 동그랗게 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 버튼 호버 효과 */
+.custom-upload-button:hover {
+  background: #5a4fcf;
+  transform: scale(1.1);
+}
+
+/* 아이콘 스타일 */
+.upload-icon {
+  font-size: 28px;
+}
+
+
 /* 별점 컨테이너 */
 .star-rating {
   display: flex;
@@ -123,8 +164,45 @@ h3 {
   color: #ffcc00; /* 선명한 노란색 */
 }
 
+.edit-ratings {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #7a69c4; /* 보라색 */
+  text-align: center;
+}
 
+/* 가격 선택 컨테이너 */
+.price-options {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #7a69c4; /* 보라색 */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
 
+/* 가격 (1인) 제목 스타일 */
+.price-label {
+  font-size: 1.0em;
+  font-weight: bold;
+  color: #7a69c4; /* 보라색 */
+  text-align: center;
+  display: block;
+  margin-bottom: 8px;
+  padding-top: 5px;
+}
+
+/* 가게 이름 스타일 */
+#storeName {
+  font-size: 1.4em; /* 글씨 크기 키우기 */
+  font-weight: bold;
+  color: #444; /* 보라색 */
+  display: block; /* 줄 바꿈 효과 */
+  text-align: center; /* 가운데 정렬 */
+  margin-bottom: 12px;
+}
 
 /* 이미지 */
 .review-image {
@@ -134,6 +212,62 @@ h3 {
   margin: 16px auto;
   display: block;
 }
+
+/* 버튼 컨테이너: 버튼을 가로 정렬 */
+.button-container {
+  display: flex;
+  justify-content: space-between; /* 버튼 사이에 간격 유지 */
+  align-items: center; /* 수직 중앙 정렬 */
+  width: 100%; /* 전체 너비 */
+  margin-top: 16px;
+  gap: 12px; /* 버튼 사이 간격 */
+}
+
+/* 버튼 스타일 */
+.submitEdit, .cancelEdit {
+  flex: 1; /* 버튼이 동일한 크기로 늘어나도록 설정 */
+  padding: 14px;
+  border: none;
+  border-radius: 12px; /* 둥근 모서리 */
+  font-size: 1.1em;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease-in-out;
+  text-align: center;
+}
+
+/* 등록 완료 버튼 (보라색) */
+.submitEdit {
+  background: #6d5acf;
+}
+
+.submitEdit:hover {
+  background: #5a4fcf;
+  transform: scale(1.03);
+}
+
+/* 취소 버튼 (빨간색) */
+.cancelEdit {
+  background: #ff4d4d;
+}
+
+.cancelEdit:hover {
+  background: #ff2222;
+  transform: scale(1.03);
+}
+
+
+/* 취소 버튼 (연한 회색) */
+.cancelEdit {
+  background: #ff4d4d;
+}
+
+.cancelEdit:hover {
+  background: #ff2222;
+  
+}
+
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
@@ -151,11 +285,6 @@ h3 {
     overflow-wrap: break-word; /* 컨테이너 벗어나지 않도록 */
     white-space: normal;
   }
-
- 
-
-  
-
   .edit-button,
   .delete-button {
     width: 100%;
