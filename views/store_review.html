@@ -148,14 +148,13 @@
           .then((response) => response.json())
           .then((review) => {
             detailsContainer.innerHTML = `
-                        <div class="edit-review-container">
-                            <h3>리뷰 수정</h3>
-                            <label for="storeName">가게명:</label>
-                             <span id="storeName">${
-                               review.restaurant_name || "알 수 없는 가게"
-                             }</span>
+                    
+                            <div class="edit-review-container">
+                              <h3>리뷰 수정</h3>
+                              <span id="storeName">${review.restaurant_name || "알 수 없는 가게"}</span>
+                            </div>
                             <div class="edit-ratings">
-                                <label for="edit-taste-rating">맛: </label>
+                                <label for="edit-taste-rating">맛</label>
                                 <div id="edit-taste-rating" class="star-rating">${generateEditableStars(
                                   review.taste_rating || 0,
                                   "taste"
@@ -163,7 +162,7 @@
                                 <input type="hidden" id="taste-rating-input" value="${
                                   review.taste_rating || 0
                                 }">
-                                <label for="edit-access-rating">접근성: </label>
+                                <label for="edit-access-rating">접근성 </label>
                                 <div id="edit-access-rating" class="star-rating">${generateEditableStars(
                                   review.access_rating || 0,
                                   "access"
@@ -171,40 +170,60 @@
                                 <input type="hidden" id="access-rating-input" value="${
                                   review.access_rating || 0
                                 }">
-                                <label for="edit-revisit-rating">재방문: </label>
+                                <label for="edit-revisit-rating">재방문</label>
                                 <div id="edit-revisit-rating" class="star-rating">${generateEditableStars(
                                   review.revisit_rating || 0,
                                   "revisit"
                                 )}</div>
                                 <input type="hidden" id="revisit-rating-input" value="${
                                   review.revisit_rating || 0
-                                }">
+                                }"><br>
                             </div>
-                            <label for="edit-review-price">가격(1인):</label>
-                            <div id="price-options">
-                            <label>
-                              <input type="radio" name="price" value="10000" /> 10,000원 이하
-                            </label>
-                            <label>
-                              <input type="radio" name="price" value="20000" /> 10,000원 ~ 20,000원 
-                            </label>
-                            <label>
-                              <input type="radio" name="price" value="30000" /> 20,000원 이상
-                            </label>
-                          </div>
-                          <input type="hidden" id="selectedPrice" name="selected_price" value="" /><br>
+                            <label for="edit-review-price" class="price-label">가격 (1인):</label>
+                            <div class="price-options">
+                              <label>
+                                <input type="radio" name="price" value="10000" /> 10,000원 이하
+                              </label>
+                              <label>
+                                <input type="radio" name="price" value="20000" /> 10,000원 ~ 20,000원
+                              </label>
+                              <label>
+                                <input type="radio" name="price" value="30000" /> 20,000원 이상
+                              </label>
+                            </div>
 
-                            <label for="edit-review-photo">사진 수정:</label><br>
-                            <input type="file" id="edit-review-photo" accept="image/*"><br>
-                            <label for="edit-review-text">후기:</label><br>
+                          <input type="hidden" id="selectedPrice" name="selected_price" value="" /><br>
                                 <textarea 
                                     id="edit-review-text" 
                                     name="review_text" 
                                     rows="4" 
                                     placeholder="추천하는 메뉴와 가격 등 자유롭게 후기를 작성해주세요!"
                                 >${review.review_text || ""}</textarea><br>
-                            <button onclick="submitEdit(${reviewId})">수정 완료</button>
-                            <button onclick="cancelEdit(${reviewId})">취소</button>
+                                 <!-- 이미지 미리보기 컨테이너 -->
+                                  <div id="image-preview-container">
+                                    ${review.review_photo 
+                                      ? `<img id="image-preview" src="/review/${review.review_photo}" alt="리뷰 이미지" class="review-image">`
+                                      : "<p>업로드된 사진이 없습니다.</p>"
+                                    }
+                                  </div>
+
+                                 <!-- 이미지 등록 -->
+                                  <div class="custom-file-upload">
+                                    <label for="edit-review-photo" class="custom-upload-button">
+                                      <i class="fas fa-camera upload-icon"></i>
+                                    </label>
+                                    <input type="file" id="edit-review-photo" accept="image/*" onchange="previewImage(event)" hidden />
+                                  </div>
+
+                                  <!-- Font Awesome 아이콘 -->
+                                  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+                                  <br>
+                            <div class="button-container">
+                              <button class="submitEdit" onclick="submitEdit(${reviewId})">수정 완료</button>
+                              <button class="cancelEdit" onclick="cancelEdit(${reviewId})">취소</button>
+                            </div>
+
                         </div>
                     `;
           })
@@ -213,6 +232,32 @@
             alert("수정 데이터를 불러오지 못했습니다.");
           });
       }
+      function previewImage(event) {
+  const imagePreviewContainer = document.getElementById("image-preview-container");
+  const file = event.target.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      let imagePreview = document.getElementById("image-preview");
+
+      if (!imagePreview) {
+        // 기존에 이미지가 없으면 새 이미지 태그 추가
+        imagePreview = document.createElement("img");
+        imagePreview.id = "image-preview";
+        imagePreview.className = "review-image";
+        imagePreviewContainer.innerHTML = ""; // 기존 내용 지우기
+        imagePreviewContainer.appendChild(imagePreview);
+      }
+      
+      // 새로 선택한 이미지로 미리보기 변경
+      imagePreview.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+  }
+}
+
 
       async function submitEdit(reviewId) {
         const reviewText = document
