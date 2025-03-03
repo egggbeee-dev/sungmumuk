@@ -19,6 +19,21 @@ button,
   font-family: "Noto Sans KR", sans-serif;
 }
 
+/* 모바일 화면 크기 (최대 768px)에서 반응형 처리 */
+@media screen and (max-width: 768px) {
+  .page-header {
+    font-size: 24px; /* 모바일 화면에서 글씨 크기 줄이기 */
+    padding: 90px 0; /* 모바일에서 상하 여백 줄이기 */
+  }
+}
+
+/* 모바일 화면 크기 (최대 480px)에서 추가적인 반응형 처리 */
+@media screen and (max-width: 480px) {
+  .page-header {
+    font-size: 20px; /* 글씨 크기를 더 줄여서 가독성 확보 */
+    padding: 90px 0; /* 상하 여백을 더 줄여서 화면에 맞게 조정 */
+  }
+}
 /* 헤더 */
 .header {
   display: flex;
