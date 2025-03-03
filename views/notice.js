@@ -1,7 +1,7 @@
 const fixedNotices = [
     {
         id: 'fixed-1',
-        title: '[사용법] 성뭐먹 사용법 안내',
+        title: '[사용법] 성뭐먹 이용 가이드',
         date: '2025-03-04',
         views: '-',
         link: 'fixed_notice_1.html'
