@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
 
         // 🔹 랜덤 토큰 생성
         const resetToken = crypto.randomBytes(16).toString('hex');
-        const resetLink = `http://sungmumuk.com/reset_password?token=${resetToken}`;
+        const resetLink = `https://sungmumuk.com/reset_password?token=${resetToken}`;
         const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10분 후 만료
 
         // 🔹 Gmail SMTP 설정
