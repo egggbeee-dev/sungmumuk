@@ -1,622 +1,205 @@
-/* 슬라이드쇼 컨테이너 */
-.slideshow-container {
-  position: relative;
-  max-width: 100%;
-  margin: auto;
-  background-color: #8e89f6;
-  padding: 20px 20px;
+/* 기본 스타일 설정 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* 슬라이드 내용 */
-.slide-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1100px;
-  margin: auto;
+/* 배경 설정 */
+body {
   background-color: #ffebff;
-  padding: 20px;
-  border-radius: 15px;
-}
-
-/* 슬라이드 이미지 */
-.banner-img {
-  width: 35%; /* 이미지가 슬라이드의 절반 차지 */
-  height: auto;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-left: 100px; /* 이미지의 왼쪽에 여백 추가하여 오른쪽으로 이동 */
-}
-
-/* 슬라이드 텍스트 및 버튼 */
-.banner-text {
-  width: 40%; /* 텍스트 영역이 슬라이드의 40% 차지 */
-  padding: 20px;
-  color: #8e89f6;
-  text-align: center; /* 텍스트 왼쪽 정렬 */
-  margin-right: 80px;
-}
-
-.banner-text h2 {
-  font-size: 4.5em; /* 텍스트 크기 */
-  margin-bottom: 20px;
-  line-height: 1.2; /* 텍스트 간격 */
-}
-
-.banner-text button {
-  padding: 10px 20px;
-  background-color: #afacfb;
-  border: none;
-  color: white;
-  cursor: pointer;
   font-family: "Noto Sans KR", sans-serif;
-  font-size: 1em;
-  border-radius: 5px;
-  display: inline-block;
 }
 
-/* 네비게이션 버튼 (작은 동그라미) */
-.dot-container {
-  position: absolute;
-  bottom: 15px; /* 슬라이드쇼 내부 하단에 위치 */
-  width: 100%;
-  text-align: center;
-}
-
-.dot {
-  cursor: pointer;
-  height: 15px;
-  width: 15px;
-  margin: 0 5px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 1.3s ease;
-}
-
-.active,
-.dot:hover {
-  background-color: #717171;
-}
-
-/* 페이드 효과 */
-.fade {
-  animation: fadeEffect 1s ease-in-out;
-}
-
-@keyframes fadeEffect {
-  from {
-    opacity: 0.4;
-  }
-  to {
-    opacity: 1;
+/* 모바일 화면 크기 (최대 768px)에서 반응형 처리 */
+@media screen and (max-width: 768px) {
+  .page-header {
+    font-size: 24px; /* 모바일 화면에서 글씨 크기 줄이기 */
+    padding: 90px 0; /* 모바일에서 상하 여백 줄이기 */
   }
 }
 
-/* 메인 섹션 스타일 */
-.main-section {
-  background-color: #ffebff; /* 메인 섹션 배경색 */
+/* 모바일 화면 크기 (최대 480px)에서 추가적인 반응형 처리 */
+@media screen and (max-width: 480px) {
+  .page-header {
+    font-size: 20px; /* 글씨 크기를 더 줄여서 가독성 확보 */
+    padding: 90px 0; /* 상하 여백을 더 줄여서 화면에 맞게 조정 */
+  }
+}
+.page-header {
   text-align: center;
-  padding: 40px 0;
-}
-
-.main-section h1 {
-  font-size: 7em;
-  color: #8e89f6; /* 텍스트 색상 */
-  text-align: center; /* 가운데 정렬 */
-}
-/* 중간 부분 배경색 설정 */
-.middle-section {
-  background-color: #8e89f6; /* 중간 부분 배경색을 #8E89F6로 설정 */
-  padding: 50px 0;
-  text-align: center;
-}
-
-/* 클릭 불가능한 메뉴들에만 비활성화 적용 */
-.header-nav ul li.no-click > a {
-  pointer-events: none;
-}
-
-/* 하위 메뉴 클릭은 가능하도록 다시 활성화 */
-.header-nav ul li:hover .submenu a {
-  pointer-events: auto;
-}
-
-/* 중간 부분 배경색 설정 */
-.middle-section {
-  background-color: #8e89f6; /* 중간 부분 배경색을 #8E89F6로 설정 */
+  color: #7a69c4; /* 연보라색 텍스트 */
+  font-size: 30px; /* 글씨 크기 조정 */
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
   padding: 20px 0;
-  text-align: center;
+  background-color: #f4e7f9; /* 연보라 배경색 */
+  border-bottom: 1px solid #e6e6fa;
 }
 
-/* 전역 스타일 */
-a {
-  text-decoration: none; /* 링크 밑줄 제거 */
-}
-
-.menu-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 50px; /* 각 메뉴 버튼 사이 간격 */
-}
-
-.menu-icon {
-  font-size: 2em; /* 아이콘 크기 */
-  display: block;
-  margin-bottom: 10px;
-  width: 80px; /* 아이콘의 배경 크기 */
-  height: 80px;
-  line-height: 80px; /* 아이콘을 세로로 가운데 정렬 */
-  background-color: rgba(255, 255, 255, 0.4); /* 배경 */
-  color: #8e89f6; /* 아이콘 색상 */
-  border-radius: 50%; /* 동그라미 모양 */
-  text-align: center; /* 아이콘을 가로로 가운데 정렬 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 아이콘에 약간의 그림자 추가 */
-}
-
-.menu-icon:hover {
-  background-color: white; /* 마우스 오버 시 배경색을 흰색으로 변경 */
-  color: #8e89f6; /* 아이콘 색상도 변경 가능 */
-  transition: background-color 0.3s ease; /* 부드러운 전환 효과 추가 */
-}
-
-/* TOP 3 섹션 */
-.top3-section {
-  background-color: #ffebff; /* 배경색 */
-  text-align: left;
-  padding: 20px 40px;
-  font-family: "Noto Sans KR", sans-serif;
-}
-
-.top3-section h2 {
-  font-size: 5.5em; /* 글자 크기 */
-  color: #8e89f6;
-  margin-bottom: 20px;
-  margin-left: 400px; /* 제목을 왼쪽으로 550px 이동 */
-}
-
-/* 정렬 버튼 컨테이너 */
-.sort-button-container {
-  font-size: 1.7em;
-  margin-bottom: 20px;
-  margin-left: 400px;
-}
-
-.sort-button {
-  padding: 10px 20px;
-  background-color: #afacfb;
-  border: none;
-  color: white;
-  font-size: 1.2em;
-  border-radius: 25px;
-  cursor: pointer;
-  font-family: "Noto Sans KR", sans-serif;
-}
-
-/* 가게 리스트 */
-.store-list {
-  display: flex;
-  flex-direction: column; /* 가게 상자들을 위아래로 정렬 */
-  justify-content: center;
-  gap: 20px; /* 각 가게 상자 사이 간격 */
-  margin-bottom: 40px;
-}
-
-.store-item {
-  display: flex; /* 이미지와 텍스트를 가로로 정렬 */
-  align-items: center; /* 수직 가운데 정렬 */
-  background-color: #fff;
-  border: 1px solid #8e89f6;
-  border-radius: 10px;
-  padding: 20px; /* 상자 내부 패딩 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 750px; /* 상자 너비 설정 */
-  height: 200px; /* 상자 높이 증가 */
-  margin: 0 auto; /* 가운데 정렬 */
-}
-
-.store-img {
-  width: 200px; /* 이미지 너비 */
-  height: 150px; /* 이미지 높이 */
-  object-fit: cover; /* 이미지 비율 유지 */
-  border-radius: 5px;
-  margin-right: 20px; /* 이미지와 텍스트 사이 간격 */
-}
-
-.store-details {
-  text-align: left; /* 텍스트 왼쪽 정렬 */
-  font-family: "Noto Sans KR", sans-serif;
-}
-
-.store-name {
-  font-size: 2em;
-  color: #8e89f6;
-  margin-bottom: 10px;
-}
-
-.store-description {
-  font-size: 1.2em; /* 설명 글씨 */
-  color: #333;
-}
-
-/* 자세히 보기 버튼 스타일 */
-.details-button {
-  padding: 10px 20px;
-  background-color: #afacfb;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 1em;
-  font-family: "Noto Sans KR", sans-serif;
-  transition: background-color 0.3s;
-}
-.top-category .store-list {
-  display: flex;
-  justify-content: center; /* 가로 중앙 정렬 */
-  gap: 20px; /* 각 가게 사이 간격 */
-}
-
-/* 메뉴 검색 섹션 정렬 */
-.menu-buttons {
-  display: flex;
-  justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  gap: 145px; /* 각 버튼 사이 간격 */
-  padding: 20px;
-  background-color: #8e89f6; /*배경색 보라색*/
-}
-
-.menu-button {
-  text-align: center;
-}
-
-.menu-icon {
-  font-size: 2em; /* 아이콘 크기를 키움 */
-  display: block;
-  margin-bottom: 20px; /* 아이콘과 텍스트 간격 */
-}
-
-.menu-button p {
-  font-size: 1.2em; /* 버튼 아래 텍스트 크기 */
-  font-family: "Noto Sans KR", sans-serif;
-  color: #fff;
-}
-
-/* 특정 요소의 배경색을 흰색으로 변경 */
-.right-section {
-  background-color: #ffffff; /* 흰색 배경 설정 */
-}
-
+/* 컨테이너 설정 */
 .container {
-  width: 100%;
-  max-width: 1200px; /* 최대 너비 설정 */
-  margin: 0 auto; /* 가운데 정렬 */
-  padding: 20px;
-}
-
-.header h1 {
-  font-size: 2.5em;
-  color: #fff;
-}
-
-/* 검색 섹션 스타일 */
-.search-section {
-  background-color: #8e89f6;
-  padding: 50px 0;
-  text-align: center;
-}
-
-.search-container input {
-  width: 100%; /* 입력 필드 너비 */
-  padding: 15px 20px; /* 패딩 */
-  font-size: 1.5em; /* 글꼴 크기 */
-  border: 2px solid #8e89f6; /* 테두리 색상 */
-  border-radius: 30px; /* 둥근 모서리 */
-  background-color: #ffebff; /* 배경색 */
-  color: black; /* 글자 색상 */
-  text-align: left; /* 텍스트 정렬 */
-}
-
-/* 검색창 컨테이너 */
-.search-container {
-  position: relative;
-  display: flex; /* 플렉스 레이아웃 */
-  align-items: center; /* 세로 정렬 */
-  width: 850px; /* 검색창 전체 너비 */
-  margin: 0 auto; /* 가로 중앙 정렬 */
-  box-sizing: border-box; /* 패딩 포함 크기 계산 */
-}
-
-/* 입력 필드 */
-.search-container input[type="text"] {
-  flex: 1; /* 남은 공간 채우기 */
-  padding: 15px 20px;
-  font-size: 1.5em;
-  border: 2px solid #8e89f6;
-  border-right: none; /* 오른쪽 테두리 제거 */
-  border-radius: 20px 0 0 20px;
-  height: 80px; /* 검색창 높이 */
-  background-color: white;
-  color: black;
-  box-sizing: border-box; /* 크기 계산 방식 */
-}
-
-/* 검색 아이콘 버튼 */
-.search-container .search-icon {
-  font-size: 1.5em; /* 아이콘 크기 */
-  padding: 15px 45px;
-  background-color: #c5b9f3;
-  color: white;
-  border-radius: 0 20px 20px 0;
-  cursor: pointer;
-  border: 2px solid #8e89f6;
-  border-left: none;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 80px; /* 입력 필드와 동일한 높이 */
-  width: 60px; /* 정사각형 */
-  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+  justify-content: flex-start; /* 상단 정렬 */
+  padding: 50px; /* 상단과 좌우 여백 추가 */
 }
 
-.search-container input[type="text"]:focus {
-  outline: none; /* 포커스 시 생기는 기본 테두리 제거 */
-  box-shadow: none; /* 추가적인 그림자 효과 제거 */
+/* 제목 스타일 */
+h1 {
+  color: #8e89f6;
+  font-size: 45px;
+  margin-bottom: 10px;
+  text-align: center;
+  margin-top: 20px;
+  width: 100%;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
-.search-container input::placeholder {
-  color: black; /* placeholder 색상 */
-  font-size: 1em; /* placeholder 글씨 크기 */
+/* 라벨 및 입력 폼 스타일 */
+label {
+  display: block;
+  margin: 10px 0;
+  font-size: 20px;
+  color: black;
 }
 
-/* 메뉴 아이콘 섹션 */
-.menu-buttons {
-  display: flex; /* 플렉스 레이아웃 */
-  justify-content: center; /* 가로 방향 정렬 */
-  gap: 145px; /* 버튼 간 간격 */
-  padding-top: 20px; /* 위쪽 여백 */
-}
-
-.menu-button {
-  text-align: center; /* 텍스트 중앙 정렬 */
-}
-
-.menu-button img {
-  width: 60px; /* 이미지 너비 */
-  height: 60px; /* 이미지 높이 */
-  margin-bottom: 10px; /* 아래 여백 */
-}
-
-.menu-button p {
-  font-size: 1.2em; /* 글꼴 크기 */
-  color: #ffffff; /* 글자 색상 */
-  font-weight: bold; /* 굵은 글씨 */
-}
-
-.store-item {
-  position: relative; /* 부모 요소에 상대 위치 설정 */
-  display: flex; /* 이미지와 텍스트를 가로로 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  background-color: #fff;
+input[type="text"],
+textarea {
+  width: 600px; /* 입력 박스 크기 확대 */
+  padding: 15px; /* 내부 여백 증가 */
   border: 1px solid #8e89f6;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 750px;
-  height: 200px; /* 상자 높이 */
-  margin: 0 auto; /* 가운데 정렬 */
+  border-radius: 4px;
+  margin: 10px auto;
+  font-size: 16px;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
-.password-reset-box p {
-  color: #666;
-  font-size: 14px;
-  margin-bottom: 20px; /* 문구 밑에 마진 추가 */
+/* 폼 내부 요소는 원래대로 좌측 정렬 */
+form {
+  display: block;
 }
 
-@media (max-width: 1024px) {
-  #header-placeholder + section.search-section {
-    padding-top: 120px;
-  }
-  section {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-  .search-container {
-    width: 100%;
-  }
-  .menu-buttons {
-    flex-wrap: wrap;
-    gap: 32px;
-  }
-  .top3-section h2,
-  .sort-button-container {
-    margin-left: 0;
-  }
-  .search-container input[type="text"] {
-    font-size: 16px;
-  }
-  .menu-button a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-  .menu-icon {
-    margin-bottom: 0;
-  }
-  .top3-section h2 {
-    font-size: 42px;
-  }
-  .sort-button {
-    font-size: 20px;
-  }
-  .store-item {
-    width: 100%;
-  }
+/* 입력 영역 스타일 */
+textarea {
+  height: 400px; /* 텍스트 박스 크기 확대 */
+  resize: none;
 }
-@media (max-width: 768px) {
-  .slide-content {
-    flex-direction: column;
-    padding-bottom: 40px;
-  }
-  .banner-img {
-    margin-left: 0;
-    width: 100%;
-  }
-  .banner-text {
-    margin-right: 0;
-    width: 100%;
-  }
-  .search-container input[type="text"] {
-    padding: 12px 20px;
-    height: 60px;
-  }
-  .search-container .search-icon {
-    padding: 12px 32px;
-    height: 60px;
-  }
-  .menu-button p {
-    font-size: 16px;
-  }
-  .menu-icon {
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-  }
-  .menu-buttons {
-    gap: 16px;
-    padding: 0;
-  }
-  .dot-container {
-    width: calc(100% - 32px);
-    margin-bottom: 20px;
-  }
-  .banner-img {
-    aspect-ratio: 1100/1000;
-  }
-  .slide-content {
-    width: 100%;
-  }
-  .banner-text h2 {
-    margin-top: 12px;
-  }
-  .store-item {
-    flex-direction: column;
-    align-items: flex-start;
-    height: auto;
-  }
+/* 버튼 스타일 */
+button {
+  background-color: #8e89f6;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-family: "Noto Sans KR", sans-serif;
+  margin-top: 30px; /* 버튼을 박스 아래로 내림 */
+  cursor: pointer;
+  border-radius: 4px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
-/* 팝업 스타일 */
-.popup-left, .popup-right {
+
+button:hover {
+  background-color: #6d66d6;
+}
+
+/* 한국어는 Black Han Sans, 영어는 Anton 적용 */
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffebff; /* 배경색 */
+}
+
+/* 영어 텍스트에 Anton 폰트 적용 */
+h1,
+h2,
+h3,
+.banner-text h2,
+button,
+.sort-button {
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+#login-message {
+  text-align: center; /* 텍스트만 중앙 정렬 */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px; /* 내부 여백 추가 */
+  background-color: #f9f9f9; /* 메시지 영역에 배경 추가 */
+  border-radius: 8px; /* 메시지 박스 모서리를 둥글게 */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
+}
+
+.store_register {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 10px; /* 간격 추가 */
+}
+
+/* 팝업 창 스타일 */
+.popup {
   display: none;
   position: fixed;
   top: 50%;
-  background: rgb(244, 234, 252);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
   padding: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  border-radius: 10px;
-  width: 400px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
-  transform: translateY(-50%);
+  font-size: 18px;
+  color: #333;
+  z-index: 1000;
 }
 
-/* 왼쪽 팝업 */
-.popup-left {
-  left: 15%;
-}
-
-/* 오른쪽 팝업 */
-.popup-right {
-  right: 15%;
-}
-
-.popup-content {
-  position: relative;
-}
-
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
+.popup button {
+  background-color: #8e89f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
   cursor: pointer;
-  font-size: 20px;
-}
-
-label {
-  display: block;
+  border-radius: 4px;
   margin-top: 10px;
-  font-size: 14px;
 }
 
-/* 이미지 스타일 */
-.popup-left img .popup-right img {
-  width: 800%;  /* 팝업 너비에 맞춤 */
-  max-height: 100px; /* 이미지 높이 제한 */
-  object-fit: cover; /* 비율 유지하면서 자름 */
-  border-radius: 10px; /* 모서리 둥글게 */
-  margin-bottom: 10px;
+.popup button:hover {
+  background-color: #6d66d6;
 }
 
-/* 반응형 스타일 추가 */
-@media screen and (max-width: 768px) {
-  .popup {
-    width: 80%; /* 모바일 화면 너비에 맞춤 */
-    max-width: none; /* 최대 너비 해제 */
-    padding: 15px; /* 패딩 축소 */
-    font-size: 16px; /* 폰트 크기 축소 */
-  }
-
-  .popup button {
-    padding: 8px 16px;
-    font-size: 14px; /* 버튼 폰트도 축소 */
-  }
+/* 배경 어둡게 처리 */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 500;
 }
-
-
-@media screen and (max-width: 400px) {
-  .popup {
-    width: 85%;         /* 화면 거의 꽉차게 */
-    padding: 10px;       /* 패딩 더 축소 */
-    font-size: 14px;     /* 폰트 더 축소 */
+@media (max-width: 1024px) {
+  .container {
+    padding: 110px 16px 50px 16px;
   }
-
-  .popup button {
-    padding: 6px 12px;   /* 버튼도 축소 */
-    font-size: 12px;
+  .store_register p {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+ 
   }
-}
-/* 기본 이미지 스타일 */
-.popup-content img {
-  width: 100%; /* 기본적으로 부모 요소에 맞춤 */
-  max-width: 400px; /* 최대 크기 제한 */
-  height: auto; /* 비율 유지 */
-}
-/* 모바일 화면 조정 */
-@media screen and (max-width: 768px) {
-  .popup-content {
-
-    justify-content: center;
-    align-items: center;
-    text-align: center; /* 텍스트도 가운데 정렬 */
+  #inquiryForm {
+    width: 100%;
   }
-  .popup-content img {
-    max-width: 250px; /* 태블릿 및 작은 화면에서 크기 조정 */
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .popup-content {
-
-    justify-content: center;
-    align-items: center;
-    text-align: center; /* 텍스트도 가운데 정렬 */
-  }
-  .popup-content img {
-    max-width: 200px; /* 스마트폰에서 크기 축소 */
+  #inquiryForm > *:not(button) {
+    width: 100%;
   }
 }
