@@ -1,6 +1,15 @@
 async function fetchNotices() {
+    const params = new URLSearchParams(location.search);
+    const filter = params.get('filter');
+    const keyword = params.get('keyword');
+
+    let url = '/notice';
+    if (filter && keyword) {
+        url += `?filter=${encodeURIComponent(filter)}&keyword=${encodeURIComponent(keyword)}`;
+    }
+
     try {
-        const response = await fetch('/notice');
+        const response = await fetch(url);
         const notices = await response.json();
         renderNotices(notices);
     } catch (error) {
@@ -53,4 +62,13 @@ async function checkAdmin() {
 document.addEventListener('DOMContentLoaded', async () => {
     await checkAdmin();
     fetchNotices();
+});
+
+document.querySelector('.search-btn').addEventListener('click', () => {
+    const filter = document.querySelector('.search-filter').value;
+    const keyword = document.querySelector('.search-input').value;
+
+    const query = new URLSearchParams({ filter, keyword }).toString();
+
+    location.href = `/notice.html?${query}`;  // URL에 검색어와 필터 추가
 });

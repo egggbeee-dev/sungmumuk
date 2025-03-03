@@ -4,12 +4,38 @@ const pool = require('../config/db');
 
 // 공지사항 목록 조회 API
 router.get('/', async (req, res) => {
+    const { filter, keyword } = req.query;
+
+    let query = `
+        SELECT 
+            notice_id,
+            notice_title,
+            notice_content,
+            DATE_FORMAT(notice_created_at, '%Y-%m-%d') AS date,
+            views
+        FROM notice
+    `;
+
+    const params = [];
+
+    if (filter && keyword) {
+        if (filter === 'title') {
+            query += ` WHERE  notice_title LIKE ?`;
+            params.push(`%${keyword}%`);
+        } else if (filter === 'content') {
+            query += ` WHERE notice_content LIKE ?`;
+            params.push(`%${keyword}%`);
+        }
+    }
+
+    query += ` ORDER BY notice_created_at DESC`;
+
     try {
-        const [rows] = await pool.query('SELECT notice_id, notice_title, DATE_FORMAT(notice_created_at, "%Y-%m-%d") as date, views FROM notice ORDER BY notice_created_at DESC');
+        const [rows] = await pool.query(query, params);
         res.json(rows);
-    } catch (err) {
-        console.error('공지사항 조회 에러:', err);
-        res.status(500).send('서버 에러');
+    } catch (error) {
+        console.error('공지사항 목록 조회 실패:', error);
+        res.status(500).json({ message: '서버 에러' });
     }
 });
 
