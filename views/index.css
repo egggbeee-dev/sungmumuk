@@ -520,9 +520,9 @@ a {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   border-radius: 10px;
-  width: 400px;
+  width: 350px;
   text-align: center;
-  transform: translateY(-50%);
+  transform: translateY(-55%);
 }
 
 /* 왼쪽 팝업 */
@@ -533,6 +533,7 @@ a {
 /* 오른쪽 팝업 */
 .popup-right {
   right: 10%;
+  
 }
 
 .popup-content {
@@ -555,8 +556,8 @@ label {
 
 /* 이미지 스타일 */
 .popup-left img .popup-right img {
-  width: 800%;  /* 팝업 너비에 맞춤 */
-  max-height: 100px; /* 이미지 높이 제한 */
+  width: 600%;  /* 팝업 너비에 맞춤 */
+  max-height: 80px; /* 이미지 높이 제한 */
   object-fit: cover; /* 비율 유지하면서 자름 */
   border-radius: 10px; /* 모서리 둥글게 */
   margin-bottom: 10px;
@@ -565,7 +566,7 @@ label {
 
 /* 기본 이미지 스타일 */
 .popup-content img {
-  width: 100%; /* 기본적으로 부모 요소에 맞춤 */
+  width: 70%; /* 기본적으로 부모 요소에 맞춤 */
   max-width: 400px; /* 최대 크기 제한 */
   height: auto; /* 비율 유지 */
 }
@@ -615,6 +616,7 @@ input[type="checkbox"] {
     max-width: 150px; /* 스마트폰에서 크기 축소 */
   }
 }
+
 /* 모바일 화면 조정 */
 @media screen and (max-width: 768px) {
 
@@ -628,4 +630,36 @@ input[type="checkbox"] {
   .popup-content img {
     max-width: 200px; /* 태블릿 및 작은 화면에서 크기 조정 */
   }
+}
+
+/* 공통 버튼 스타일 */
+button {
+  background-color: #5c6bc0; /* 파란색 계열 S배경색 */
+  color: white; /* 글자색 흰색 */
+  font-size: 16px;
+  padding: 10px 20px; /* 버튼 안쪽 여백 */
+  border: none; /* 테두리 없애기 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  cursor: pointer; /* 마우스를 올리면 손 모양 */
+  transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+button:hover {
+  background-color: #3f4e9d; /* 호버 시 색상 변경 */
+}
+
+/* 팝업 버튼 스타일 (설문조사 참여 버튼과 자세히 보기 버튼) */
+a button {
+  margin-top: 15px; /* 버튼과 텍스트 간의 간격 */
+}
+
+/* 체크박스 스타일 */
+label {
+  font-size: 14px; /* 글씨 크기 */
+  
+  margin-top: 10px;
+}
+
+input[type="checkbox"] {
+  margin-right: 5px; /* 체크박스와 텍스트 간격 */
 }
