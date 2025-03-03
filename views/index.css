@@ -514,7 +514,7 @@ a {
 .popup-left, .popup-right {
   display: none;
   position: fixed;
-  top: 50%;
+  top: 60%;
   background: rgb(244, 234, 252);
   padding: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
@@ -527,12 +527,12 @@ a {
 
 /* 왼쪽 팝업 */
 .popup-left {
-  left: 15%;
+  left: 10%;
 }
 
 /* 오른쪽 팝업 */
 .popup-right {
-  right: 15%;
+  right: 10%;
 }
 
 .popup-content {
@@ -569,18 +569,8 @@ label {
   max-width: 400px; /* 최대 크기 제한 */
   height: auto; /* 비율 유지 */
 }
-/* 모바일 화면 조정 */
-@media screen and (max-width: 768px) {
-  .popup-content {
 
-    justify-content: center;
-    align-items: center;
-    text-align: center; /* 텍스트도 가운데 정렬 */
-  }
-  .popup-content img {
-    max-width: 250px; /* 태블릿 및 작은 화면에서 크기 조정 */
-  }
-}
+
 /* 공통 버튼 스타일 */
 button {
   background-color: #af85ce; /* 파란색 계열 배경색 */
@@ -614,14 +604,28 @@ input[type="checkbox"] {
 }
 
 @media screen and (max-width: 480px) {
-  .popup-content {
 
-    justify-content: center;
-    align-items: center;
-    text-align: center; /* 텍스트도 가운데 정렬 */
+  .popup-left, .popup-right {
+    width: 80vw; /* 화면 너비의 90% */
+    max-height: 80vh; /* 화면 높이의 80% */
+
   }
+
   .popup-content img {
-    max-width: 200px; /* 스마트폰에서 크기 축소 */
+    max-width: 150px; /* 스마트폰에서 크기 축소 */
   }
 }
+/* 모바일 화면 조정 */
+@media screen and (max-width: 768px) {
 
+
+  .popup-left, .popup-right {
+    width: 80vw; /* 화면 너비의 90% */
+    max-height: 80vh; /* 화면 높이의 80% */
+    
+  }
+
+  .popup-content img {
+    max-width: 200px; /* 태블릿 및 작은 화면에서 크기 조정 */
+  }
+}
