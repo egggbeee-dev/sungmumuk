@@ -220,15 +220,26 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
 
       try {
-          const response = await fetch(`/haksik/search?query=${encodeURIComponent(query)}`);
-          const results = await response.json();
-          posts = results;
-          renderPosts();
-      } catch (error) {
-          console.error('검색 오류:', error);
-          alert('검색 중 오류가 발생했습니다.');
-      }
-  }
+        const response = await fetch(`/haksik/search?query=${encodeURIComponent(query)}`);
+        const results = await response.json();
+
+        // 검색 결과도 posts 형식과 동일하게 매핑
+        posts = results.map(post => ({
+            id: post.post_id,
+            title: post.title,
+            content: post.content,
+            image: post.image_url || '',
+            category: post.category || '[카테고리]',
+            likeCount: post.like_count || 0,  // ⭐️ 이 부분 추가
+            userId: post.user_id
+        }));
+
+        renderPosts();
+    } catch (error) {
+        console.error('검색 오류:', error);
+        alert('검색 중 오류가 발생했습니다.');
+    }
+}
 });
 
 document.addEventListener("DOMContentLoaded", function () {

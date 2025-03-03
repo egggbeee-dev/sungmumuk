@@ -164,9 +164,17 @@ router.get('/search', async (req, res) => {
   }
 
   const searchQuery = `
-    SELECT * FROM posts
-    WHERE board_type = "haksik" AND (title LIKE ? OR content LIKE ?)
-    ORDER BY created_at DESC`;
+    SELECT p.post_id, p.title, p.content, p.category, p.image_url, p.user_id, 
+           IFNULL(l.like_count, 0) AS like_count
+    FROM posts p
+    LEFT JOIN (
+        SELECT post_id, COUNT(*) AS like_count
+        FROM likes
+        GROUP BY post_id
+    ) l ON p.post_id = l.post_id
+    WHERE p.board_type = "haksik"
+    AND (p.title LIKE ? OR p.content LIKE ?)
+    ORDER BY p.created_at DESC`;
 
   try {
     const [results] = await pool.query(searchQuery, [`%${query}%`, `%${query}%`]);
