@@ -32,16 +32,13 @@ router.get('/get-random-restaurant', async (req, res) => {
         // "2인~4인"은 모든 가게를 포함하므로 조건 추가하지 않음
     }
 
-    // 금액대 필터링
+    
     if (price) {
-        if (price === 'low') {
-            query += ' AND average_price < 10000';
-        } else if (price === 'mid') {
-            query += ' AND average_price BETWEEN 10000 AND 30000';
-        } else if (price === 'high') {
-            query += ' AND average_price > 30000';
-        }
+        query += ` AND TRIM(average_price) LIKE '%${price.trim()}%'`;
     }
+    console.log("현재 선택된 가격 필터:", price);
+
+    
 
     // 캠퍼스 필터링
     if (campus) {
