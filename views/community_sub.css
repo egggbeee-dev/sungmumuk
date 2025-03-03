@@ -28,17 +28,17 @@ body {
   margin: 20px auto;
   display: flex;
   justify-content: center;
-  margin-left: 100px;
+  width: 80%; /* 부모 요소의 80% 너비로 설정 */
+  max-width: 600px; /* 최대 너비를 설정하여 너무 넓어지지 않도록 */
 }
 
 .search-bar input {
-  width: 400px;
+  width: 100%; /* input은 부모 너비에 맞게 설정 */
   padding: 10px;
   border: 2px solid #c5b9f3;
   border-radius: 5px 0 0 5px;
   outline: none;
 }
-
 
 .search-bar button {
   padding: 10px 20px;
@@ -47,11 +47,24 @@ body {
   border-radius: 0 5px 5px 0;
   cursor: pointer;
 }
-@media screen and (max-width: 768px) 
-{ .search-bar 
-  { flex-direction: row; justify-content: center; width: 90%; } 
-  .search-bar input { max-width: 70%; min-width: 190px; } } 
 
+@media screen and (max-width: 768px) {
+  .search-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;  /* 수직 정렬을 위해 추가 */
+    width: 90%;
+    margin: 0 auto; /* 부모 요소에 대해 중앙 정렬 */
+  }
+  
+  .search-bar input {
+    max-width: 70%;
+    min-width: 190px;
+    width: 100%;  /* 부모 너비에 맞게 */
+    box-sizing: border-box; /* padding이 포함된 너비 계산 */
+  }
+}
 
 #new-post-form {
   width: 50%;
