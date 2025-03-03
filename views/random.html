@@ -84,13 +84,13 @@
 
         <div class="option-group" id="price-options">
           <h2>금액대 선택</h2>
-          <span class="option" onclick="toggleOption(this, 'price', 'low')"
+          <span class="option" onclick="toggleOption(this, 'price', '10,000원 미만')"
             >10,000원 미만</span
           >
-          <span class="option" onclick="toggleOption(this, 'price', 'mid')"
+          <span class="option" onclick="toggleOption(this, 'price', '10,000원 ~ 20,000원')"
             >10,000원 ~ 20,000원</span
           >
-          <span class="option" onclick="toggleOption(this, 'price', 'high')"
+          <span class="option" onclick="toggleOption(this, 'price', '20,000원 이상')"
             >20,000원 이상</span
           >
         </div>
@@ -185,6 +185,8 @@
       showResults(); // 로딩 후 결과 표시
     }, 2000);
   }
+
+  
 
   const selections = {
     food: [],
