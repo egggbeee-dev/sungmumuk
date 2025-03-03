@@ -40,10 +40,10 @@ router.post('/', async (req, res) => {
 
         // 🔹 이메일 전송
         await transporter.sendMail({
-            from: `"성신여대 인증 시스템" <${process.env.EMAIL_USER}>`,
+            from: `"TEAM sungmumuk" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: '비밀번호 재설정 링크',
-            text: `안녕하세요.\n\n비밀번호 재설정을 위해 아래 링크를 클릭해주세요.\n\n${resetLink}\n\n이 링크는 10분 내에 사용해야 합니다.`,
+            text: `안녕하세요.\n\n비밀번호 재설정을 위해 아래 링크를 클릭해서 변경 부탁드립니다.\n\n${resetLink}\n\n이 링크는 10분 내에 사용해야 합니다.`,
         });
 
         // 🔹 토큰을 DB에 저장
