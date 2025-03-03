@@ -22,6 +22,19 @@
       <div class="register-box">
         <h2>회원가입</h2>
         <form id="registerForm" method="POST">
+          <!-- 약관 동의 추가 -->
+          <div class="input-group">
+            <p>
+              <a href="http://sungmumuk.com/notice_detail.html?id=4" target="_blank">
+                [📜 약관 보기]
+              </a>
+            </p>
+            <label>
+              <input type="checkbox" id="agreeTerms" onclick="toggleVerificationButton()">
+              본 약관에 동의합니다.
+            </label>
+          </div>
+
           <div class="input-group">
             <label for="username"> 재학생 인증 위해서 성신여대 이메일로 인증번호 요청 부탁드립니다.</label>
             <input
@@ -38,6 +51,7 @@
               type="button"
               id="sendVerificationCode"
               style="margin-top: 10px;"
+              disabled
             >
               인증번호 요청
             </button>
@@ -100,6 +114,13 @@
       console.log("JavaScript 코드 실행 확인");
 
       let isEmailVerified = false; // 인증 상태 저장
+
+      // 약관 동의 체크 여부에 따라 이메일 인증 버튼 활성화
+      function toggleVerificationButton() {
+          const agreeTerms = document.getElementById("agreeTerms").checked;
+          const sendVerificationButton = document.getElementById("sendVerificationCode");
+          sendVerificationButton.disabled = !agreeTerms;
+      }
 
       // 이메일 검증 함수
       function isValidSungshinEmail(email) {
@@ -236,12 +257,6 @@
 
     <!-- 동적 푸터 연결 -->
     <div id="footer-placeholder"></div>
-
-    <!-- 반응형 -->
-    <!-- 동적 로드 스크립트 -->
     <script src="header_footer.js"></script>
   </body>
 </html>
-
-
-
