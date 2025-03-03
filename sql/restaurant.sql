@@ -8,7 +8,7 @@ CREATE TABLE restaurant (
     break_time VARCHAR(100),
     reservation_method VARCHAR(100),
     recommended_menu VARCHAR(255),
-    average_price VARCHAR(50),
+    average_price VARCHAR(20),
     parking_availability TINYINT(1),
     partnership_status TINYINT(1),
     solo_or_group VARCHAR(50),
