@@ -596,16 +596,27 @@ label {
   max-width: 400px; /* 최대 크기 제한 */
   height: auto; /* 비율 유지 */
 }
-
 /* 모바일 화면 조정 */
 @media screen and (max-width: 768px) {
+  .popup-content {
+
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* 텍스트도 가운데 정렬 */
+  }
   .popup-content img {
-    max-width: 300px; /* 태블릿 및 작은 화면에서 크기 조정 */
+    max-width: 250px; /* 태블릿 및 작은 화면에서 크기 조정 */
   }
 }
 
 @media screen and (max-width: 480px) {
+  .popup-content {
+
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* 텍스트도 가운데 정렬 */
+  }
   .popup-content img {
-    max-width: 250px; /* 스마트폰에서 크기 축소 */
+    max-width: 200px; /* 스마트폰에서 크기 축소 */
   }
 }
