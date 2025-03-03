@@ -206,3 +206,57 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error("좋아요 처리 오류:", error);
         }
       }
+
+  //게시글 좋아요
+  document.addEventListener("DOMContentLoaded", async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get("id");
+  
+    const likeBtn = document.getElementById("like-btn");
+    const likeCountSpan = document.getElementById("like-count");
+  
+    await updateLikeUI(postId); // 초기 좋아요 상태 체크
+  
+    likeBtn.addEventListener("click", async () => {
+      try {
+        const response = await fetch(`/haksik/posts/${postId}/like`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        });
+  
+        if (response.ok) {
+          await updateLikeUI(postId); // 좋아요 상태 업데이트
+        } else {
+          alert("좋아요 요청 실패");
+        }
+      } catch (error) {
+        console.error("좋아요 처리 오류:", error);
+      }
+    });
+  });
+  
+  // 좋아요 UI 업데이트 함수
+  async function updateLikeUI(postId) {
+    try {
+      // 좋아요 개수 가져오기
+      const likeCountResponse = await fetch(`/haksik/posts/${postId}/like/count`);
+      const likeCountData = await likeCountResponse.json();
+      document.getElementById("like-count").textContent = likeCountData.likeCount || 0;
+  
+      // 사용자의 좋아요 상태 확인
+      const likeStatusResponse = await fetch(`/haksik/posts/${postId}/like/status`);
+      const likeStatusData = await likeStatusResponse.json();
+      const likeBtn = document.getElementById("like-btn");
+  
+      // 좋아요 여부에 따라 버튼 스타일 변경
+      if (likeStatusData.liked) {
+        likeBtn.innerHTML = "❤️ <span id='like-count'>" + likeCountData.likeCount + "</span>";
+      } else {
+        likeBtn.innerHTML = "🤍 <span id='like-count'>" + likeCountData.likeCount + "</span>";
+      }
+    } catch (error) {
+      console.error("좋아요 UI 업데이트 오류:", error);
+    }
+  }
+  
+      

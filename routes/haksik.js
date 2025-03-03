@@ -164,5 +164,81 @@ router.get('/search', async (req, res) => {
   }
 });
 
+// 게시글 좋아요 추가
+router.post("/posts/:postId/like", async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.user.id;// 현재 로그인된 사용자 ID
+
+  if (!userId) {
+    return res.status(401).json({ message: "로그인이 필요합니다." });
+  }
+
+  try {
+    // 기존 좋아요 여부 확인
+    const [existingLike] = await pool.query(
+      "SELECT * FROM likes WHERE user_id = ? AND post_id = ?",
+      [userId, postId]
+    );
+
+    if (existingLike.length > 0) {
+      // 이미 좋아요를 눌렀으면 취소
+      await pool.query(
+        "DELETE FROM likes WHERE user_id = ? AND post_id = ?",
+        [userId, postId]
+      );
+      return res.status(200).json({ message: "좋아요 취소!" });
+    } else {
+      // 좋아요 추가
+      await pool.query(
+        "INSERT INTO likes (user_id, post_id, created_at,board_type) VALUES (?, ?, NOW(), 'haksik')",
+        [userId, postId]
+      );
+      return res.status(201).json({ message: "좋아요 추가!" });
+    }
+  } catch (error) {
+    console.error("좋아요 처리 오류:", error);
+    res.status(500).json({ message: "서버 오류 발생" });
+  }
+});
+
+// 특정 게시글의 좋아요 개수 가져오기
+router.get("/posts/:postId/like/count", async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    const [result] = await pool.query(
+      "SELECT COUNT(*) AS likeCount FROM likes WHERE post_id = ?",
+      [postId]
+    );
+    res.json({ likeCount: result[0].likeCount });
+  } catch (error) {
+    console.error("좋아요 개수 조회 오류:", error);
+    res.status(500).json({ message: "서버 오류 발생" });
+  }
+});
+
+// 특정 사용자가 해당 게시글에 좋아요를 눌렀는지 확인하는 API
+router.get("/posts/:postId/like/status", async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.user.id; // 로그인된 사용자 ID
+
+  if (!userId) {
+    return res.json({ liked: false }); // 로그인하지 않은 경우 좋아요 X
+  }
+
+  try {
+    const [result] = await pool.query(
+      "SELECT COUNT(*) AS count FROM likes WHERE user_id = ? AND post_id = ?",
+      [userId, postId]
+    );
+
+    res.json({ liked: result[0].count > 0 });
+  } catch (error) {
+    console.error("좋아요 상태 확인 오류:", error);
+    res.status(500).json({ message: "서버 오류 발생" });
+  }
+});
+
+
 module.exports = router;
 
