@@ -92,5 +92,27 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const { title, content } = req.body;
+
+    const user = req.session.user;
+    if (!user || user.isAdmin !== 1) {
+        return res.status(403).json({ message: '관리자 권한이 필요합니다.' });
+    }
+
+    try {
+        const [result] = await pool.query(
+            'UPDATE notice SET notice_title = ?, notice_content = ? WHERE notice_id = ?',
+            [title, content, id]
+        );
+
+        res.json({ message: '공지사항이 수정되었습니다.' });
+    } catch (error) {
+        console.error('공지사항 수정 실패:', error);
+        res.status(500).json({ message: '서버 에러' });
+    }
+});
+
 
 module.exports = router;

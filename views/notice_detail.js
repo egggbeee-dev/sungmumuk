@@ -8,28 +8,116 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    let noticeData = {};
+
     try {
-        const response = await fetch(`/notice/${noticeId}`, {
-            method: 'GET'
-        });
+        const response = await fetch(`/notice/${noticeId}`);
+        if (!response.ok) throw new Error('공지사항 정보를 불러오는데 실패했습니다.');
 
-        if (!response.ok) {
-            throw new Error('공지사항 정보를 불러오는데 실패했습니다.');
-        }
+        noticeData = await response.json();
 
-        const notice = await response.json();
+        document.getElementById('notice-title').innerText = noticeData.title;
+        document.getElementById('notice-date').innerText = noticeData.date;
+        document.getElementById('notice-views').innerText = noticeData.views;
+        document.getElementById('notice-content').innerText = noticeData.content;
 
-        document.getElementById('notice-title').innerText = notice.title;
-        document.getElementById('notice-date').innerText = notice.date;
-        document.getElementById('notice-views').innerText = notice.views;
-        document.getElementById('notice-content').innerText = notice.content;
-
+        // 관리자 여부 체크하고 수정 버튼 추가
+        checkAdmin(noticeId, noticeData);
     } catch (error) {
         console.error('공지사항 불러오기 실패:', error);
         alert('공지사항 정보를 불러오는데 실패했습니다.');
         window.location.href = '/notice.html';
     }
 });
+
+async function checkAdmin(noticeId, noticeData) {
+    try {
+        const authResponse = await fetch('/auth/status', { credentials: 'include' });
+        const authStatus = await authResponse.json();
+
+        if (authStatus.user && authStatus.user.isAdmin === 1) {
+            addEditButton(noticeId, noticeData);
+        }
+    } catch (error) {
+        console.error('관리자 체크 실패:', error);
+    }
+}
+
+function addEditButton(noticeId, noticeData) {
+    const adminActions = document.getElementById('admin-actions');
+
+    const editButton = document.createElement('button');
+    editButton.innerText = '수정하기';
+    editButton.classList.add('btn-edit');
+    editButton.onclick = () => toggleEditMode(true, noticeData);
+
+    const saveButton = document.createElement('button');
+    saveButton.innerText = '수정 완료';
+    saveButton.classList.add('btn-save');
+    saveButton.style.display = 'none';
+    saveButton.onclick = () => saveEdit(noticeId);
+
+    adminActions.appendChild(editButton);
+    adminActions.appendChild(saveButton);
+}
+
+function toggleEditMode(editMode, noticeData) {
+    const titleElement = document.getElementById('notice-title');
+    const contentElement = document.getElementById('notice-content');
+    const editTitle = document.getElementById('edit-title');
+    const editContent = document.getElementById('edit-content');
+    const editButton = document.querySelector('.btn-edit');
+    const saveButton = document.querySelector('.btn-save');
+
+    if (editMode) {
+        // 편집 모드 활성화
+        editTitle.value = noticeData.title;
+        editContent.value = noticeData.content;
+
+        titleElement.style.display = 'none';
+        contentElement.style.display = 'none';
+        editTitle.style.display = 'block';
+        editContent.style.display = 'block';
+        editButton.style.display = 'none';
+        saveButton.style.display = 'inline-block';
+    } else {
+        // 원래 뷰 모드로
+        titleElement.innerText = editTitle.value;
+        contentElement.innerText = editContent.value;
+
+        titleElement.style.display = 'block';
+        contentElement.style.display = 'block';
+        editTitle.style.display = 'none';
+        editContent.style.display = 'none';
+        editButton.style.display = 'inline-block';
+        saveButton.style.display = 'none';
+    }
+}
+
+async function saveEdit(noticeId) {
+    const updatedNotice = {
+        title: document.getElementById('edit-title').value,
+        content: document.getElementById('edit-content').value
+    };
+
+    try {
+        const response = await fetch(`/notice/${noticeId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedNotice)
+        });
+
+        if (response.ok) {
+            alert('공지사항이 수정되었습니다.');
+            toggleEditMode(false, updatedNotice);
+        } else {
+            alert('수정 실패');
+        }
+    } catch (error) {
+        console.error('수정 요청 실패:', error);
+        alert('수정 중 오류가 발생했습니다.');
+    }
+}
 
 function goBack() {
     window.location.href = '/notice.html';

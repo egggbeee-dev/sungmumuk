@@ -18,14 +18,21 @@
     <div id="header-placeholder"></div>
     <div class="page-header">공지사항</div>
     <div class="notice-detail-container">
+        <input type="text" id="edit-title" class="edit-input" style="display:none; width:100%; font-size:24px; margin-bottom:10px;">
         <h1 id="notice-title"></h1>
+    
         <div class="notice-meta">
             <span id="notice-date"></span>
             <span>| 조회수: <span id="notice-views"></span></span>
         </div>
+    
+        <textarea id="edit-content" class="edit-textarea" style="display:none; width:100%; height:200px;"></textarea>
         <div id="notice-content"></div>
+    
+        <div id="admin-actions" style="margin-top:20px;"></div>
+    
         <button class="btn-back" onclick="goBack()">목록으로 돌아가기</button>
-    </div>
+    </div>    
     <div id="footer-placeholder"></div>
     <!-- JavaScript 파일 링크 -->
     <script src="header_footer.js"></script>
