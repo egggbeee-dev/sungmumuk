@@ -17,7 +17,20 @@ body {
   flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+@media screen and (max-width: 768px) {
+  .page-header {
+    font-size: 24px; /* 모바일 화면에서 글씨 크기 줄이기 */
+    padding: 90px 0; /* 모바일에서 상하 여백 줄이기 */
+  }
+}
 
+/* 모바일 화면 크기 (최대 480px)에서 추가적인 반응형 처리 */
+@media screen and (max-width: 480px) {
+  .page-header {
+    font-size: 20px; /* 글씨 크기를 더 줄여서 가독성 확보 */
+    padding: 90px 0; /* 상하 여백을 더 줄여서 화면에 맞게 조정 */
+  }
+}
 /* 가게 이름 (보라색) */
 .review-header h2 {
   background-color: #f5f1fb; /* 부드러운 연보라 */
