@@ -10,17 +10,13 @@ async function fetchNotices() {
 
 function renderNotices(notices) {
     const tbody = document.getElementById('notice-list');
-    if (!tbody) {
-        console.error('공지사항 테이블이 없습니다.');
-        return;
-    }
     tbody.innerHTML = '';
 
     notices.forEach(notice => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${notice.notice_id}</td>
-            <td><a href="#">${notice.notice_title}</a></td>
+            <td><a href="/notice_detail.html?id=${notice.notice_id}" class="notice-link">${notice.notice_title}</a></td>
             <td>${notice.date}</td>
             <td>${notice.views}</td>
         `;

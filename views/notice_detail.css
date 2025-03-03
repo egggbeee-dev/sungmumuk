@@ -1,0 +1,112 @@
+.page-header {
+    text-align: center;
+    color: #7a69c4; /* 연보라색 텍스트 */
+    font-size: 30px; /* 글씨 크기 조정 */
+    margin: 0;
+    padding: 20px 0;
+    background-color: #f4e7f9; /* 연보라 배경색 */
+    border-bottom: 1px solid #e6e6fa;
+  }
+  
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.notice-detail-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 40px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.notice-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    word-break: break-word; /* 긴 제목 대응 */
+}
+
+.notice-meta {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.notice-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #444;
+    white-space: pre-line;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    background-color: #5c4db1;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+}
+
+.btn-back:hover {
+    background-color: #4a3ca1;
+    transform: translateY(-2px);
+}
+
+/* 반응형 처리 - 태블릿 이하 */
+@media (max-width: 768px) {
+    .notice-detail-container {
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    .notice-title {
+        font-size: 22px;
+    }
+
+    .notice-content {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .btn-back {
+        width: 100%; /* 모바일에서 버튼 전체 너비 */
+        padding: 14px;
+        font-size: 14px;
+        text-align: center;
+    }
+}
+
+/* 더 작은 모바일 기기 대응 */
+@media (max-width: 480px) {
+    .notice-title {
+        font-size: 20px;
+    }
+
+    .notice-meta {
+        font-size: 12px;
+    }
+
+    .btn-back {
+        font-size: 13px;
+    }
+}

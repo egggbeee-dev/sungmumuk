@@ -36,5 +36,35 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // 조회수 증가
+        await pool.query('UPDATE notice SET views = views + 1 WHERE notice_id = ?', [id]);
+
+        // 상세 정보 조회
+        const [rows] = await pool.query(`
+            SELECT 
+                notice_id AS id,
+                notice_title AS title,
+                notice_content AS content,
+                DATE_FORMAT(notice_created_at, '%Y-%m-%d') AS date,
+                views
+            FROM notice
+            WHERE notice_id = ?
+        `, [id]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: '공지사항이 존재하지 않습니다.' });
+        }
+
+        res.json(rows[0]);
+    } catch (error) {
+        console.error('공지사항 상세 조회 실패:', error);
+        res.status(500).json({ message: '서버 에러' });
+    }
+});
+
 
 module.exports = router;
