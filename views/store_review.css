@@ -74,7 +74,16 @@ h3 {
   color: #444 !important;
   margin-bottom: 16px !important;
   text-align: justify !important;
+  font-family: "Noto Sans KR", sans-serif;
+  word-break: break-word; /* 긴 단어 자동 줄바꿈 */
+  overflow-wrap: break-word;
+  white-space: normal; /* 기본 줄바꿈 유지 */
+  letter-spacing: 0; /* 글자 간격 일정하게 */
+  word-spacing: normal; /* 공백 크기 일정하게 */
+  line-height: 1.6; /* 줄 간격 조정 */
+  font-feature-settings: "kern" 1; /* 커닝 적용 */
 }
+
 
 /* 가게 이름 링크 스타일 */
 .restaurant-link {
@@ -302,5 +311,8 @@ h3 {
   .delete-button {
     width: 100%;
     text-align: center;
+  }
+  .content {
+    line-height: 1.4; /* 모바일에서는 줄 간격을 줄여서 보기 좋게 */
   }
 }
