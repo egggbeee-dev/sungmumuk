@@ -23,6 +23,12 @@
     }
   }
   
+  function truncateText(text, maxLength = 50) {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + "...";
+    }
+    return text;
+  }
   
   function renderReviews() {
     const reviewContainer = document.getElementById("reviews");
@@ -41,7 +47,7 @@
         <div class="review-details">
           <h4>${review.restaurant_name || "알 수 없는 레스토랑"}</h4>
           <div class="review-snippet">
-            <p>${review.review_text || " "}</p>
+            <p>${truncateText(review.review_text || " ")}</p>
           </div>
           <p class="ratings">
             맛: ${generateStars(review.taste_rating)}<br>
@@ -115,5 +121,7 @@
         history.pushState(null, "", `?page=${currentPage}`);
       }
     });
+
+
   
     fetchReviews(); // 데이터베이스에서 리뷰 가져오기
