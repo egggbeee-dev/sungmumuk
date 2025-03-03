@@ -23,7 +23,7 @@ button,
 @media screen and (max-width: 768px) {
   .page-header {
     font-size: 24px; /* 모바일 화면에서 글씨 크기 줄이기 */
-    padding: 90px 0; /* 모바일에서 상하 여백 줄이기 */
+    padding: 90px 0 30px; /* 모바일에서 상하 여백 줄이기 */
   }
 }
 
