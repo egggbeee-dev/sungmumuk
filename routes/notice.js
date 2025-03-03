@@ -114,5 +114,28 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    const user = req.session.user;
+    if (!user || user.isAdmin !== 1) {
+        return res.status(403).json({ message: '관리자 권한이 필요합니다.' });
+    }
+
+    try {
+        const [result] = await pool.query('DELETE FROM notice WHERE notice_id = ?', [id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: '삭제할 공지사항이 없습니다.' });
+        }
+
+        res.json({ message: '공지사항이 삭제되었습니다.' });
+    } catch (error) {
+        console.error('공지사항 삭제 실패:', error);
+        res.status(500).json({ message: '서버 에러' });
+    }
+});
+
+
 
 module.exports = router;

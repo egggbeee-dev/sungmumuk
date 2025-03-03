@@ -46,11 +46,19 @@ async function checkAdmin(noticeId, noticeData) {
 function addEditButton(noticeId, noticeData) {
     const adminActions = document.getElementById('admin-actions');
 
+    // 수정 버튼
     const editButton = document.createElement('button');
     editButton.innerText = '수정하기';
     editButton.classList.add('btn-edit');
     editButton.onclick = () => toggleEditMode(true, noticeData);
 
+    // 삭제 버튼
+    const deleteButton = document.createElement('button');
+    deleteButton.innerText = '삭제하기';
+    deleteButton.classList.add('btn-delete');
+    deleteButton.onclick = () => deleteNotice(noticeId);
+
+    // 수정 완료 버튼 (인라인 수정용)
     const saveButton = document.createElement('button');
     saveButton.innerText = '수정 완료';
     saveButton.classList.add('btn-save');
@@ -58,8 +66,10 @@ function addEditButton(noticeId, noticeData) {
     saveButton.onclick = () => saveEdit(noticeId);
 
     adminActions.appendChild(editButton);
+    adminActions.appendChild(deleteButton);
     adminActions.appendChild(saveButton);
 }
+
 
 function toggleEditMode(editMode, noticeData) {
     const titleElement = document.getElementById('notice-title');
@@ -121,4 +131,26 @@ async function saveEdit(noticeId) {
 
 function goBack() {
     window.location.href = '/notice.html';
+}
+
+async function deleteNotice(noticeId) {
+    if (!confirm('정말 삭제하시겠습니까?')) {
+        return;  // 사용자가 취소한 경우
+    }
+
+    try {
+        const response = await fetch(`/notice/${noticeId}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            alert('공지사항이 삭제되었습니다.');
+            location.href = '/notice.html';  // 목록으로 이동
+        } else {
+            alert('삭제에 실패했습니다.');
+        }
+    } catch (error) {
+        console.error('삭제 요청 실패:', error);
+        alert('삭제 중 오류가 발생했습니다.');
+    }
 }

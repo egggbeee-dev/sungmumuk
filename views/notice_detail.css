@@ -112,6 +112,23 @@ body {
     }
 }
 
+.btn-delete {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #ff4d4f;  /* 빨간색 */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+    background-color: #d9363e;
+}
+
+
 /* 더 작은 모바일 기기 대응 */
 @media (max-width: 480px) {
     .notice-title {
