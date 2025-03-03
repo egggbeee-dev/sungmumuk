@@ -6,16 +6,29 @@ const pool = require('../config/db'); // 데이터베이스 연결 설정
 // 🔹 ensureAuthenticated 적용 (로그인 필수)
 router.use(ensureAuthenticated);
 
-// 🔹 게시글 목록 조회 API (GET /haksik/posts)
-router.get('/posts', async (req, res) => {
-  const query = 'SELECT * FROM posts WHERE board_type = "haksik" ORDER BY created_at DESC';
+// 학식 게시판 게시글 필터링 API
+router.get("/posts", async (req, res) => {
+  const { filter } = req.query; // 클라이언트에서 보낸 필터 값
+
+  let orderBy = "created_at DESC"; // 기본값: 최신순
+  if (filter === "low") {
+      orderBy = "created_at ASC"; // 오래된 순
+  } else if (filter === "mid") {
+      orderBy = "(SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) DESC, created_at DESC"; // 좋아요 많은 순
+  }
 
   try {
-    const [results] = await pool.query(query);
-    res.status(200).json(results);
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '게시물 조회에 실패했습니다.' });
+      const [posts] = await pool.query(
+          `SELECT posts.*, 
+                  (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) AS like_count
+           FROM posts 
+           WHERE board_type = "haksik"  -- 학식 게시판 글만 가져오도록 추가
+           ORDER BY ${orderBy}`
+      );
+      res.json(posts);
+  } catch (error) {
+      console.error("게시물 필터링 오류:", error);
+      res.status(500).json({ message: "게시물 필터링 중 오류 발생" });
   }
 });
 
