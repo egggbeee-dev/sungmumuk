@@ -188,3 +188,18 @@ button,
     width: 100%;
   }
 }
+
+/* 반응형 스타일 추가 */
+@media screen and (max-width: 768px) {
+  .popup {
+    width: 90%; /* 모바일 화면 너비에 맞춤 */
+    max-width: none; /* 최대 너비 해제 */
+    padding: 15px; /* 패딩 축소 */
+    font-size: 16px; /* 폰트 크기 축소 */
+  }
+
+  .popup button {
+    padding: 8px 16px;
+    font-size: 14px; /* 버튼 폰트도 축소 */
+  }
+}
