@@ -1,102 +1,101 @@
+let currentUserId = null; // 현재 로그인한 사용자 ID
+let postAuthorId = null; // 게시글 작성자 ID
+
 document.addEventListener("DOMContentLoaded", async () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const postId = urlParams.get("id");
-        let currentUserId = null; // 현재 로그인한 사용자 ID
-        let postAuthorId = null; // 게시글 작성자 ID
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get("id");
+  
 
-        await checkAuthStatus();
-        await loadPost(postId);
-        await loadComments(postId);
+  await checkAuthStatus();
+  await loadPost(postId);
+  await loadComments(postId);
 
-        // 게시글 로드 후 수정/삭제 버튼 표시
-        if (currentUserId === postAuthorId) {
-          document.getElementById("edit-delete-buttons").style.display =
-            "block";
-        }
+  console.log("페이지 로드 후 currentUserId:", currentUserId);  // 확인 로그 추가
+  console.log("페이지 로드 후 postAuthorId:", postAuthorId);  // 확인 로그 추가
 
-        document
-          .getElementById("edit-post-btn")
-          .addEventListener("click", () => {
-            document.getElementById("edit-post-form").style.display = "block";
-            document.getElementById("edit-post-content").value =
-              document.getElementById("post-content").textContent;
-          });
+  showEditDeleteButtons();
 
-        document
-          .getElementById("save-edit-btn")
-          .addEventListener("click", async () => {
-            const newContent = document
-              .getElementById("edit-post-content")
-              .value.trim();
-            if (!newContent) {
-              alert("내용을 입력하세요.");
-              return;
-            }
-            try {
-              const response = await fetch(`/haksik/posts/${postId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ content: newContent }),
-              });
-              if (response.ok) {
-                alert("게시글이 수정되었습니다.");
-                window.location.reload();
-              } else {
-                alert("게시글 수정에 실패했습니다.");
-              }
-            } catch (error) {
-              console.error("수정 오류:", error);
-            }
-          });
+  document.getElementById("edit-post-btn").addEventListener("click", () => {
+      document.getElementById("edit-post-form").style.display = "block";
+      document.getElementById("edit-post-content").value =
+          document.getElementById("post-content").textContent;
+  });
 
-        document
-          .getElementById("delete-post-btn")
-          .addEventListener("click", async () => {
-            const confirmDelete = confirm("정말 삭제하시겠습니까?");
-            if (!confirmDelete) return;
-
-            try {
-              const response = await fetch(`/haksik/posts/${postId}`, {
-                method: "DELETE",
-              });
-              if (response.ok) {
-                alert("게시글이 삭제되었습니다.");
-                window.location.href = "/haksik.html";
-              } else {
-                alert("게시글 삭제에 실패했습니다.");
-              }
-            } catch (error) {
-              console.error("삭제 오류:", error);
-            }
-          });
-
-        document
-          .getElementById("submit-comment-btn")
-          .addEventListener("click", async () => {
-            const content = document
-              .getElementById("comment-input")
-              .value.trim();
-            if (!content) {
-              alert("댓글 내용을 입력하세요.");
-              return;
-            }
-            await submitComment(postId, content);
-          });
-      });
-
-      async function checkAuthStatus() {
-        try {
-          const response = await fetch("/api/auth/status");
-          const authData = await response.json();
-          if (authData.loggedIn) {
-            currentUserId = authData.userId;
-            document.getElementById("comment-input").disabled = false;
-            document.getElementById("submit-comment-btn").disabled = false;
-          }
-        } catch (error) {
-          console.error("로그인 상태 확인 오류:", error);
-        }
+  document.getElementById("save-edit-btn").addEventListener("click", async () => {
+      const newContent = document.getElementById("edit-post-content").value.trim();
+      if (!newContent) {
+          alert("내용을 입력하세요.");
+          return;
       }
+      try {
+          const response = await fetch(`/haksik/posts/${postId}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ content: newContent }),
+          });
+          if (response.ok) {
+              alert("게시글이 수정되었습니다.");
+              window.location.reload();
+          } else {
+              alert("게시글 수정에 실패했습니다.");
+          }
+      } catch (error) {
+          console.error("수정 오류:", error);
+      }
+  });
+
+  document.getElementById("delete-post-btn").addEventListener("click", async () => {
+      const confirmDelete = confirm("정말 삭제하시겠습니까?");
+      if (!confirmDelete) return;
+
+      try {
+          const response = await fetch(`/haksik/posts/${postId}`, {
+              method: "DELETE",
+          });
+          if (response.ok) {
+              alert("게시글이 삭제되었습니다.");
+              window.location.href = "/haksik.html";
+          } else {
+              alert("게시글 삭제에 실패했습니다.");
+          }
+      } catch (error) {
+          console.error("삭제 오류:", error);
+      }
+  });
+
+  function showEditDeleteButtons() {
+      console.log("showEditDeleteButtons() 호출 - currentUserId:", currentUserId, "postAuthorId:", postAuthorId);  // ✅ 확인 로그 추가
+      if (currentUserId === postAuthorId) {
+          document.getElementById("edit-delete-buttons").style.display = "block";
+      } else {
+          document.getElementById("edit-delete-buttons").style.display = "none";
+      }
+  }
+
+  document.getElementById("submit-comment-btn").addEventListener("click", async () => {
+      const content = document.getElementById("comment-input").value.trim();
+      if (!content) {
+          alert("댓글 내용을 입력하세요.");
+          return;
+      }
+      await submitComment(postId, content);
+  });
+});
+
+async function checkAuthStatus() {
+  try {
+      const response = await fetch("/auth/status");
+      const authData = await response.json();
+      if (authData.loggedIn) {
+          currentUserId = authData.user.id;
+          document.getElementById("comment-input").disabled = false;
+          document.getElementById("submit-comment-btn").disabled = false;
+      } else {
+      }
+  } catch (error) {
+      console.error("로그인 상태 확인 오류:", error);
+  }
+}
 
       async function loadPost(postId) {
         try {
