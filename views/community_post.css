@@ -256,3 +256,4 @@ main {
   background-color: #f4e7f9; /* 연보라 배경색 */
   border-bottom: 1px solid #e6e6fa;
 }
+#like-container { display: flex; align-items: center; gap: 10px; margin-top: 10px; } #like-btn { background-color: #ff6b6b; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 16px; } #like-btn:hover { background-color: #ff4f4f; }
