@@ -47,6 +47,10 @@ body {
   border-radius: 0 5px 5px 0;
   cursor: pointer;
 }
+@media screen and (max-width: 768px) 
+{ .search-bar 
+  { flex-direction: row; justify-content: center; width: 90%; } 
+  .search-bar input { max-width: 70%; min-width: 190px; } } 
 
 
 #new-post-form {
@@ -259,3 +263,18 @@ button:hover {
   #hide-today:hover {
     color: #ffdddd;
   }
+  .filter-box { display: flex; justify-content: center; gap: 15px; list-style: none; padding: 10px;
+     background-color: #ffffff; 
+     border-radius: 8px; margin: 20px 0; } 
+     /* 셀렉트 박스 스타일 */ 
+     .filter-box select {
+       padding: 8px 12px;
+        font-size: 14px;
+         border: 1px solid #ccc;
+          border-radius: 5px; background-color: white; 
+          cursor: pointer; } 
+          /* 셀렉트 박스 호버 효과 */ .filter-box select:hover 
+          { border-color: #6c63ff; } 
+          /* 옵션 스타일 */ 
+          .filter-box select option 
+          { padding: 5px; } 
