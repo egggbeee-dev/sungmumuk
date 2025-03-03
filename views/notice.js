@@ -15,7 +15,6 @@ function renderNotices(notices) {
     notices.forEach(notice => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${notice.notice_id}</td>
             <td><a href="/notice_detail.html?id=${notice.notice_id}" class="notice-link">${notice.notice_title}</a></td>
             <td>${notice.date}</td>
             <td>${notice.views}</td>
