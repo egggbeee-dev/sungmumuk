@@ -565,7 +565,7 @@ label {
 /* 반응형 스타일 추가 */
 @media screen and (max-width: 768px) {
   .popup {
-    width: 90%; /* 모바일 화면 너비에 맞춤 */
+    width: 80%; /* 모바일 화면 너비에 맞춤 */
     max-width: none; /* 최대 너비 해제 */
     padding: 15px; /* 패딩 축소 */
     font-size: 16px; /* 폰트 크기 축소 */
@@ -580,7 +580,7 @@ label {
 
 @media screen and (max-width: 400px) {
   .popup {
-    width: 95%;         /* 화면 거의 꽉차게 */
+    width: 85%;         /* 화면 거의 꽉차게 */
     padding: 10px;       /* 패딩 더 축소 */
     font-size: 14px;     /* 폰트 더 축소 */
   }
@@ -588,5 +588,24 @@ label {
   .popup button {
     padding: 6px 12px;   /* 버튼도 축소 */
     font-size: 12px;
+  }
+}
+/* 기본 이미지 스타일 */
+.popup-content img {
+  width: 100%; /* 기본적으로 부모 요소에 맞춤 */
+  max-width: 400px; /* 최대 크기 제한 */
+  height: auto; /* 비율 유지 */
+}
+
+/* 모바일 화면 조정 */
+@media screen and (max-width: 768px) {
+  .popup-content img {
+    max-width: 300px; /* 태블릿 및 작은 화면에서 크기 조정 */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .popup-content img {
+    max-width: 250px; /* 스마트폰에서 크기 축소 */
   }
 }
