@@ -1,7 +1,7 @@
 const fixedNotices = [
     {
         id: 'fixed-1',
-        title: '[이벤트] 사용자 설문조사 참여 이벤트 안내',
+        title: '[사용법] 성뭐먹 사용법 안내',
         date: '2025-03-04',
         views: '-',
         link: 'fixed_notice_1.html'
@@ -39,7 +39,7 @@ function renderFixedNotices() {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>
-                <a href="${notice.link}" class="notice-link" style="color: #7a69c4; font-weight: bold;">
+                <a href="/${notice.link}" class="notice-link" style="color: #7a69c4; font-weight: bold;">
                     ${notice.title}
                 </a>
             </td>
@@ -97,6 +97,10 @@ async function checkAdmin() {
         console.error('관리자 체크 실패:', error);
     }
 }
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await checkAdmin();
+});
 
 document.querySelector('.search-btn').addEventListener('click', () => {
     const filter = document.querySelector('.search-filter').value;

@@ -67,6 +67,7 @@ app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
 // app.use('/reset_password', express.static(path.join(__dirname, 'views')));
+app.use('/', express.static(path.join(__dirname, 'views/notice')));
 app.use('/restaurant', express.static(path.join(__dirname, 'restaurant')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/review', express.static(path.join(__dirname, 'review')));

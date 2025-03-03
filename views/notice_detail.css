@@ -8,6 +8,11 @@
     border-bottom: 1px solid #e6e6fa;
   }
 
+h1{
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px; 
+}
+
 body {
     font-family: 'Noto Sans KR', sans-serif;
     margin: 0;
