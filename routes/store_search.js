@@ -11,12 +11,21 @@ router.get('/', async (req, res) => {
         let filters = [];
         let params = [];
 
-        // 검색 조건 추가
-        if (query.trim()) {
-            filters.push('(restaurant_name LIKE ? OR recommended_menu LIKE ? OR category LIKE ? OR search LIKE ?)');
-            params.push(`%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`);
-        }
+        // 검색어에서 띄어쓰기를 제거한 버전 추가
+const cleanQuery = query.replace(/\s+/g, ''); // 모든 공백 제거
 
+// 검색 조건 추가
+if (query.trim()) {
+    filters.push(`
+        (restaurant_name LIKE ? OR recommended_menu LIKE ? OR category LIKE ? OR search LIKE ? 
+        OR REPLACE(restaurant_name, ' ', '') LIKE ? 
+        OR REPLACE(recommended_menu, ' ', '') LIKE ? 
+        OR REPLACE(category, ' ', '') LIKE ? 
+        OR REPLACE(search, ' ', '') LIKE ?)
+    `);
+    params.push(`%${query}%`, `%${query}%`, `%${query}%`, `%${query}%`,
+                `%${cleanQuery}%`, `%${cleanQuery}%`, `%${cleanQuery}%`, `%${cleanQuery}%`);
+}
 
         // 가격 필터 추가
         if (price) {
