@@ -28,9 +28,9 @@ router.post('/send-code', async (req, res) => {
         });
 
         await transporter.sendMail({
-            from: '"성신여대 인증 시스템" <no-reply@sungshin.ac.kr>',
+            from: '"TEAM sungmumuk" <no-reply@sungshin.ac.kr>',
             to: email,
-            subject: '성신여대 이메일 인증번호',
+            subject: '성뭐먹 이메일 인증번호',
             text: `인증번호: ${verificationCode}`,
         });
 
