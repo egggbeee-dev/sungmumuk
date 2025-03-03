@@ -15,6 +15,7 @@ body {
 }
 
 
+
 /* 제목 섹션 스타일 */
 .heading {
   text-align: center;
@@ -29,20 +30,30 @@ body {
 
 /* 수평 리스트 */
 .new-store-list {
-  display: flex;
+  display: grid;
   gap: 20px;
   padding: 10px 0;
   max-width: calc(300px * 3 + 20px * 2); /* 카드 3개와 간격 2개 기준 */
   margin: 0 auto;
 }
 
+.new-store-list {
+  display: flex;
+  flex-wrap: wrap; /* 여러 줄로 변경 가능하도록 설정 */
+  justify-content: center;
+  gap: 20px;
+}
+
+.new-store-item {
+  width: calc(33.33% - 20px); /* 3개씩 배치 */
+  max-width: 300px;
+}
 .new-store-item {
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 10px;
-  overflow: hidden;
-  width: 300px; /* 고정 너비 */
-  flex: 0 0 auto; /* 크기 고정 */
+  width: calc(33.33% - 20px); /* 3개씩 배치 */
+  max-width: 300px;
   scroll-snap-align: start; /* 스냅 포인트 */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
