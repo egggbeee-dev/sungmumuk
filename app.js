@@ -48,6 +48,7 @@ const haksikNewRouter = require('./routes/haksik_new');
 const findPasswordRouter = require('./routes/find_password');
 const resetPasswordRouter = require('./routes/reset_password');
 const noticeRouter = require('./routes/notice')
+const nicknameCheckRouter = require('./routes/check_nicknames');
 
 app.set('port', process.env.PORT || 80);
 app.set('view engine', 'html');
@@ -127,6 +128,10 @@ app.use('/api/find_password', findPasswordRouter);
 app.use('/reset_password', resetPasswordRouter);
 app.use('/reset_password', express.static(path.join(__dirname, 'views')));
 app.use('/notice',noticeRouter)
+app.use('/api', nicknameCheckRouter);
+
+
+
 
 // 정적 HTML 파일 제공 라우트
 app.get('/', (req, res) => {
