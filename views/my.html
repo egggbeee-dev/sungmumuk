@@ -32,6 +32,10 @@
         <div class="info-content">
           <span id="nickname-display">로딩 중...</span>
           <input type="text" id="nickname-input" class="hidden" value="" />
+          <div class="nickname-check hidden">
+            <button type="button" id="check-nickname-button">중복 확인</button>
+            <p id="nickname-check-result" style="color: red; display: none; margin-top: 5px;"></p>
+          </div>
         </div>
       </div>
       <div class="info-group">
@@ -51,7 +55,7 @@
     </div>
   </div>
 
-  <script src="../views/my.js"></script> <!-- routes를 불러올 수 없다..?-->
+  <script src="../routes/my.js"></script>
 
 
       <div class="favorites-container">
@@ -80,7 +84,7 @@
 
     <!-- Footer -->
     <div id="footer-placeholder"></div>
-    <script src="my.js"></script>
+    <script src="/my.js"></script>
 
   </body>
 </html>

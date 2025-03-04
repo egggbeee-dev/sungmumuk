@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../config/db'); // MySQL 연결
+const pool = require('../config/db'); // 이미 연결된 pool 객체 사용
 const { ensureAuthenticated } = require('../middlewares/auth');
 
 // 프로필 정보 가져오기
-router.get('/profile', ensureAuthenticated, async (req, res) => {
+router.get('/profile',  ensureAuthenticated,async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.id; // 로그인된 사용자 ID 가져오기
     if (!userId) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
@@ -17,9 +17,10 @@ router.get('/profile', ensureAuthenticated, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // JSON 형태로 사용자 정보 반환
     res.json({
       nickname: user[0].nickname,
-      email: user[0].email,
+      email: user[0].email, // username은 email로 변경한 것으로 추정
       department: user[0].department,
     });
   } catch (error) {
@@ -28,7 +29,6 @@ router.get('/profile', ensureAuthenticated, async (req, res) => {
   }
 });
 
-// 닉네임 및 학과 정보 업데이트 (닉네임 중복 검사 추가)
 router.post("/profile/update", ensureAuthenticated, async (req, res) => {
   const userId = req.user.id;
   const { nickname, department } = req.body;
@@ -36,17 +36,7 @@ router.post("/profile/update", ensureAuthenticated, async (req, res) => {
   try {
     console.log("Updating user:", { id: userId, nickname, department });
 
-    // ✅ 1. 닉네임 중복 검사 (자기 자신 제외)
-    const [existingNickname] = await pool.query(
-      "SELECT id FROM users WHERE nickname = ? AND id != ?",
-      [nickname, userId]
-    );
-
-    if (existingNickname.length > 0) {
-      return res.status(409).json({ success: false, message: "이미 사용 중인 닉네임입니다." });
-    }
-
-    // ✅ 2. 닉네임 및 학과 정보 업데이트
+    // 닉네임 및 학과 정보 업데이트
     const [result] = await pool.query(
       "UPDATE users SET nickname = ?, department = ? WHERE id = ?",
       [nickname, department, userId]
@@ -56,7 +46,7 @@ router.post("/profile/update", ensureAuthenticated, async (req, res) => {
       return res.status(404).send({ success: false, message: "사용자를 찾을 수 없습니다." });
     }
 
-    // ✅ 3. 세션 갱신 (새로운 닉네임 저장)
+    // ✅ 세션에 새로운 닉네임 저장 (세션 갱신)
     req.user.nickname = nickname;
 
     res.send({ success: true, message: "정보가 업데이트되었습니다." });
