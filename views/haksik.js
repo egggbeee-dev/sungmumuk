@@ -1,289 +1,350 @@
-const express = require('express');
-const router = express.Router();
-const { ensureAuthenticated } = require('../middlewares/auth');
-const pool = require('../config/db'); // 데이터베이스 연결 설정
+document.addEventListener('DOMContentLoaded', async function () {
+  const postList = document.getElementById('post-list');
+  const newPostBtn = document.getElementById('new-post-btn');
+  const newPostForm = document.getElementById('new-post-form');
+  const newPostTitle = document.getElementById('new-post-title');
+  const newPostContent = document.getElementById('new-post-content');
+  const newPostImage = document.getElementById('new-post-image');
+  const submitPostBtn = document.getElementById('submit-post');
+  const searchInput = document.getElementById('search-input');
+  const searchBtn = document.getElementById('search-btn');
+  const loginMessage = document.getElementById('login-message');
+  const filterSelect = document.getElementById('post-category');  // 필터 선택 요소
 
-// 🔹 ensureAuthenticated 적용 (로그인 필수)
-router.use(ensureAuthenticated);
+  let posts = [];
+  let isLoggedIn = false;
+  let currentUserId = null;
 
-// 학식 게시판 게시글 필터링 API
-router.get("/posts", async (req, res) => {
-  const { filter } = req.query; // 클라이언트에서 보낸 필터 값
+  // 초기화
+  await checkAuthStatus();
+  await loadPosts();  // 최신순 기본 로드
 
-  let orderBy = "created_at DESC"; // 기본값: 최신순
-  if (filter === "low") {
-      orderBy = "created_at ASC"; // 오래된 순
-  } else if (filter === "mid") {
-      orderBy = "(SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) DESC, created_at DESC"; // 좋아요 많은 순
-  }
+  // 필터 변경 이벤트
+  filterSelect.addEventListener('change', async function () {
+      await loadPosts(filterSelect.value);
+  });
 
-  try {
-      const [posts] = await pool.query(
-          `SELECT posts.*, 
-                  (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) AS like_count
-           FROM posts 
-           WHERE board_type = "haksik"  -- 학식 게시판 글만 가져오도록 추가
-           ORDER BY ${orderBy}`
-      );
-      res.json(posts);
-  } catch (error) {
-      console.error("게시물 필터링 오류:", error);
-      res.status(500).json({ message: "게시물 필터링 중 오류 발생" });
-  }
-});
+  // 검색 버튼 이벤트
+  searchBtn.addEventListener('click', searchPosts);
+  searchInput.addEventListener('keyup', function (event) {
+      if (event.key === 'Enter') {
+          searchPosts();
+      }
+  });
 
-// 🔹 특정 게시글 상세 조회 API (GET /haksik/posts/:id)
-router.get('/posts/:id', async (req, res) => {
-  const postId = req.params.id;
-  const query = `
-    SELECT p.*, u.nickname AS author, u.id AS author_id
-    FROM posts p
-    JOIN users u ON p.user_id = u.id
-    WHERE p.post_id = ? AND p.board_type = "haksik"`;
+  // 글 작성 이벤트
+  submitPostBtn.addEventListener('click', submitPost);
 
-  try {
-    const [results] = await pool.query(query, [postId]);
-    if (results.length === 0) {
-      return res.status(404).json({ message: '게시물이 존재하지 않습니다.' });
+  // 로그인 상태 확인
+  async function checkAuthStatus() {
+    try {
+        const response = await fetch('/auth/status');
+        const authStatus = await response.json();
+
+        if (authStatus.loggedIn) {
+            isLoggedIn = true;
+            currentUserId = authStatus.user.id;
+            enablePostActions();
+            loginMessage.style.display = 'none';
+        } else {
+            isLoggedIn = false;
+            currentUserId = null;  // 로그인 안한 상태에서도 페이지 보이게 초기화
+
+            const userResponse = confirm("학식 게시판은 로그인 후 이용 가능합니다.\n로그인 페이지로 이동하시겠습니까?");
+            if (userResponse) {
+                window.location.href = "/login.html"; // 로그인 페이지로 이동
+            } else {
+                window.history.back(); // 이전 페이지로 이동
+            }
+
+            disablePostActions();
+        }
+    } catch (error) {
+        console.error('로그인 상태 확인 오류:', error);
     }
-    res.status(200).json(results[0]); // 작성자 정보 포함
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '게시물 조회에 실패했습니다.' });
-  }
-});
+}
 
-// 🔹 댓글 작성 API (POST /haksik/posts/:id/comments)
-router.post('/posts/:id/comments', async (req, res) => {
-  const postId = req.params.id;
-  const userId = req.user.id;
-  const { content } = req.body;
-
-  if (!content) {
-    return res.status(400).json({ message: '댓글 내용을 입력하세요.' });
+  // 로그인 시 기능 활성화
+  function enablePostActions() {
+      newPostBtn.style.display = 'block';
+      submitPostBtn.disabled = false;
+      newPostTitle.disabled = false;
+      newPostContent.disabled = false;
+      newPostImage.disabled = false;
   }
 
-  const query = `
-    INSERT INTO comments (post_id, user_id, content, created_at, likes)
-    VALUES (?, ?, ?, NOW(), 0)`;
-
-  try {
-    const [result] = await pool.query(query, [postId, userId, content]);
-    res.status(201).json({ message: '댓글이 작성되었습니다.', commentId: result.insertId });
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '댓글 작성에 실패했습니다.' });
-  }
-});
-
-// 🔹 댓글 조회 API (GET /haksik/posts/:id/comments)
-router.get('/posts/:id/comments', async (req, res) => {
-  const postId = req.params.id;
-  const query = `
-    SELECT c.comment_id, c.content, c.created_at, c.likes, c.user_id, u.nickname AS author
-    FROM comments c
-    LEFT JOIN users u ON c.user_id = u.id
-    WHERE c.post_id = ?
-    ORDER BY c.created_at DESC`;
-
-  try {
-    const [results] = await pool.query(query, [postId]);
-    res.status(200).json(results);
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '댓글 조회에 실패했습니다.' });
-  }
-});
-
-// 게시글 삭제 API (DELETE /haksik/posts/:id)
-router.delete('/posts/:id', ensureAuthenticated, async (req, res) => {
-  const postId = req.params.id;
-  const userId = req.user.id;
-
-  const deleteCommentsQuery = 'DELETE FROM comments WHERE post_id = ?';
-  const deletePostQuery = 'DELETE FROM posts WHERE post_id = ? AND user_id = ? AND board_type = "free"';
-
-
-  try {
-    await pool.query(deleteCommentsQuery, [postId]);
-    const [result] = await pool.query(deletePostQuery, [postId, userId]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: '게시글이 존재하지 않거나 삭제 권한이 없습니다.' });
-    }
-
-    res.status(200).json({ message: '게시글 및 관련 댓글이 삭제되었습니다.' });
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '게시글 삭제에 실패했습니다.' });
-  }
-});
-
-// 🔹 댓글 좋아요 API (POST /haksik/comments/:id/like)
-router.post('/comments/:id/like', async (req, res) => {
-  const commentId = req.params.id;
-  const query = 'UPDATE comments SET likes = likes + 1 WHERE comment_id = ?';
-
-  try {
-    await pool.query(query, [commentId]);
-    res.status(201).json({ message: '좋아요가 추가되었습니다.' });
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '좋아요 처리 중 오류가 발생했습니다.' });
-  }
-});
-
-// 🔹 게시글 수정 API (PUT /haksik/posts/:id)
-router.put('/posts/:id', async (req, res) => {
-  const postId = req.params.id;
-  const userId = req.user.id;
-  const { content } = req.body;
-
-  if (!content) {
-    return res.status(400).json({ message: '내용을 입력하세요.' });
+  // 비로그인 시 기능 비활성화
+  function disablePostActions() {
+      newPostBtn.style.display = 'none';
+      submitPostBtn.disabled = true;
+      newPostTitle.disabled = true;
+      newPostContent.disabled = true;
+      newPostImage.disabled = true;
   }
 
-  const query = 'UPDATE posts SET content = ? WHERE post_id = ? AND user_id = ? AND board_type = "haksik"';
+  // 게시글 목록 불러오기 (필터 값 추가)
+  async function loadPosts(filter = "") {
+      try {
+          const response = await fetch(`/haksik/posts?filter=${filter}`);
+          const data = await response.json();
 
-  try {
-    const [results] = await pool.query(query, [content, postId, userId]);
-    if (results.affectedRows === 0) {
-      return res.status(404).json({ message: '게시글이 존재하지 않거나 수정 권한이 없습니다.' });
-    }
-    res.status(200).json({ message: '게시글이 수정되었습니다.' });
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '게시글 수정에 실패했습니다.' });
+          posts = data.map(post => ({
+              id: post.post_id,
+              title: post.title,
+              content: post.content,
+              image: post.image_url || '',
+              isExpanded: false,
+              category: post.category || '[카테고리]',
+              userId: post.user_id,
+              likeCount: post.like_count || 0
+          }));
+
+          renderPosts();
+      } catch (error) {
+          console.error('게시물 로드 오류:', error);
+          alert('게시물을 불러오는 중 오류가 발생했습니다.');
+      }
   }
-});
 
-// 🔹 게시글 삭제 API (DELETE /haksik/posts/:id)
-router.delete('/posts/:id', async (req, res) => {
-  const postId = req.params.id;
-  const userId = req.user.id;
+  // 게시글 렌더링
+  function renderPosts() {
+    postList.innerHTML = '';
 
-  const deleteCommentsQuery = 'DELETE FROM comments WHERE post_id = ?';
-  const deletePostQuery = 'DELETE FROM posts WHERE post_id = ? AND user_id = ? AND board_type = "haksik"';
-
-  try {
-    await pool.query(deleteCommentsQuery, [postId]);
-    const [result] = await pool.query(deletePostQuery, [postId, userId]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: '게시글이 존재하지 않거나 삭제 권한이 없습니다.' });
+    if (posts.length === 0) {
+        postList.innerHTML = "<p>게시글이 없습니다.</p>";
+        return;
     }
 
-    res.status(200).json({ message: '게시글 및 관련 댓글이 삭제되었습니다.' });
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '게시글 삭제에 실패했습니다.' });
-  }
-});
+    posts.forEach(post => {
+        const postDiv = document.createElement('div');
+        postDiv.classList.add('post');
 
-// 🔹 검색 기능 API (GET /haksik/search)
-router.get('/search', async (req, res) => {
-  const query = req.query.query;
-  if (!query) {
-    return res.status(400).json({ message: '검색어가 없습니다.' });
-  }
+        const titleLink = document.createElement('a');
+        titleLink.href = `/haksik_post.html?id=${post.id}`;
+        titleLink.innerHTML = `<span style="color: #8a63d2;">${post.category}</span> 
+                               <span style="color: black;">${post.title}</span>`;
+        titleLink.style.textDecoration = 'none';
+        titleLink.style.cursor = 'pointer';
+        postDiv.appendChild(titleLink);
 
-  const searchQuery = `
-    SELECT p.post_id, p.title, p.content, p.category, p.image_url, p.user_id, 
-           IFNULL(l.like_count, 0) AS like_count
-    FROM posts p
-    LEFT JOIN (
-        SELECT post_id, COUNT(*) AS like_count
-        FROM likes
-        GROUP BY post_id
-    ) l ON p.post_id = l.post_id
-    WHERE p.board_type = "haksik"
-    AND (p.title LIKE ? OR p.content LIKE ?)
-    ORDER BY p.created_at DESC`;
+        const contentDiv = document.createElement('div');
+        contentDiv.textContent = post.content.slice(0, 100) + "...";
+        postDiv.appendChild(contentDiv);
 
-  try {
-    const [results] = await pool.query(searchQuery, [`%${query}%`, `%${query}%`]);
-    res.status(200).json(results);
-  } catch (err) {
-    console.error('검색 중 오류 발생:', err);
-    res.status(500).json({ message: '검색 중 오류가 발생했습니다.' });
-  }
-});
+        const likeCountDiv = document.createElement('div');
+        likeCountDiv.textContent = `❤️ ${post.likeCount}`;
+        postDiv.appendChild(likeCountDiv);
 
-// 게시글 좋아요 추가
-router.post("/posts/:postId/like", async (req, res) => {
-  const { postId } = req.params;
-  const userId = req.user.id;// 현재 로그인된 사용자 ID
+        postList.appendChild(postDiv);
+    });
+}
 
-  if (!userId) {
-    return res.status(401).json({ message: "로그인이 필요합니다." });
+  function postLinkStyle(link) {
+      link.style.textDecoration = 'none';
+      link.style.cursor = 'pointer';
   }
 
-  try {
-    // 기존 좋아요 여부 확인
-    const [existingLike] = await pool.query(
-      "SELECT * FROM likes WHERE user_id = ? AND post_id = ?",
-      [userId, postId]
-    );
+  async function submitPost() {
+      const title = newPostTitle.value.trim();
+      const content = newPostContent.value.trim();
+      const image = newPostImage.files[0];
 
-    if (existingLike.length > 0) {
-      // 이미 좋아요를 눌렀으면 취소
-      await pool.query(
-        "DELETE FROM likes WHERE user_id = ? AND post_id = ?",
-        [userId, postId]
-      );
-      return res.status(200).json({ message: "좋아요 취소!" });
-    } else {
-      // 좋아요 추가
-      await pool.query(
-        "INSERT INTO likes (user_id, post_id, created_at,board_type) VALUES (?, ?, NOW(), 'haksik')",
-        [userId, postId]
-      );
-      return res.status(201).json({ message: "좋아요 추가!" });
+      if (!title || !content) {
+          alert('제목과 내용을 입력하세요.');
+          return;
+      }
+
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('content', content);
+      if (image) formData.append('image', image);
+
+      try {
+          const response = await fetch('/haksik_new/posts', {
+              method: 'POST',
+              body: formData,
+          });
+
+          if (!response.ok) throw new Error('게시물 저장 실패');
+
+          await loadPosts(filterSelect.value);  // 작성 후 필터 적용 유지
+      } catch (error) {
+          console.error('게시물 저장 오류:', error);
+          alert('게시물 저장 중 오류가 발생했습니다.');
+      }
+  }
+
+  async function editPost(post) {
+      const newContent = prompt('수정할 내용을 입력하세요:', post.content);
+      if (!newContent) return;
+
+      try {
+          const response = await fetch(`/haksik/posts/${post.id}`, {
+              method: 'PUT',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({content: newContent}),
+          });
+
+          if (response.ok) {
+              alert('게시글이 수정되었습니다.');
+              await loadPosts(filterSelect.value);
+          } else {
+              alert('게시글 수정에 실패했습니다.');
+          }
+      } catch (error) {
+          console.error('게시글 수정 오류:', error);
+      }
+  }
+
+  async function deletePost(postId) {
+      if (!confirm('정말 삭제하시겠습니까?')) return;
+
+      try {
+          const response = await fetch(`/haksik/posts/${postId}`, {method: 'DELETE'});
+          if (response.ok) {
+              alert('게시글이 삭제되었습니다.');
+              await loadPosts(filterSelect.value);
+          } else {
+              alert('게시글 삭제에 실패했습니다.');
+          }
+      } catch (error) {
+          console.error('게시글 삭제 오류:', error);
+      }
+  }
+
+  async function searchPosts() {
+      const query = searchInput.value.trim();
+      if (!query) {
+          alert('검색어를 입력하세요.');
+          return;
+      }
+
+      try {
+        const response = await fetch(`/haksik/search?query=${encodeURIComponent(query)}`);
+        const results = await response.json();
+
+        // 검색 결과도 posts 형식과 동일하게 매핑
+        posts = results.map(post => ({
+            id: post.post_id,
+            title: post.title,
+            content: post.content,
+            image: post.image_url || '',
+            category: post.category || '[카테고리]',
+            likeCount: post.like_count || 0,  // ⭐️ 이 부분 추가
+            userId: post.user_id
+        }));
+
+        renderPosts();
+    } catch (error) {
+        console.error('검색 오류:', error);
+        alert('검색 중 오류가 발생했습니다.');
     }
-  } catch (error) {
-    console.error("좋아요 처리 오류:", error);
-    res.status(500).json({ message: "서버 오류 발생" });
-  }
+}
 });
 
-// 특정 게시글의 좋아요 개수 가져오기
-router.get("/posts/:postId/like/count", async (req, res) => {
-  const { postId } = req.params;
+document.addEventListener("DOMContentLoaded", function () {
+  const messageBox = document.getElementById("site-message");
+  const closeBtn = document.getElementById("close-message");
+  const hideTodayBtn = document.getElementById("hide-today");
 
-  try {
-    const [result] = await pool.query(
-      "SELECT COUNT(*) AS likeCount FROM likes WHERE post_id = ?",
-      [postId]
-    );
-    res.json({ likeCount: result[0].likeCount });
-  } catch (error) {
-    console.error("좋아요 개수 조회 오류:", error);
-    res.status(500).json({ message: "서버 오류 발생" });
+  // localStorage에서 'hideMessage' 값 확인 (값이 있으면 숨기기)
+  if (localStorage.getItem("hideMessage") === "true") {
+    messageBox.style.display = "none";
   }
+
+  // X 버튼 클릭 시 메시지 창 닫기 (이번만 닫힘)
+  closeBtn.addEventListener("click", function () {
+    messageBox.style.display = "none";
+  });
+
+  // "오늘은 더 이상 보지 않기" 클릭 시 하루 동안 숨기기
+  hideTodayBtn.addEventListener("click", function () {
+    localStorage.setItem("hideMessage", "true"); // 로컬스토리지에 숨김 설정 저장
+    messageBox.style.display = "none"; // 메시지 숨김
+  });
 });
 
-// 특정 사용자가 해당 게시글에 좋아요를 눌렀는지 확인하는 API
-router.get("/posts/:postId/like/status", async (req, res) => {
-  const { postId } = req.params;
-  const userId = req.user.id; // 로그인된 사용자 ID
+// 페이지네이션 버튼 렌더링
+function renderPagination(totalPosts) {
+    pagination.innerHTML = ""; // 기존 페이지 버튼들 삭제
+    const totalPages = Math.ceil(totalPosts / postsPerPage);
 
-  if (!userId) {
-    return res.json({ liked: false }); // 로그인하지 않은 경우 좋아요 X
+    // '맨 처음 페이지로 이동' 버튼
+    const firstPageBtn = document.createElement("button");
+    firstPageBtn.textContent = "<<";
+    firstPageBtn.addEventListener("click", function () {
+    currentPage = 1;
+    loadPosts(currentPage);
+    });
+    pagination.appendChild(firstPageBtn);
+
+    // '이전 페이지' 버튼
+    const prevPageBtn = document.createElement("button");
+    prevPageBtn.textContent = "<";
+    prevPageBtn.addEventListener("click", function () {
+      if (currentPage > 1) {
+          currentPage--;
+          loadPosts(currentPage);
+        }
+      });
+    pagination.appendChild(prevPageBtn);
+
+      // 페이지 번호 버튼들 (10페이지씩 보이게 수정)
+    const startPage = Math.floor((currentPage - 1) / 10) * 10 + 1; // 시작 페이지 번호
+    const endPage = Math.min(startPage + 9, totalPages); // 끝 페이지 번호 (최대 10페이지)
+
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement("button");
+      pageBtn.textContent = i;
+
+      // 버튼 스타일 설정
+
+      prevPageBtn.style.margin = "0 3px";
+      pageBtn.style.width = "40px"; // 버튼 크기 고정
+      pageBtn.style.margin = "0 5px"; // 버튼 간 여백 추가
+      pageBtn.style.display = "flex"; // 중앙 정렬을 위해 flex 사용
+      pageBtn.style.alignItems = "center"; // 수직 중앙 정렬
+      pageBtn.style.justifyContent = "center"; // 수평 중앙 정렬
+      pageBtn.style.padding = "5px 10px"; // 패딩 추가
+      pageBtn.style.fontSize = "16px"; // 글자 크기 설정
+
+      // 현재 페이지는 색상 변경
+      if (i === currentPage) {
+        pageBtn.style.backgroundColor = "#8E89F6"; // 진한 색상
+        pageBtn.style.color = "#fff"; // 텍스트 색상 변경
+        pageBtn.style.fontWeight = "bold"; // 글자 두껍게
+      }
+
+      pageBtn.addEventListener("click", function () {
+        currentPage = i;
+        loadPosts(currentPage);
+      });
+      pagination.appendChild(pageBtn);
+    }
+
+    // '다음 페이지' 버튼
+    const nextPageBtn = document.createElement("button");
+    nextPageBtn.textContent = ">";
+    nextPageBtn.addEventListener("click", function () {
+      if (currentPage < totalPages) {
+        currentPage++;
+        loadPosts(currentPage);
+      }
+    });
+    pagination.appendChild(nextPageBtn);
+
+    // '마지막 페이지로 이동' 버튼
+    const lastPageBtn = document.createElement("button");
+    lastPageBtn.textContent = ">>";
+    lastPageBtn.addEventListener("click", function () {
+      currentPage = totalPages;
+      loadPosts(currentPage);
+    });
+    pagination.appendChild(lastPageBtn);
+
+    // 페이지네이션 바 스타일을 가로로 설정
+    pagination.style.display = "flex";
+    pagination.style.justifyContent = "center"; // 버튼들을 가로로 중앙 정렬
+    pagination.style.alignItems = "center"; // 수직 중앙 정렬
+    lastPageBtn.style.margin = "0 3px";
   }
-
-  try {
-    const [result] = await pool.query(
-      "SELECT COUNT(*) AS count FROM likes WHERE user_id = ? AND post_id = ?",
-      [userId, postId]
-    );
-
-    res.json({ liked: result[0].count > 0 });
-  } catch (error) {
-    console.error("좋아요 상태 확인 오류:", error);
-    res.status(500).json({ message: "서버 오류 발생" });
-  }
-});
-
-
-module.exports = router;
-
