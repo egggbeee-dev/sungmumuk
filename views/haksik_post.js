@@ -277,7 +277,7 @@ async function deleteComment(commentId) {
     if (!confirm("정말 삭제하시겠습니까?")) return;
 
     try {
-        const response = await fetch(`/free/comments/${commentId}`, { method: "DELETE" });
+        const response = await fetch(`/haksik/comments/${commentId}`, { method: "DELETE" });
         if (response.ok) {
             alert("댓글이 삭제되었습니다.");
             document.getElementById(`comment-${commentId}`).remove();
