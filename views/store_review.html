@@ -116,7 +116,7 @@
                         <p>재방문: ${generateStars(review.revisit_rating)}</p>
                     </div>
                     <div class="content">
-                       ${review.review_text || "내용이 없습니다."}
+                      ${review.review_text ? review.review_text.replace(/\n/g, '<br>') : "내용이 없습니다."}
                     </div>
 
                     ${
