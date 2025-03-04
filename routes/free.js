@@ -65,7 +65,7 @@ router.post('/posts/:id/comments', ensureAuthenticated, async (req, res) => {
 router.get('/posts/:id/comments', async (req, res) => {
   const postId = req.params.id;
   const query = `
-  SELECT c.comment_id, c.content, c.created_at, c.likes, u.nickname AS author
+  SELECT c.comment_id, c.content, c.created_at, c.likes, c.user_id, u.nickname AS author
   FROM comments c
   LEFT JOIN users u ON c.user_id = u.id
   WHERE c.post_id = ?
@@ -159,6 +159,27 @@ router.get('/search', async (req, res) => {
   } catch (err) {
     console.error('검색 중 오류 발생:', err);
     res.status(500).json({ message: '검색 중 오류가 발생했습니다.' });
+  }
+});
+
+//댓글 삭제 API
+router.delete('/comments/:id', ensureAuthenticated, async (req, res) => {
+  const commentId = req.params.id;
+  const userId = req.user.id; // 로그인한 사용자
+
+  const query = 'DELETE FROM comments WHERE comment_id = ? AND user_id = ?';
+
+  try {
+      const [result] = await pool.query(query, [commentId, userId]);
+
+      if (result.affectedRows === 0) {
+          return res.status(404).json({ message: '댓글이 존재하지 않거나 삭제 권한이 없습니다.' });
+      }
+
+      res.status(200).json({ message: '댓글이 삭제되었습니다.' });
+  } catch (err) {
+      console.error('Database error:', err);
+      res.status(500).json({ message: '댓글 삭제에 실패했습니다.' });
   }
 });
 
