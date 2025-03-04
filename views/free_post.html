@@ -101,12 +101,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 작성자 여부 체크 후 버튼 표시
     showEditDeleteButtons();
-
-    document.getElementById("edit-post-btn").addEventListener("click", () => {
-      document.getElementById("edit-post-form").style.display = "block";
-      document.getElementById("edit-post-title").value = document.getElementById("post-title").textContent;
-      document.getElementById("edit-post-content").value = document.getElementById("post-content").textContent;
-  });
   
 
   document.getElementById("save-edit-btn").addEventListener("click", async () => {
@@ -186,7 +180,14 @@ async function loadPost(postId) {
 
       document.getElementById("post-title").textContent = post.title;
       document.getElementById("post-author").textContent = `작성자: ${post.author}`;
-      document.getElementById("post-content").textContent = post.content;
+      document.getElementById("post-content").innerHTML = post.content.replace(/\n/g, '<br>');
+
+       // 수정 폼 띄울 때 원래 내용에 \n 복구
+    document.getElementById("edit-post-btn").addEventListener("click", () => {
+      document.getElementById("edit-post-title").value = post.title;
+      document.getElementById("edit-post-content").value = post.content;  // \n 유지
+      document.getElementById("edit-post-form").style.display = "block";
+  });
 
       // 작성일 표시 추가 (created_at 사용)
       const createdDate = new Date(post.created_at);
