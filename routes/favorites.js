@@ -77,8 +77,6 @@ async function getStoreData(userId) {
   }
 }
 
-
-
 router.get('/favorites', ensureAuthenticated, async (req, res) => {
   try {
     if (!req.user) {
@@ -211,6 +209,28 @@ router.get('/mypage/favorites', ensureAuthenticated, async (req, res) => {
     res.status(500).json({ message: '서버 오류' });
   }
 });
+
+router.get('/api/check-favorite-status', ensureAuthenticated, async (req, res) => {
+  const userId = req.user?.id;
+  const storeId = parseInt(req.query.id, 10);
+
+  if (!userId) {
+      return res.status(401).json({ error: '로그인이 필요합니다.' });
+  }
+
+  if (isNaN(storeId)) {
+      return res.status(400).json({ error: '유효한 가게 ID가 필요합니다.' });
+  }
+
+  const [rows] = await pool.execute(
+      'SELECT 1 FROM favorites WHERE user_id = ? AND restaurant_id = ?',
+      [userId, storeId]
+  );
+
+  const isFavorite = rows.length > 0;
+  return res.status(200).json({ isFavorite });
+});
+
 
 
 module.exports = router;
