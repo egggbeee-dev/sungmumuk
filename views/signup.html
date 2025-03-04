@@ -123,19 +123,6 @@
           return emailPattern.test(email.trim());
       }
       
-      // 📌 약관 동의 체크 여부에 따라 '인증번호 요청' 버튼 활성화
-      function toggleVerificationButton() {
-          const agreeTerms = document.getElementById("agreeTerms").checked;
-          const sendVerificationButton = document.getElementById("sendVerificationCode");
-      
-          if (agreeTerms) {
-              sendVerificationButton.disabled = false; // 약관 동의 시 버튼 활성화
-          } else {
-              sendVerificationButton.disabled = true; // 약관 미동의 시 버튼 비활성화
-              alert("회원가입을 위해 약관에 동의해야 합니다."); // 체크 해제 시 경고창 띄우기
-          }
-      }
-      
       // 📌 페이지 로딩 시 체크박스 상태 확인 (새로고침 시에도 적용)
       document.addEventListener("DOMContentLoaded", () => {
           toggleVerificationButton(); // 초기 버튼 상태 설정
