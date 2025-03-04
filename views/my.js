@@ -1,24 +1,41 @@
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    // 서버에서 상위 3개 찜한 가게 데이터를 가져옴
-    const response = await fetch('/mypage/favorites');
-    if (!response.ok) throw new Error('찜한 가게 데이터를 가져올 수 없습니다.');
+      const response = await fetch('/mypage/favorites');
+      if (!response.ok) throw new Error('찜한 가게 데이터를 가져올 수 없습니다.');
 
-    const stores = await response.json();
-    renderFavorites(stores);
+      const stores = await response.json();
+      renderFavorites(stores);
   } catch (error) {
-    console.error('마이페이지 데이터 로드 중 오류:', error);
+      console.error('마이페이지 데이터 로드 중 오류:', error);
   }
 
-  // 리뷰 데이터 불러오기
   await loadReviews();
-
-  // 프로필 데이터 불러오기
   await loadProfile();
 
-  // 닉네임 중복확인 버튼 이벤트 연결
-  document.getElementById("check-nickname-button").addEventListener("click", checkNickname);
+  // 수정 버튼 이벤트 등록 (전역으로 빼는 대신 이 방식 추천)
+  document.getElementById("edit-button").addEventListener("click", toggleEditMode);
 });
+
+function toggleEditMode() {
+  document.getElementById("nickname-display").classList.add("hidden");
+  document.getElementById("department-display").classList.add("hidden");
+
+  document.getElementById("nickname-input").classList.remove("hidden");
+  document.getElementById("department-input").classList.remove("hidden");
+
+  document.querySelector(".edit-button").classList.add("hidden");
+  document.getElementById("save-button").classList.remove("hidden");
+
+  // 닉네임 중복 확인 영역 보이기
+  document.querySelector(".nickname-check").classList.remove("hidden");
+
+  // ✅ 여기서 이벤트 강제 바인딩 (이벤트 중복 방지 위해 먼저 제거하고 다시 등록)
+  const checkBtn = document.getElementById("check-nickname-button");
+  checkBtn.removeEventListener("click", checkNickname); // 혹시 중복 방지
+  checkBtn.addEventListener("click", checkNickname);
+}
+
+
 
 function renderFavorites(stores) {
   const container = document.querySelector('.favorites-list');
@@ -118,43 +135,48 @@ async function loadProfile() {
 
 // 닉네임 중복 확인
 async function checkNickname() {
-    const nickname = document.getElementById("nickname-input").value.trim();
-    const resultMessage = document.getElementById("nickname-check-result");
+  const nickname = document.getElementById("nickname-input").value.trim();
+  const resultMessage = document.getElementById("nickname-check-result");
 
-    if (!nickname) {
-        resultMessage.textContent = "닉네임을 입력해주세요.";
-        resultMessage.style.color = "red";
-        resultMessage.style.display = "block";
-        return;
-    }
+  // 중복 확인 영역 강제 표시 (안보이는 경우 대비)
+  document.querySelector('.nickname-check').classList.remove('hidden');
 
-    // 현재 닉네임과 동일한 경우
-    if (nickname === currentNickname) {
-        resultMessage.textContent = "현재 사용 중인 닉네임입니다.";
-        resultMessage.style.color = "green";
-        resultMessage.style.display = "block";
-        return;
-    }
+  if (!nickname) {
+      resultMessage.textContent = "닉네임을 입력해주세요.";
+      resultMessage.style.color = "red";
+      resultMessage.style.display = "block";
+      return;
+  }
 
-    try {
-        const response = await fetch(`/api/check-nickname?nickname=${nickname}`);
-        const data = await response.json();
+  if (nickname === currentNickname) {
+      resultMessage.textContent = "사용 가능한 닉네임입니다.";
+      resultMessage.style.color = "green";
+      resultMessage.style.display = "block";
+      return;
+  }
 
-        if (response.status === 409) {
-            resultMessage.textContent = "이미 사용 중인 닉네임입니다.";
-            resultMessage.style.color = "red";
-        } else {
-            resultMessage.textContent = "사용 가능한 닉네임입니다.";
-            resultMessage.style.color = "green";
-        }
-        resultMessage.style.display = "block";
-    } catch (error) {
-        console.error("닉네임 중복 확인 중 오류 발생:", error);
-        resultMessage.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
-        resultMessage.style.color = "red";
-        resultMessage.style.display = "block";
-    }
+  try {
+      const response = await fetch(`/api/check-nickname?nickname=${nickname}`);
+      const data = await response.json();
+
+      if (response.status === 409) {
+          resultMessage.textContent = "이미 사용 중인 닉네임입니다.";
+          resultMessage.style.color = "red";
+      } else {
+          resultMessage.textContent = "사용 가능한 닉네임입니다.";
+          resultMessage.style.color = "green";
+      }
+
+      resultMessage.style.display = "block";
+  } catch (error) {
+      console.error("닉네임 중복 확인 중 오류 발생:", error);
+      resultMessage.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
+      resultMessage.style.color = "red";
+      resultMessage.style.display = "block";
+  }
 }
+
+
 
 // 정보 저장
 async function saveChanges() {
