@@ -81,6 +81,21 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const { data = [], totalPages = 1 } = await response.json();
 
+            // 검색 결과 없을 때 메시지 출력
+            if (data.length === 0) {
+                storeList.innerHTML = `
+                    <div class="no-results">
+                        <p>찾으시는 가게가 없으신가요?</p>
+                        <p>가게 등록 요청을 해주세요!</p>
+                        <a href="/store_register.html" class="register-link">가게 등록 요청하기</a>
+                    </div>
+                `;
+                pageIndicator.textContent = "0 / 0";
+                prevButton.disabled = true;
+                nextButton.disabled = true;
+                return;
+            }
+
             storeList.innerHTML = data
                 .map(
                     (store) => `
