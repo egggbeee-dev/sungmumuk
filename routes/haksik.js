@@ -80,20 +80,22 @@ router.post('/posts/:id/comments', async (req, res) => {
 router.get('/posts/:id/comments', async (req, res) => {
   const postId = req.params.id;
   const query = `
-    SELECT c.comment_id, c.content, c.created_at, c.likes, c.user_id, u.nickname AS author
-    FROM comments c
-    LEFT JOIN users u ON c.user_id = u.id
-    WHERE c.post_id = ?
-    ORDER BY c.created_at DESC`;
+      SELECT c.comment_id, c.content, c.created_at, c.likes, c.user_id, u.nickname AS author
+      FROM comments c
+      LEFT JOIN users u ON c.user_id = u.id
+      WHERE c.post_id = ?
+      ORDER BY c.created_at DESC`;
 
   try {
-    const [results] = await pool.query(query, [postId]);
-    res.status(200).json(results);
+      const [results] = await pool.query(query, [postId]);
+      console.log("🔍 서버에서 반환하는 댓글 데이터:", results); // ✅ 서버 응답 확인
+      res.status(200).json(results);
   } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '댓글 조회에 실패했습니다.' });
+      console.error('❌ 댓글 조회 오류:', err);
+      res.status(500).json({ message: '댓글 조회에 실패했습니다.' });
   }
 });
+
 
 //댓글 삭제 API
 router.delete('/comments/:id', ensureAuthenticated, async (req, res) => {
