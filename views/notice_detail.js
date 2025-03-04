@@ -43,22 +43,21 @@ async function checkAdmin(noticeId, noticeData) {
     }
 }
 
+// 공지사항 수정/삭제 버튼 추가
 function addEditButton(noticeId, noticeData) {
     const adminActions = document.getElementById('admin-actions');
+    adminActions.innerHTML = ''; // 기존 버튼 초기화 (중복 방지)
 
-    // 수정 버튼
     const editButton = document.createElement('button');
     editButton.innerText = '수정하기';
     editButton.classList.add('btn-edit');
     editButton.onclick = () => toggleEditMode(true, noticeData);
 
-    // 삭제 버튼
     const deleteButton = document.createElement('button');
     deleteButton.innerText = '삭제하기';
     deleteButton.classList.add('btn-delete');
     deleteButton.onclick = () => deleteNotice(noticeId);
 
-    // 수정 완료 버튼 (인라인 수정용)
     const saveButton = document.createElement('button');
     saveButton.innerText = '수정 완료';
     saveButton.classList.add('btn-save');
@@ -70,7 +69,7 @@ function addEditButton(noticeId, noticeData) {
     adminActions.appendChild(saveButton);
 }
 
-
+// 편집 모드 토글
 function toggleEditMode(editMode, noticeData) {
     const titleElement = document.getElementById('notice-title');
     const contentElement = document.getElementById('notice-content');
@@ -80,7 +79,7 @@ function toggleEditMode(editMode, noticeData) {
     const saveButton = document.querySelector('.btn-save');
 
     if (editMode) {
-        // 편집 모드 활성화
+        // 편집 모드 진입
         editTitle.value = noticeData.title;
         editContent.value = noticeData.content;
 
@@ -91,9 +90,9 @@ function toggleEditMode(editMode, noticeData) {
         editButton.style.display = 'none';
         saveButton.style.display = 'inline-block';
     } else {
-        // 원래 뷰 모드로
+        // 뷰 모드 복귀 + 링크 자동 변환
         titleElement.innerText = editTitle.value;
-        contentElement.innerText = editContent.value;
+        displayNoticeContent(editContent.value);  // 링크 변환 후 표시
 
         titleElement.style.display = 'block';
         contentElement.style.display = 'block';
@@ -104,6 +103,25 @@ function toggleEditMode(editMode, noticeData) {
     }
 }
 
+// 저장 후 링크 포함된 내용 표시
+function displayNoticeContent(content) {
+    const contentElement = document.getElementById('notice-content');
+    contentElement.innerHTML = convertTextToHTML(content);
+}
+
+function convertTextToHTML(text) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    
+    // 1. URL은 링크로 변환
+    const textWithLinks = text.replace(urlRegex, (url) => {
+        return `<a href="${url}" target="_blank">${url}</a>`;
+    });
+
+    // 2. 줄바꿈 \n → <br>로 변환
+    return textWithLinks.replace(/\n/g, '<br>');
+}
+
+// 공지사항 수정 저장
 async function saveEdit(noticeId) {
     const updatedNotice = {
         title: document.getElementById('edit-title').value,
@@ -119,7 +137,7 @@ async function saveEdit(noticeId) {
 
         if (response.ok) {
             alert('공지사항이 수정되었습니다.');
-            toggleEditMode(false, updatedNotice);
+            toggleEditMode(false, updatedNotice);  // 수정 완료 후 뷰 모드로 전환
         } else {
             alert('수정 실패');
         }
@@ -129,14 +147,9 @@ async function saveEdit(noticeId) {
     }
 }
 
-function goBack() {
-    window.location.href = '/notice.html';
-}
-
+// 공지사항 삭제
 async function deleteNotice(noticeId) {
-    if (!confirm('정말 삭제하시겠습니까?')) {
-        return;  // 사용자가 취소한 경우
-    }
+    if (!confirm('정말 삭제하시겠습니까?')) return;
 
     try {
         const response = await fetch(`/notice/${noticeId}`, {
@@ -145,12 +158,13 @@ async function deleteNotice(noticeId) {
 
         if (response.ok) {
             alert('공지사항이 삭제되었습니다.');
-            location.href = '/notice.html';  // 목록으로 이동
+            location.reload();
         } else {
-            alert('삭제에 실패했습니다.');
+            alert('삭제 실패');
         }
     } catch (error) {
         console.error('삭제 요청 실패:', error);
         alert('삭제 중 오류가 발생했습니다.');
     }
 }
+
