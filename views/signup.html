@@ -31,7 +31,7 @@
               </p>
               <label style="display: block;">
                 <input type="checkbox" id="agreeTerms" onclick="toggleVerificationButton()">
-                본 약관에 동의합니다.
+                [필수] 본 약관에 동의합니다.
               </label>
             </div>
           
@@ -120,8 +120,14 @@
       function toggleVerificationButton() {
           const agreeTerms = document.getElementById("agreeTerms").checked;
           const sendVerificationButton = document.getElementById("sendVerificationCode");
+      
+          if (!agreeTerms) {
+              alert("약관 동의가 필요합니다.");
+          }
+      
           sendVerificationButton.disabled = !agreeTerms;
       }
+      
 
       // 이메일 검증 함수
       function isValidSungshinEmail(email) {
