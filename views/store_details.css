@@ -204,16 +204,22 @@ body {
   margin-top: 20px;
 }
 
-.wish-button,
-.share-button {
-  padding: 8px 16px;
-  font-size: 14px;
-  background-color: #6d63e5;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.back-button,
+.wishlist-button,
+.compare-button {
+    flex: none; /* 버튼 크기 자동 확장 방지 */
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+
+.wishlist-button,
+.compare-button {
+    min-width: 80px; /* 버튼 최소 너비 */
+    max-width: 120px; /* 버튼 최대 너비 */
 }
 
 .wish-button:hover,
@@ -407,6 +413,43 @@ body {
   #restaurant-name {
     font-size: 28px; /* 모바일에서 글씨 크기 줄이기 */
   }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+    gap: 4px;
+}
+
+.header-actions {
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  gap: 6px; /* 모바일에서 버튼 간격 좁히기 */
+  flex-wrap: nowrap; /* 버튼 줄바꿈 방지 */
+  overflow-x: auto; /* 버튼이 넘치면 스크롤 */
+  padding-bottom: 8px; /* 스크롤바와 간격 확보 */
+}
+
+.back-button,
+.wishlist-button,
+.compare-button {
+  padding: 6px 10px;
+  font-size: 12px; /* 글자 크기 축소 */
+  min-width: 70px;
+}
+}
+/* 더 작은 화면 (480px 이하) */
+@media (max-width: 480px) {
+  .header-actions {
+    justify-content: flex-start;
+    overflow-x: auto; /* 더 작은 화면에서는 좌우 스크롤 허용 */
+}
+
+.back-button,
+.wishlist-button,
+.compare-button {
+    padding: 5px 8px;
+    font-size: 11px;
+    min-width: 60px;
+}
 }
 .back-button {
   display: block;

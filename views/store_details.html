@@ -21,7 +21,15 @@
     <div id="header-placeholder"></div>
     <!-- Main Content -->
     <div class="container">
-      <button class="back-button" onclick="goBack()"> &lt; </button>
+      <div class="header-actions">
+        <button class="back-button" onclick="goBack()">&lt;</button>
+        <button id="wishlist-button" class="wishlist-button">
+            <span class="heart-icon">🤍</span><br>찜
+        </button>
+        <button id="compare-button" class="compare-button">
+          🔍<br>비교함
+      </button>
+    </div>
 
       <!-- 가게 정보 -->
       <header class="store-header">
@@ -385,6 +393,7 @@ function changePage(direction) {
     <div id="footer-placeholder"></div>
 
     <script src="header_footer.js"></script>
+    <script src="store_details.js"></script>
 
     <!-- 반응형 -->
   </body>
