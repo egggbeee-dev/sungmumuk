@@ -115,29 +115,34 @@
 
       console.log("JavaScript 코드 실행 확인");
 
-      let isEmailVerified = false; // 인증 상태 저장
+      let isEmailVerified = false; // 이메일 인증 여부 저장
       
-      // 이메일 검증 함수
+      // 📌 성신여대 이메일 검증 함수
       function isValidSungshinEmail(email) {
           const emailPattern = /^[^\s@]+@sungshin\.ac\.kr$/;
           return emailPattern.test(email.trim());
       }
       
-      // ✅ 약관 동의 체크 여부에 따라 이메일 인증 버튼 활성화
+      // 📌 약관 동의 체크 여부에 따라 '인증번호 요청' 버튼 활성화
       function toggleVerificationButton() {
           const agreeTerms = document.getElementById("agreeTerms").checked;
           const sendVerificationButton = document.getElementById("sendVerificationCode");
       
-          // 약관 동의하지 않으면 버튼 비활성화
-          sendVerificationButton.disabled = !agreeTerms;
+          if (agreeTerms) {
+              sendVerificationButton.disabled = false; // 약관 동의 시 버튼 활성화
+          } else {
+              sendVerificationButton.disabled = true; // 약관 미동의 시 버튼 비활성화
+              alert("회원가입을 위해 약관에 동의해야 합니다."); // 체크 해제 시 경고창 띄우기
+          }
       }
       
-      // 📌 페이지 로딩 시 체크박스 상태 확인 (새로고침해도 동작하도록)
+      // 📌 페이지 로딩 시 체크박스 상태 확인 (새로고침 시에도 적용)
       document.addEventListener("DOMContentLoaded", () => {
-          toggleVerificationButton();
+          toggleVerificationButton(); // 초기 버튼 상태 설정
+          document.getElementById("agreeTerms").addEventListener("change", toggleVerificationButton); // 체크 변경 감지
       });
       
-      // 인증번호 요청 버튼 클릭 이벤트
+      // 📌 인증번호 요청 버튼 클릭 이벤트
       document.getElementById("sendVerificationCode").addEventListener("click", function () {
           const agreeTerms = document.getElementById("agreeTerms").checked;
           const email = document.getElementById("username").value.trim();
