@@ -112,61 +112,61 @@
 
     <!-- JavaScript 코드 -->
     <script>
+
       console.log("JavaScript 코드 실행 확인");
-
-      let isEmailVerified = false; // 인증 상태 저장
-
-
-          document.getElementById("sendVerificationCode").addEventListener("click", function () {
-        const agreeTerms = document.getElementById("agreeTerms").checked;
-        
-        if (!agreeTerms) {
-            alert("회원가입을 위해 약관에 동의해야 합니다.");
-            return;
-        }
       
-
+      let isEmailVerified = false; // 인증 상태 저장
+      
       // 이메일 검증 함수
       function isValidSungshinEmail(email) {
-        const emailPattern = /^[^\s@]+@sungshin\.ac\.kr$/;
-        return emailPattern.test(email.trim());
+          const emailPattern = /^[^\s@]+@sungshin\.ac\.kr$/;
+          return emailPattern.test(email.trim());
       }
-
-      // 인증번호 요청
-      document
-        .getElementById("sendVerificationCode")
-        .addEventListener("click", function () {
+      
+      // 인증번호 요청 버튼 클릭 이벤트
+      document.getElementById("sendVerificationCode").addEventListener("click", function () {
+          const agreeTerms = document.getElementById("agreeTerms").checked;
           const email = document.getElementById("username").value.trim();
-
+      
+          // 1️⃣ 약관 동의 확인
+          if (!agreeTerms) {
+              alert("회원가입을 위해 약관에 동의해야 합니다.");
+              return;
+          }
+      
+          // 2️⃣ 이메일 입력 확인
           if (!email) {
-            alert("이메일을 입력해주세요.");
-            return;
+              alert("이메일을 입력해주세요.");
+              return;
           }
-
+      
+          // 3️⃣ 성신여대 이메일 형식 확인
           if (!isValidSungshinEmail(email)) {
-            alert("@sungshin.ac.kr 이메일을 사용해주세요.");
-            document.getElementById("email-error").textContent = "@sungshin.ac.kr 이메일을 사용해주세요.";
-            return;
+              alert("@sungshin.ac.kr 이메일을 사용해주세요.");
+              document.getElementById("email-error").textContent = "@sungshin.ac.kr 이메일을 사용해주세요.";
+              return;
           }
-
+      
           document.getElementById("email-error").textContent = ""; // 오류 메시지 초기화
-
+      
+          // 4️⃣ 인증번호 요청 API 호출
           fetch("/api/email/send-code", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email }),
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email }),
           })
-            .then((response) => response.json())
-            .then((data) => {
-              alert(data.message || "인증번호가 전송되었습니다. 10분내로 입력해주세요.");
-            })
-            .catch((error) => {
+          .then((response) => response.json())
+          .then((data) => {
+              alert(data.message || "인증번호가 전송되었습니다. 10분 내로 입력해주세요.");
+          })
+          .catch((error) => {
               console.error("인증번호 요청 오류:", error);
               alert("인증번호 요청 중 문제가 발생했습니다.");
-            });
-        });
+          });
+      });
+
 
       // 인증번호 확인
       document
