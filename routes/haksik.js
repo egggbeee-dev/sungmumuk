@@ -95,27 +95,24 @@ router.get('/posts/:id/comments', async (req, res) => {
   }
 });
 
-// 게시글 삭제 API (DELETE /haksik/posts/:id)
-router.delete('/posts/:id', ensureAuthenticated, async (req, res) => {
-  const postId = req.params.id;
-  const userId = req.user.id;
+//댓글 삭제 API
+router.delete('/comments/:id', ensureAuthenticated, async (req, res) => {
+  const commentId = req.params.id;
+  const userId = req.user.id; // 로그인한 사용자
 
-  const deleteCommentsQuery = 'DELETE FROM comments WHERE post_id = ?';
-  const deletePostQuery = 'DELETE FROM posts WHERE post_id = ? AND user_id = ? AND board_type = "haksik"';
-
+  const query = 'DELETE FROM comments WHERE comment_id = ? AND user_id = ?';
 
   try {
-    await pool.query(deleteCommentsQuery, [postId]);
-    const [result] = await pool.query(deletePostQuery, [postId, userId]);
+      const [result] = await pool.query(query, [commentId, userId]);
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: '게시글이 존재하지 않거나 삭제 권한이 없습니다.' });
-    }
+      if (result.affectedRows === 0) {
+          return res.status(404).json({ message: '댓글이 존재하지 않거나 삭제 권한이 없습니다.' });
+      }
 
-    res.status(200).json({ message: '게시글 및 관련 댓글이 삭제되었습니다.' });
+      res.status(200).json({ message: '댓글이 삭제되었습니다.' });
   } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '게시글 삭제에 실패했습니다.' });
+      console.error('Database error:', err);
+      res.status(500).json({ message: '댓글 삭제에 실패했습니다.' });
   }
 });
 
