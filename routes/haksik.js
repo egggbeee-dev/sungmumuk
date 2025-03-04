@@ -101,7 +101,7 @@ router.delete('/posts/:id', ensureAuthenticated, async (req, res) => {
   const userId = req.user.id;
 
   const deleteCommentsQuery = 'DELETE FROM comments WHERE post_id = ?';
-  const deletePostQuery = 'DELETE FROM posts WHERE post_id = ? AND user_id = ? AND board_type = "free"';
+  const deletePostQuery = 'DELETE FROM posts WHERE post_id = ? AND user_id = ? AND board_type = "haksik"';
 
 
   try {
