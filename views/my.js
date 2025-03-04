@@ -194,7 +194,7 @@ function renderReviews(reviews, container, viewAll) {
                 }
             } catch (error) {
                 console.error("Error saving profile changes:", error);
-                alert("정보 업데이트 중 오류가 발생했습니다.");
+                alert("중복된 닉네임을 사용할 수 없습니다. 다른 닉네임으로 시도해보세요!");
             }
         }
 
