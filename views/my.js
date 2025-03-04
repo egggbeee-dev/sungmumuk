@@ -146,18 +146,8 @@ function renderReviews(reviews, container, viewAll) {
         document.getElementById("save-button").classList.remove("hidden");
       }
 
-        // ✅ 1. 닉네임 중복 검사 API 호출 추가
-        const checkNicknameResponse = await fetch(`/api/check-nickname?nickname=${nickname}`);
-        const checkNicknameData = await checkNicknameResponse.json();
-        
-        if (checkNicknameResponse.status === 409) {
-            alert(checkNicknameData.message); // "이미 사용 중인 닉네임입니다."
-            return; // 업데이트 중단
-        }
-
-
-      // 변경된 정보 저장
         async function saveChanges() {
+            // ✅ 1. 입력값 가져오기
             const nickname = document.getElementById("nickname-input").value.trim();
             const department = document.getElementById("department-input").value.trim();
         
@@ -167,16 +157,16 @@ function renderReviews(reviews, container, viewAll) {
             }
         
             try {
-                // ✅ 1. 닉네임 중복 검사 API 호출 추가
+                // ✅ 2. 닉네임 중복 검사 API 호출
                 const checkNicknameResponse = await fetch(`/api/check-nickname?nickname=${nickname}`);
                 const checkNicknameData = await checkNicknameResponse.json();
         
                 if (checkNicknameResponse.status === 409) {
-                    alert(checkNicknameData.message); // "이미 사용 중인 닉네임입니다."
-                    return; // 업데이트 중단
+                    alert("이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해주세요.");
+                    return; // 닉네임이 중복되면 업데이트 중단
                 }
         
-                // ✅ 2. 닉네임 업데이트 요청
+                // ✅ 3. 닉네임 중복이 없으면 업데이트 진행
                 const response = await fetch("/my/profile/update", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -184,10 +174,11 @@ function renderReviews(reviews, container, viewAll) {
                 });
         
                 const result = await response.json();
+        
                 if (result.success) {
                     alert("정보가 성공적으로 업데이트되었습니다.");
         
-                    // ✅ UI 업데이트
+                    // ✅ 4. UI 업데이트 (변경된 닉네임 & 학과 반영)
                     document.getElementById("nickname-display").textContent = nickname;
                     document.getElementById("nickname-input").classList.add("hidden");
                     document.getElementById("nickname-display").classList.remove("hidden");
@@ -196,7 +187,7 @@ function renderReviews(reviews, container, viewAll) {
                     document.getElementById("department-input").classList.add("hidden");
                     document.getElementById("department-display").classList.remove("hidden");
         
-                    document.querySelector(".edit-button").classList.remove("hidden");
+                    document.getElementById("edit-button").classList.remove("hidden");
                     document.getElementById("save-button").classList.add("hidden");
                 } else {
                     alert(result.message);
@@ -206,3 +197,8 @@ function renderReviews(reviews, container, viewAll) {
                 alert("정보 업데이트 중 오류가 발생했습니다.");
             }
         }
+
+
+
+     
+
