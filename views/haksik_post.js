@@ -71,6 +71,26 @@ document.addEventListener("DOMContentLoaded", async () => {
           document.getElementById("edit-delete-buttons").style.display = "none";
       }
   }
+// 게시글 삭제
+async function deletePost(postId) {
+  const confirmDelete = confirm("정말 삭제하시겠습니까?");
+  if (!confirmDelete) return;
+
+  try {
+    const response = await fetch(`/free/posts/${postId}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      alert("게시글이 삭제되었습니다.");
+      loadPosts();
+    } else {
+      alert("게시글 삭제에 실패했습니다.");
+    }
+  } catch (error) {
+    console.error("게시글 삭제 오류:", error);
+  }
+}
+
 
   document.getElementById("submit-comment-btn").addEventListener("click", async () => {
       const content = document.getElementById("comment-input").value.trim();
@@ -86,16 +106,22 @@ async function checkAuthStatus() {
   try {
       const response = await fetch("/auth/status");
       const authData = await response.json();
+      console.log("로그인 상태 응답:", authData); // ✅ 확인 로그 추가
+
       if (authData.loggedIn) {
           currentUserId = authData.user.id;
+          console.log("로그인된 사용자 ID 설정됨:", currentUserId); // ✅ 확인 로그 추가
+
           document.getElementById("comment-input").disabled = false;
           document.getElementById("submit-comment-btn").disabled = false;
       } else {
+          console.warn("로그인되지 않음");
       }
   } catch (error) {
       console.error("로그인 상태 확인 오류:", error);
   }
 }
+
 
     async function loadPost(postId) {
       try {
