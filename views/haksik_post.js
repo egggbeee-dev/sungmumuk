@@ -144,26 +144,40 @@ async function checkAuthStatus() {
           commentsList.appendChild(emptyMessage);
         } else {
           comments.forEach((comment) => {
-            const commentDiv = document.createElement("div");
-            commentDiv.classList.add("comment");
-            commentDiv.id = `comment-${comment.comment_id}`;
-            commentDiv.innerHTML = `
-                          <p>${comment.content} - 작성자: ${
-              comment.author || "익명"
-            } (${new Date(comment.created_at).toLocaleString()})</p>
-                          <button onclick="likeComment(${
-                            comment.comment_id
-                          })">👍 <span class="like-count">${
-              comment.likes || 0
-            }</span></button>
-                      `;
-            commentsList.appendChild(commentDiv);
+              if (!comment) return; //comment가 undefined일 경우 오류 방지
+
+              const commentDiv = document.createElement("div");
+              commentDiv.classList.add("comment");
+              commentDiv.id = `comment-${comment.comment_id}`;
+
+              //좋아요 버튼 선언 추가
+              const likeButton = `<button onclick="likeComment(${comment.comment_id})">👍 <span class="like-count">${comment.likes || 0}</span></button>`;
+
+              // 현재 로그인한 사용자와 댓글 작성자의 ID 확인
+              console.log("현재 로그인 사용자 ID:", currentUserId);
+              console.log("댓글 작성자 ID:", comment.user_id);
+
+              // 삭제 버튼 (댓글 작성자인 경우만 추가)
+              let deleteButton = "";
+              if (currentUserId && comment.user_id && currentUserId === comment.user_id) {
+                  deleteButton = `<button onclick="deleteComment(${comment.comment_id})" class="delete-comment-btn">🗑️</button>`;
+              }
+
+              // 댓글 HTML 추가
+              commentDiv.innerHTML = `
+                  <p>${comment.content} - 작성자: ${comment.author || "익명"} (${new Date(comment.created_at).toLocaleString()})</p>
+                  <div class="comment-actions">
+                      ${likeButton}
+                      ${deleteButton}
+                  </div>
+              `;
+              commentsList.appendChild(commentDiv);
           });
-        }
-      } catch (error) {
-        console.error("댓글 로드 오류:", error);
       }
-    }
+  } catch (error) {
+      console.error("댓글 로드 오류:", error);
+  }
+}
 
     async function submitComment(postId, content) {
       try {
@@ -258,4 +272,19 @@ async function checkAuthStatus() {
     }
   }
   
-      
+  // 댓글 삭제 기능
+async function deleteComment(commentId) {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+
+    try {
+        const response = await fetch(`/free/comments/${commentId}`, { method: "DELETE" });
+        if (response.ok) {
+            alert("댓글이 삭제되었습니다.");
+            document.getElementById(`comment-${commentId}`).remove();
+        } else {
+            alert("댓글 삭제에 실패했습니다.");
+        }
+    } catch (error) {
+        console.error("댓글 삭제 오류:", error);
+    }
+}
