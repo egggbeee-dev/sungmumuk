@@ -132,7 +132,6 @@ app.use('/api', nicknameCheckRouter);
 
 
 
-
 // 정적 HTML 파일 제공 라우트
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
