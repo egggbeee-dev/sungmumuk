@@ -23,8 +23,8 @@ body {
 
 /* 공통 초기화 */
 * {
-  margin: 0;
-  padding: 0;
+  margin: 5;
+  padding: 5;
   box-sizing: border-box;
 }
 
@@ -67,7 +67,7 @@ h2 {
 
 /* 입력 그룹 */
 .input-group {
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 
 .input-group label {
@@ -139,4 +139,26 @@ button:hover {
     min-height: 100vh; /* 콘텐츠가 많아질 경우 스크롤 허용 */
     padding: 10px;
   }
+}
+
+.terms-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+.terms-container input {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.terms-warning {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 14px;
+  color: red;
+  margin-bottom: 40px;
 }
