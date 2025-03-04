@@ -96,29 +96,25 @@ router.post('/comments/:id/like', ensureAuthenticated, async (req, res) => {
 });
 
 // 게시글 수정 API (PUT /free/posts/:id)
-router.put('/posts/:id', ensureAuthenticated, async (req, res) => {
-  const postId = req.params.id;
-  const userId = req.user.id;
-  const { content } = req.body;
-
-  if (!content) {
-    return res.status(400).json({ message: '내용을 입력하세요.' });
-  }
-
-  const query = 'UPDATE posts SET content = ? WHERE post_id = ? AND user_id = ? AND board_type = "free"';
-
+router.put('/posts/:id', async (req, res) => {
+  const { title, content } = req.body;  // title도 받음
+  const { id } = req.params;
 
   try {
-    const [results] = await pool.query(query, [content, postId, userId]);
-    if (results.affectedRows === 0) {
-      return res.status(404).json({ message: '게시글이 존재하지 않거나 수정 권한이 없습니다.' });
-    }
-    res.status(200).json({ message: '게시글이 수정되었습니다.' });
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '게시글 수정에 실패했습니다.' });
+      const query = `
+          UPDATE posts
+          SET title = ?, content = ?
+          WHERE post_id = ?
+      `;
+      await pool.execute(query, [title, content, id]);
+
+      res.status(200).json({ message: "게시글이 수정되었습니다." });
+  } catch (error) {
+      console.error("게시글 수정 오류:", error);
+      res.status(500).json({ error: "서버 오류로 수정 실패" });
   }
 });
+
 
 // 게시글 삭제 API (DELETE /free/posts/:id)
 router.delete('/posts/:id', ensureAuthenticated, async (req, res) => {

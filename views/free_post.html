@@ -68,13 +68,11 @@
 
       <!-- 게시글 수정 폼 -->
       <form id="edit-post-form" style="display: none">
-        <textarea
-          id="edit-post-content"
-          rows="5"
-          placeholder="내용을 수정하세요"
-        ></textarea>
+        <input type="text" id="edit-post-title" placeholder="제목을 수정하세요" />
+        <textarea id="edit-post-content" rows="5" placeholder="내용을 수정하세요"></textarea>
         <button type="button" id="save-edit-btn">저장</button>
-      </form>
+    </form>
+    
     </main>
 
     <section id="comments-section">
@@ -105,32 +103,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     showEditDeleteButtons();
 
     document.getElementById("edit-post-btn").addEventListener("click", () => {
-        document.getElementById("edit-post-form").style.display = "block";
-        document.getElementById("edit-post-content").value = document.getElementById("post-content").textContent;
-    });
+      document.getElementById("edit-post-form").style.display = "block";
+      document.getElementById("edit-post-title").value = document.getElementById("post-title").textContent;
+      document.getElementById("edit-post-content").value = document.getElementById("post-content").textContent;
+  });
+  
 
-    document.getElementById("save-edit-btn").addEventListener("click", async () => {
-        const newContent = document.getElementById("edit-post-content").value.trim();
-        if (!newContent) {
-            alert("내용을 입력하세요.");
-            return;
+  document.getElementById("save-edit-btn").addEventListener("click", async () => {
+    const newTitle = document.getElementById("edit-post-title").value.trim();
+    const newContent = document.getElementById("edit-post-content").value.trim();
+
+    if (!newTitle || !newContent) {
+        alert("제목과 내용을 모두 입력하세요.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/free/posts/${postId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: newTitle, content: newContent }),
+        });
+
+        if (response.ok) {
+            alert("게시글이 수정되었습니다.");
+            window.location.reload();
+        } else {
+            alert("게시글 수정에 실패했습니다.");
         }
-        try {
-            const response = await fetch(`/free/posts/${postId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ content: newContent }),
-            });
-            if (response.ok) {
-                alert("게시글이 수정되었습니다.");
-                window.location.reload();
-            } else {
-                alert("게시글 수정에 실패했습니다.");
-            }
-        } catch (error) {
-            console.error("수정 오류:", error);
-        }
-    });
+    } catch (error) {
+        console.error("수정 오류:", error);
+    }
+});
+
 
     document.getElementById("delete-post-btn").addEventListener("click", async () => {
         if (!confirm("정말 삭제하시겠습니까?")) return;
