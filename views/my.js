@@ -145,47 +145,64 @@ function renderReviews(reviews, container, viewAll) {
         // "저장" 버튼 표시
         document.getElementById("save-button").classList.remove("hidden");
       }
-      
+
+        // ✅ 1. 닉네임 중복 검사 API 호출 추가
+        const checkNicknameResponse = await fetch(`/api/check-nickname?nickname=${nickname}`);
+        const checkNicknameData = await checkNicknameResponse.json();
+        
+        if (checkNicknameResponse.status === 409) {
+            alert(checkNicknameData.message); // "이미 사용 중인 닉네임입니다."
+            return; // 업데이트 중단
+        }
+
 
       // 변경된 정보 저장
-      async function saveChanges() {
-        const nickname = document.getElementById("nickname-input").value;
-        const department = document.getElementById("department-input").value;
-    
-        try {
-            const response = await fetch("/my/profile/update", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nickname, department })
-            });
-    
-            const result = await response.json();
-            if (result.success) {
-                alert("정보가 성공적으로 업데이트되었습니다.");
-    
-                // ✅ 헤더의 닉네임을 즉시 업데이트
-                updateHeaderNickname(nickname);
-    
-                // ✅ 세션을 새로고침하여 변경된 닉네임 반영
-                refreshSession();
-    
-                // ✅ 페이지 새로고침 없이 마이페이지 UI도 업데이트
-                document.getElementById("nickname-display").textContent = nickname;
-                document.getElementById("nickname-input").classList.add("hidden");
-                document.getElementById("nickname-display").classList.remove("hidden");
-    
-                document.getElementById("department-display").textContent = department;
-                document.getElementById("department-input").classList.add("hidden");
-                document.getElementById("department-display").classList.remove("hidden");
-    
-                document.querySelector(".edit-button").classList.remove("hidden");
-                document.getElementById("save-button").classList.add("hidden");
-            } else {
-                alert(result.message);
+        async function saveChanges() {
+            const nickname = document.getElementById("nickname-input").value.trim();
+            const department = document.getElementById("department-input").value.trim();
+        
+            if (!nickname) {
+                alert("닉네임을 입력해주세요.");
+                return;
             }
-        } catch (error) {
-            console.error("Error saving profile changes:", error);
-            alert("정보 업데이트 중 오류가 발생했습니다.");
+        
+            try {
+                // ✅ 1. 닉네임 중복 검사 API 호출 추가
+                const checkNicknameResponse = await fetch(`/api/check-nickname?nickname=${nickname}`);
+                const checkNicknameData = await checkNicknameResponse.json();
+        
+                if (checkNicknameResponse.status === 409) {
+                    alert(checkNicknameData.message); // "이미 사용 중인 닉네임입니다."
+                    return; // 업데이트 중단
+                }
+        
+                // ✅ 2. 닉네임 업데이트 요청
+                const response = await fetch("/my/profile/update", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nickname, department })
+                });
+        
+                const result = await response.json();
+                if (result.success) {
+                    alert("정보가 성공적으로 업데이트되었습니다.");
+        
+                    // ✅ UI 업데이트
+                    document.getElementById("nickname-display").textContent = nickname;
+                    document.getElementById("nickname-input").classList.add("hidden");
+                    document.getElementById("nickname-display").classList.remove("hidden");
+        
+                    document.getElementById("department-display").textContent = department;
+                    document.getElementById("department-input").classList.add("hidden");
+                    document.getElementById("department-display").classList.remove("hidden");
+        
+                    document.querySelector(".edit-button").classList.remove("hidden");
+                    document.getElementById("save-button").classList.add("hidden");
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error("Error saving profile changes:", error);
+                alert("정보 업데이트 중 오류가 발생했습니다.");
+            }
         }
-    }
-    
