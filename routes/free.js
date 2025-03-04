@@ -103,7 +103,7 @@ router.put('/posts/:id', async (req, res) => {
   try {
       const query = `
           UPDATE posts
-          SET title = ?, content = ?
+          SET title = ?, content = ?,updated_at = NOW()
           WHERE post_id = ?
       `;
       await pool.execute(query, [title, content, id]);

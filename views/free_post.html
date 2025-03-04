@@ -188,13 +188,30 @@ async function loadPost(postId) {
       document.getElementById("post-author").textContent = `작성자: ${post.author}`;
       document.getElementById("post-content").textContent = post.content;
 
+      // 작성일 표시 추가 (created_at 사용)
+      const createdDate = new Date(post.created_at);
+      document.getElementById("post-date").textContent = formatDate(createdDate);
+
       postAuthorId = post.user_id;  // 작성자 ID 저장
 
-      showEditDeleteButtons();  // 버튼 표시 확인용 함수 실행
+      showEditDeleteButtons();  // 작성자 확인해서 버튼 표시
   } catch (error) {
       console.error("게시글 데이터 로드 오류:", error);
   }
 }
+
+function formatDate(date) {
+  return date.toLocaleString('ko-KR', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true  // 오전/오후 표시
+  });
+}
+
 
 // 댓글 데이터 불러오기
 async function loadComments(postId) {
