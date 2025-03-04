@@ -90,215 +90,189 @@
     </section>
 
     <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const postId = urlParams.get("id");
-        let currentUserId = null; // 현재 로그인한 사용자 ID
-        let postAuthorId = null; // 게시글 작성자 ID
+      let currentUserId = null;  // 현재 로그인 사용자
+      let postAuthorId = null;   // 게시글 작성자
 
-        await checkAuthStatus();
-        await loadPost(postId);
-        await loadComments(postId);
+document.addEventListener("DOMContentLoaded", async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get("id");
 
-        // 게시글 로드 후 수정/삭제 버튼 표시
-        if (currentUserId === postAuthorId) {
-          document.getElementById("edit-delete-buttons").style.display =
-            "block";
+    await checkAuthStatus();
+    await loadPost(postId);
+    await loadComments(postId);
+
+    // 작성자 여부 체크 후 버튼 표시
+    showEditDeleteButtons();
+
+    document.getElementById("edit-post-btn").addEventListener("click", () => {
+        document.getElementById("edit-post-form").style.display = "block";
+        document.getElementById("edit-post-content").value = document.getElementById("post-content").textContent;
+    });
+
+    document.getElementById("save-edit-btn").addEventListener("click", async () => {
+        const newContent = document.getElementById("edit-post-content").value.trim();
+        if (!newContent) {
+            alert("내용을 입력하세요.");
+            return;
         }
-
-        document
-          .getElementById("edit-post-btn")
-          .addEventListener("click", () => {
-            document.getElementById("edit-post-form").style.display = "block";
-            document.getElementById("edit-post-content").value =
-              document.getElementById("post-content").textContent;
-          });
-
-        document
-          .getElementById("save-edit-btn")
-          .addEventListener("click", async () => {
-            const newContent = document
-              .getElementById("edit-post-content")
-              .value.trim();
-            if (!newContent) {
-              alert("내용을 입력하세요.");
-              return;
-            }
-            try {
-              const response = await fetch(`/free/posts/${postId}`, {
+        try {
+            const response = await fetch(`/free/posts/${postId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ content: newContent }),
-              });
-              if (response.ok) {
+            });
+            if (response.ok) {
                 alert("게시글이 수정되었습니다.");
                 window.location.reload();
-              } else {
+            } else {
                 alert("게시글 수정에 실패했습니다.");
-              }
-            } catch (error) {
-              console.error("수정 오류:", error);
             }
-          });
+        } catch (error) {
+            console.error("수정 오류:", error);
+        }
+    });
 
-        document
-          .getElementById("delete-post-btn")
-          .addEventListener("click", async () => {
-            const confirmDelete = confirm("정말 삭제하시겠습니까?");
-            if (!confirmDelete) return;
+    document.getElementById("delete-post-btn").addEventListener("click", async () => {
+        if (!confirm("정말 삭제하시겠습니까?")) return;
 
-            try {
-              const response = await fetch(`/free/posts/${postId}`, {
-                method: "DELETE",
-              });
-              if (response.ok) {
+        try {
+            const response = await fetch(`/free/posts/${postId}`, { method: "DELETE" });
+            if (response.ok) {
                 alert("게시글이 삭제되었습니다.");
                 window.location.href = "/free.html";
-              } else {
+            } else {
                 alert("게시글 삭제에 실패했습니다.");
-              }
-            } catch (error) {
-              console.error("삭제 오류:", error);
             }
-          });
-
-        document
-          .getElementById("submit-comment-btn")
-          .addEventListener("click", async () => {
-            const content = document
-              .getElementById("comment-input")
-              .value.trim();
-            if (!content) {
-              alert("댓글 내용을 입력하세요.");
-              return;
-            }
-            await submitComment(postId, content);
-          });
-      });
-
-      async function checkAuthStatus() {
-        try {
-          const response = await fetch("/api/auth/status");
-          const authData = await response.json();
-          if (authData.loggedIn) {
-            currentUserId = authData.userId;
-            document.getElementById("comment-input").disabled = false;
-            document.getElementById("submit-comment-btn").disabled = false;
-          }
         } catch (error) {
-          console.error("로그인 상태 확인 오류:", error);
+            console.error("삭제 오류:", error);
         }
+    });
+
+    document.getElementById("submit-comment-btn").addEventListener("click", async () => {
+        const content = document.getElementById("comment-input").value.trim();
+        if (!content) {
+            alert("댓글 내용을 입력하세요.");
+            return;
+        }
+        await submitComment(postId, content);
+    });
+});
+
+// 로그인 상태 체크
+async function checkAuthStatus() {
+  try {
+      const response = await fetch("/auth/status");
+      const authData = await response.json();
+      if (authData.loggedIn) {
+          currentUserId = authData.user.id;
+      } else {
+          console.log("[checkAuthStatus] 로그인 안됨");
       }
+  } catch (error) {
+      console.error("로그인 상태 확인 오류:", error);
+  }
+}
 
+// 게시글 데이터 불러오기
+async function loadPost(postId) {
+  try {
+      const response = await fetch(`/free/posts/${postId}`);
+      const post = await response.json();
 
-      async function loadPost(postId) {
+      document.getElementById("post-title").textContent = post.title;
+      document.getElementById("post-author").textContent = `작성자: ${post.author}`;
+      document.getElementById("post-content").textContent = post.content;
+
+      postAuthorId = post.user_id;  // 작성자 ID 저장
+
+      showEditDeleteButtons();  // 버튼 표시 확인용 함수 실행
+  } catch (error) {
+      console.error("게시글 데이터 로드 오류:", error);
+  }
+}
+
+// 댓글 데이터 불러오기
+async function loadComments(postId) {
     try {
-        const response = await fetch(`/free/posts/${postId}`);
-        const post = await response.json();
+        const response = await fetch(`/free/posts/${postId}/comments`);
+        const comments = await response.json();
 
-        document.getElementById("post-title").textContent = post.title;
-        document.getElementById("post-author").textContent = `작성자: ${post.author}`;
-        document.getElementById("post-content").textContent = post.content;
-        document.getElementById("post-category").textContent = post.category;
+        const commentsList = document.getElementById("comments-list");
+        commentsList.innerHTML = "";
 
-        // 작성일 포맷 변경
-        const createdDate = new Date(post.created_at);
-        const formattedDate = `${createdDate.getFullYear().toString()}년 
-            ${String(createdDate.getMonth() + 1).padStart(2, "0")}월 
-            ${String(createdDate.getDate()).padStart(2, "0")}일 
-            ${String(createdDate.getHours()).padStart(2, "0")}시 
-            ${String(createdDate.getMinutes()).padStart(2, "0")}분`;
-
-        document.getElementById("post-date").textContent = formattedDate;
-
-        postAuthorId = post.user_id;
-
-        if (post.image_url) {
-            const postImage = document.getElementById("post-image");
-            postImage.src = post.image_url;
-            postImage.style.display = "block";
+        if (comments.length === 0) {
+            const emptyMessage = document.createElement("p");
+            emptyMessage.textContent = "댓글이 없습니다. 첫 댓글을 작성해보세요!";
+            commentsList.appendChild(emptyMessage);
+        } else {
+            comments.forEach((comment) => {
+                const commentDiv = document.createElement("div");
+                commentDiv.classList.add("comment");
+                commentDiv.id = `comment-${comment.comment_id}`;
+                commentDiv.innerHTML = `
+                    <p>${comment.content} - 작성자: ${comment.author || "익명"} (${new Date(comment.created_at).toLocaleString()})</p>
+                    <button onclick="likeComment(${comment.comment_id})">👍 <span class="like-count">${comment.likes || 0}</span></button>
+                `;
+                commentsList.appendChild(commentDiv);
+            });
         }
     } catch (error) {
-        console.error("게시글 데이터 로드 오류:", error);
+        console.error("댓글 로드 오류:", error);
     }
 }
 
-      async function loadComments(postId) {
-        try {
-          const response = await fetch(`/free/posts/${postId}/comments`);
-          const comments = await response.json();
-
-          const commentsList = document.getElementById("comments-list");
-          commentsList.innerHTML = "";
-
-          if (comments.length === 0) {
-            const emptyMessage = document.createElement("p");
-            emptyMessage.textContent =
-              "댓글이 없습니다. 첫 댓글을 작성해보세요!";
-            commentsList.appendChild(emptyMessage);
-          } else {
-            comments.forEach((comment) => {
-              const commentDiv = document.createElement("div");
-              commentDiv.classList.add("comment");
-              commentDiv.id = `comment-${comment.comment_id}`;
-              commentDiv.innerHTML = `
-                            <p>${comment.content} - 작성자: ${
-                comment.author || "익명"
-              } (${new Date(comment.created_at).toLocaleString()})</p>
-                            <button onclick="likeComment(${
-                              comment.comment_id
-                            })">👍 <span class="like-count">${
-                comment.likes || 0
-              }</span></button>
-                        `;
-              commentsList.appendChild(commentDiv);
-            });
-          }
-        } catch (error) {
-          console.error("댓글 로드 오류:", error);
-        }
-      }
-
-      async function submitComment(postId, content) {
-        try {
-          const response = await fetch(`/free/posts/${postId}/comments`, {
+// 댓글 작성
+async function submitComment(postId, content) {
+    try {
+        const response = await fetch(`/free/posts/${postId}/comments`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ content }),
-          });
-          if (response.ok) {
+        });
+        if (response.ok) {
             alert("댓글이 작성되었습니다.");
             document.getElementById("comment-input").value = "";
             await loadComments(postId);
-          } else {
+        } else {
             alert("댓글 작성에 실패했습니다.");
-          }
-        } catch (error) {
-          console.error("댓글 작성 오류:", error);
         }
-      }
+    } catch (error) {
+        console.error("댓글 작성 오류:", error);
+    }
+}
 
-      async function likeComment(commentId) {
-        try {
-          const response = await fetch(`/free/comments/${commentId}/like`, {
-            method: "POST",
-          });
-          if (response.ok) {
-            const likeCountElement = document.querySelector(
-              `#comment-${commentId} .like-count`
-            );
+// 댓글 좋아요
+async function likeComment(commentId) {
+    try {
+        const response = await fetch(`/free/comments/${commentId}/like`, { method: "POST" });
+        if (response.ok) {
+            const likeCountElement = document.querySelector(`#comment-${commentId} .like-count`);
             if (likeCountElement) {
-              const currentCount = parseInt(likeCountElement.textContent);
-              likeCountElement.textContent = currentCount + 1;
+                const currentCount = parseInt(likeCountElement.textContent);
+                likeCountElement.textContent = currentCount + 1;
             }
             alert("좋아요가 추가되었습니다.");
-          } else {
+        } else {
             alert("좋아요 처리에 실패했습니다.");
-          }
-        } catch (error) {
-          console.error("좋아요 처리 오류:", error);
         }
-      }
+    } catch (error) {
+        console.error("좋아요 처리 오류:", error);
+    }
+}
+
+// 작성자 여부 체크 및 버튼 표시
+function showEditDeleteButtons() {
+
+  if (currentUserId === postAuthorId) {
+      console.log("[showEditDeleteButtons] 작성자 일치 - 버튼 표시");
+      document.getElementById("edit-delete-buttons").style.display = "block";
+  } else {
+      console.log("[showEditDeleteButtons] 작성자 불일치 - 버튼 숨김");
+      document.getElementById("edit-delete-buttons").style.display = "none";
+  }
+}
+
+
     </script>
 
     <!-- 반응형 -->
