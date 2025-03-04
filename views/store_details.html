@@ -21,16 +21,7 @@
     <div id="header-placeholder"></div>
     <!-- Main Content -->
     <div class="container">
-      <div class="header-actions">
-        <button class="back-button" onclick="goBack()">&lt;</button>
-        <button id="wishlist-button" class="wishlist-button">
-            <span class="heart-icon">🤍</span><br>찜
-        </button>
-        <button id="compare-button" class="compare-button">
-          🔍<br>비교함
-      </button>
-    </div>
-    
+      <button class="back-button" onclick="goBack()"> &lt; </button>
 
       <!-- 가게 정보 -->
       <header class="store-header">
@@ -95,6 +86,14 @@
           리뷰 작성하기
         </button>
       </div>
+      <div class="review-controls">
+        <select id="sort-reviews" onchange="sortReviews()">
+          <option value="latest">최신순</option>
+          <option value="oldest">오래된 순</option>
+          <option value="high-rating">별점 높은 순</option>
+          <option value="low-rating">별점 낮은 순</option>
+        </select>
+      </div>
 
       <!-- 리뷰 목록 -->
       <div class="review-list" id="review-list"></div>
@@ -117,6 +116,7 @@
       const reviewsPerPage = 10;
       let imageUrls = [];  // imageUrls 전역 변수로 선언
       let currentSlideIndex = 0;  // 현재 슬라이드 인덱스
+      let reviewsData = [];
 
       async function displayRestaurantDetails() {
         try {
@@ -203,27 +203,59 @@ function changeSlide(direction) {
   slides[currentSlideIndex].style.display = "block";
   updateButtonVisibility(); // 버튼 상태 업데이트
 }
-document.addEventListener("DOMContentLoaded", displayRestaurantDetails);  // 페이지 로드 시 이미지 슬라이드 시작
+document.addEventListener("DOMContentLoaded", () => {
+  displayRestaurantDetails();
+  loadReviews();
+});
 
+async function loadReviews() {
+  try {
+    const response = await fetch(`/store_details/reviews?id=${storedID}`);
+    reviewsData = await response.json(); // 데이터를 전역 변수에 저장
 
-      async function loadReviews() {
-            try {
-                const response = await fetch(`/store_details/reviews?id=${storedID}`);
-                const reviews = await response.json();
+    if (reviewsData.length === 0) {
+      document.getElementById('review-list').innerHTML = "<p>아직 등록된 리뷰가 없습니다.</p>";
+      document.getElementById('prevPageButton').disabled = true;
+      document.getElementById('nextPageButton').disabled = true;
+      return;
+    }
 
-                if (reviews.length === 0) {
-                    document.getElementById('review-list').innerHTML = "<p>아직 등록된 리뷰가 없습니다.</p>";
-                    document.getElementById('prevPageButton').disabled = true;
-                    document.getElementById('nextPageButton').disabled = true;
-                    return;
-                }
+    sortReviews(); // 정렬 후 렌더링
+  } catch (error) {
+    console.error("리뷰 데이터를 불러오는 중 오류 발생:", error);
+  }
+}
+        function sortReviews() {
+        const sortOption = document.getElementById("sort-reviews").value;
+        let sortedReviews = [...reviewsData];
 
-                renderReviews(reviews);
-            } catch (error) {
-                console.error('리뷰 데이터를 불러오는 중 오류 발생:', error);
-                document.getElementById('review-list').innerHTML = "<p>리뷰를 불러오는 중 오류가 발생했습니다.</p>";
-            }
+        switch (sortOption) {
+          case "latest":
+            sortedReviews.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            break;
+          case "oldest":
+            sortedReviews.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+            break;
+            case "high-rating":
+            sortedReviews.sort((a, b) => {
+              const avgA = (a.taste_rating + a.access_rating + a.revisit_rating) / 3;
+              const avgB = (b.taste_rating + b.access_rating + b.revisit_rating) / 3;
+              return avgB - avgA; // 높은 순으로 정렬
+            });
+            break;
+
+          case "low-rating":
+            sortedReviews.sort((a, b) => {
+              const avgA = (a.taste_rating + a.access_rating + a.revisit_rating) / 3;
+              const avgB = (b.taste_rating + b.access_rating + b.revisit_rating) / 3;
+              return avgA - avgB; // 낮은 순으로 정렬
+            });
+            break;
         }
+
+        renderReviews(sortedReviews);
+      }
+
 
               function generateStars(rating) {
         const maxStars = 5; // 최대 별 개수
@@ -307,10 +339,14 @@ document.addEventListener("DOMContentLoaded", displayRestaurantDetails);  // 페
     return `${year}년 ${month}월 ${day}일 ${hours}시 : ${minutes}분`;
 }
 
-      function changePage(direction) {
-        currentPage += direction;
-        loadReviews();
-      }
+function changePage(direction) {
+  const totalPages = Math.ceil(reviewsData.length / reviewsPerPage);
+
+  if ((direction === -1 && currentPage > 1) || (direction === 1 && currentPage < totalPages)) {
+    currentPage += direction;
+    sortReviews(); // 새로운 페이지의 리뷰를 다시 정렬하여 표시
+  }
+}
 
       document.addEventListener("DOMContentLoaded", () => {
         displayRestaurantDetails();
@@ -337,14 +373,18 @@ document.addEventListener("DOMContentLoaded", displayRestaurantDetails);  // 페
       function goBack() {
     window.history.back();
 }
+-
+function changePage(direction) {
+  currentPage += direction;
+  sortReviews();
+}
+
     </script>
 
     <!-- Footer Placeholder -->
     <div id="footer-placeholder"></div>
 
     <script src="header_footer.js"></script>
-    <script src="store_details.js"></script>
-
 
     <!-- 반응형 -->
   </body>
