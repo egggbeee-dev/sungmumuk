@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db'); // DB 연결 모듈
+const db = require('../config/db'); // DB 연결 모듈
 
 router.get('/check-nickname', async (req, res) => {
     const { nickname } = req.query;
