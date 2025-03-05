@@ -43,32 +43,24 @@ body {
   border-bottom: 1px solid #e6e6fa;
 }
 
-/* 수평 리스트 */
 .new-store-list {
   display: grid;
   gap: 20px;
   padding: 10px 0;
-  max-width: calc(300px * 3 + 20px * 2); /* 카드 3개와 간격 2개 기준 */
+  max-width: 100%;
   margin: 0 auto;
+  grid-template-columns: repeat(4, minmax(280px, 1fr)); /* 유동적으로 카드 개수 조정 */
+  justify-content: center; /* 중앙 정렬 */
 }
 
-.new-store-list {
-  display: flex;
-  flex-wrap: wrap; /* 여러 줄로 변경 가능하도록 설정 */
-  justify-content: center;
-  gap: 20px;
-}
 
-.new-store-item {
-  width: calc(33.33% - 20px); /* 3개씩 배치 */
-  max-width: 300px;
-}
+
 .new-store-item {
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 10px;
-  width: calc(33.33% - 20px); /* 3개씩 배치 */
-  max-width: 300px;
+  width: 100%; /* 3개씩 배치 */
+  max-width: 550px;
   scroll-snap-align: start; /* 스냅 포인트 */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
