@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 게시물 렌더링
+    /*일단주석처리    // 게시물 렌더링
     function renderPosts(filteredPosts = posts) {
         postList.innerHTML = ''; // 게시물 목록 초기화
 
@@ -116,7 +116,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
             postList.appendChild(postDiv);
         });
+    } */
+
+
+
+      // 게시글 렌더링
+      function renderPosts() {
+        postList.innerHTML = '';
+    
+        if (posts.length === 0) {
+            postList.innerHTML = "<p>게시글이 없습니다.</p>";
+            return;
+        }
+    
+        posts.forEach(post => {
+            const postDiv = document.createElement('div');
+            postDiv.classList.add('post');
+    
+            const titleLink = document.createElement('a');
+            titleLink.href = `/haksik_post.html?id=${post.id}`;
+            titleLink.innerHTML = `<span style="color: #8a63d2;">${post.category}</span> 
+                                   <span style="color: black;">${post.title}</span>`;
+            titleLink.style.textDecoration = 'none';
+            titleLink.style.cursor = 'pointer';
+            postDiv.appendChild(titleLink);
+    
+            const contentDiv = document.createElement('div');
+            contentDiv.textContent = post.content.slice(0, 100) + "...";
+            postDiv.appendChild(contentDiv);
+    
+            const likeCountDiv = document.createElement('div');
+            likeCountDiv.textContent = `❤️ ${post.likeCount}`;
+            postDiv.appendChild(likeCountDiv);
+    
+            postList.appendChild(postDiv);
+        });
     }
+        
 
     // 게시물 작성
     submitPostBtn.addEventListener('click', async function () {
