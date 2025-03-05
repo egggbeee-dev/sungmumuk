@@ -252,6 +252,17 @@ body {
     font-size: 16px;
 }
 
+#post-image {
+    width: 100%;         /* 부모 요소 기준으로 가득 차게 */
+    max-width: 500px;    /* 최대 너비 지정 */
+    height: 300px;       /* 높이 고정 */
+    object-fit: cover;   /* 이미지 비율 유지하면서 자르기 */
+    display: block;
+    margin: 10px 0;      /* 이미지 위아래 여백 추가 */
+    border-radius: 8px;  /* 이미지 모서리 둥글게 */
+}
+
+
 /* 모바일 대응 */
 @media (max-width: 768px) {
     .like-btn {
