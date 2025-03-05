@@ -348,8 +348,3 @@ function renderPagination(totalPosts) {
     pagination.style.alignItems = "center"; // 수직 중앙 정렬
     lastPageBtn.style.margin = "0 3px";
   }
-
- // 초기 실행
-    checkAuthStatus(); // 인증 상태 확인
-    loadPosts(); // 서버에서 게시물 가져오기
-});
