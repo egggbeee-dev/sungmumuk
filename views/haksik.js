@@ -196,21 +196,50 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
   }
 
-  async function deletePost(postId) {
-      if (!confirm('정말 삭제하시겠습니까?')) return;
+  router.delete('/posts/:id', async (req, res) => {
+    const postId = req.params.id;
+    const userId = req.user.id;  // 로그인 유저 정보는 반드시 미들웨어에서 세팅돼 있어야 함
 
-      try {
-          const response = await fetch(`/haksik/posts/${postId}`, {method: 'DELETE'});
-          if (response.ok) {
-              alert('게시글이 삭제되었습니다.');
-              await loadPosts(filterSelect.value);
-          } else {
-              alert('게시글 삭제에 실패했습니다.');
-          }
-      } catch (error) {
-          console.error('게시글 삭제 오류:', error);
-      }
-  }
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
+
+        // 1. 댓글 좋아요 삭제 (댓글 기능 없으면 생략 가능)
+        await connection.query(`
+            DELETE FROM likes 
+            WHERE comment_id IN (SELECT comment_id FROM comments WHERE post_id = ?)
+        `, [postId]);
+
+        // 2. 댓글 삭제
+        await connection.query('DELETE FROM comments WHERE post_id = ?', [postId]);
+
+        // 3. 게시글 좋아요 삭제
+        await connection.query('DELETE FROM likes WHERE post_id = ?', [postId]);
+
+        // 4. 게시글 삭제
+        const [result] = await connection.query(
+            'DELETE FROM posts WHERE post_id = ? AND user_id = ? AND board_type = "haksik"',
+            [postId, userId]
+        );
+
+        if (result.affectedRows === 0) {
+            await connection.rollback();
+            return res.status(403).json({ message: '삭제 권한이 없거나 이미 삭제된 게시글입니다.' });
+        }
+
+        await connection.commit();
+        res.json({ message: '게시글이 삭제되었습니다.' });
+
+    } catch (error) {
+        await connection.rollback();
+        console.error('게시글 삭제 중 에러:', error);
+        res.status(500).json({ message: '게시글 삭제 중 오류가 발생했습니다.' });
+    } finally {
+        connection.release();
+    }
+});
+
+
 
   async function searchPosts() {
       const query = searchInput.value.trim();
