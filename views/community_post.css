@@ -17,9 +17,17 @@
   line-height: 1.5; /* 가독성을 위한 줄 간격 추가 */
 }
 
+/* 부모 요소 크기 제한 (이미지가 너무 커지는 것 방지) */
+.post-container {
+  max-width: 600px; /* 부모 요소 크기를 600px로 제한 */
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Post Image Styles */
 #post-image {
-  width: auto; /* 부모 요소보다 커지지 않도록 수정 */
-  max-width: 300px; /* 최대 크기 600px 유지 */
+  width: 100%; /* 부모 요소보다 커지지 않도록 수정 */
+  max-width: 600px; /* 부모 요소 크기를 초과하지 않도록 제한 */
   height: auto; /* 원본 비율 유지 */
   margin: 10px 0;
   display: block;
