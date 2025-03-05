@@ -19,7 +19,7 @@
 
 #post-image {
   width: auto; /* 부모 요소보다 커지지 않도록 수정 */
-  max-width: 600px; /* 최대 크기 600px 유지 */
+  max-width: 300px; /* 최대 크기 600px 유지 */
   height: auto; /* 원본 비율 유지 */
   margin: 10px 0;
   display: block;
