@@ -3,16 +3,28 @@ const router = express.Router();
 const { ensureAuthenticated } = require('../middlewares/auth');
 const pool = require('../config/db'); // 데이터베이스 연결 설정
 
-// 게시글 목록 조회 API (GET /free/posts)
-router.get('/posts', async (req, res) => {
-  const query = 'SELECT * FROM posts WHERE board_type = "free" ORDER BY created_at DESC';
+router.get("/posts", async (req, res) => {
+  const { filter } = req.query; // 클라이언트에서 보낸 필터 값
+
+  let orderBy = "created_at DESC"; // 기본값: 최신순
+  if (filter === "low") {
+      orderBy = "created_at ASC"; // 오래된 순
+  } else if (filter === "mid") {
+      orderBy = "(SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) DESC, created_at DESC"; // 좋아요 많은 순
+  }
 
   try {
-    const [results] = await pool.query(query);
-    res.status(200).json(results);
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '게시물 조회에 실패했습니다.' });
+      const [posts] = await pool.query(
+          `SELECT posts.*, 
+                  (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) AS like_count
+           FROM posts 
+           WHERE board_type = "free"  -- 학식 게시판 글만 가져오도록 추가
+           ORDER BY ${orderBy}`
+      );
+      res.json(posts);
+  } catch (error) {
+      console.error("게시물 필터링 오류:", error);
+      res.status(500).json({ message: "게시물 필터링 중 오류 발생" });
   }
 });
 
@@ -121,23 +133,27 @@ router.delete('/posts/:id', ensureAuthenticated, async (req, res) => {
   const postId = req.params.id;
   const userId = req.user.id;
 
-  const deleteCommentsQuery = 'DELETE FROM comments WHERE post_id = ?';
-  const deletePostQuery = 'DELETE FROM posts WHERE post_id = ? AND user_id = ? AND board_type = "free"';
-
-
   try {
-    await pool.query(deleteCommentsQuery, [postId]);
-    const [result] = await pool.query(deletePostQuery, [postId, userId]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: '게시글이 존재하지 않거나 삭제 권한이 없습니다.' });
+    // 작성자 확인
+    const [rows] = await pool.query('SELECT user_id FROM posts WHERE post_id = ?', [postId]);
+    if (rows.length === 0) {
+        return res.status(404).json({ message: "게시글을 찾을 수 없습니다." });
+    }
+    if (rows[0].user_id !== userId) {
+        return res.status(403).json({ message: "삭제 권한이 없습니다." });
     }
 
-    res.status(200).json({ message: '게시글 및 관련 댓글이 삭제되었습니다.' });
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: '게시글 삭제에 실패했습니다.' });
-  }
+    // 좋아요 먼저 삭제 (외래키 문제 해결)
+    await pool.query('DELETE FROM likes WHERE post_id = ?', [postId]);
+
+    // 게시글 삭제
+    await pool.query('DELETE FROM posts WHERE post_id = ?', [postId]);
+
+    res.status(200).json({ message: "게시글이 삭제되었습니다." });
+} catch (error) {
+    console.error('게시글 삭제 오류:', error);
+    res.status(500).json({ message: "게시글 삭제 중 오류 발생" });
+}
 });
 
 // 검색 기능 API (GET /free/search)
