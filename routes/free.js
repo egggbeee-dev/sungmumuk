@@ -182,5 +182,85 @@ router.delete('/comments/:id', ensureAuthenticated, async (req, res) => {
       res.status(500).json({ message: '댓글 삭제에 실패했습니다.' });
   }
 });
+// 게시글 좋아요 추가
+// 게시글 좋아요 추가/취소 (board_type 추가 반영)
+router.post("/posts/:postId/like", async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.user?.id; // 현재 로그인된 사용자 ID
+  const boardType = "haksik"; // 현재 게시판 타입 고정
+
+  if (!userId) {
+    return res.status(401).json({ message: "로그인이 필요합니다." });
+  }
+
+  try {
+    // 기존 좋아요 여부 확인 (board_type 조건 추가)
+    const [existingLike] = await pool.query(
+      "SELECT * FROM likes WHERE user_id = ? AND post_id = ? AND board_type = ?",
+      [userId, postId, boardType]
+    );
+
+    if (existingLike.length > 0) {
+      // 이미 좋아요를 눌렀으면 취소
+      await pool.query(
+        "DELETE FROM likes WHERE user_id = ? AND post_id = ? AND board_type = ?",
+        [userId, postId, boardType]
+      );
+      return res.status(200).json({ message: "좋아요 취소!" });
+    } else {
+      // 좋아요 추가
+      await pool.query(
+        "INSERT INTO likes (user_id, post_id, created_at, board_type) VALUES (?, ?, NOW(), ?)",
+        [userId, postId, boardType]
+      );
+      return res.status(201).json({ message: "좋아요 추가!" });
+    }
+  } catch (error) {
+    console.error("좋아요 처리 오류:", error);
+    res.status(500).json({ message: "서버 오류 발생" });
+  }
+});
+
+
+// 특정 게시글의 좋아요 개수 가져오기
+// 특정 게시글의 좋아요 개수 가져오기 (board_type 추가 반영)
+router.get("/posts/:postId/like/count", async (req, res) => {
+  const { postId } = req.params;
+  const boardType = "haksik"; // 현재 게시판 타입 고정
+
+  try {
+    const [result] = await pool.query(
+      "SELECT COUNT(*) AS likeCount FROM likes WHERE post_id = ? AND board_type = ?",
+      [postId, boardType]
+    );
+    res.json({ likeCount: result[0].likeCount });
+  } catch (error) {
+    console.error("좋아요 개수 조회 오류:", error);
+    res.status(500).json({ message: "서버 오류 발생" });
+  }
+});
+
+
+// 특정 사용자가 해당 게시글에 좋아요를 눌렀는지 확인하는 API
+router.get("/posts/:postId/like/status", async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.user?.id; // 로그인된 사용자 ID
+  const boardType = "haksik"; // 현재 게시판 타입 고정
+
+  if (!userId) {
+    return res.json({ liked: false });
+  }
+
+  try {
+    const [result] = await pool.query(
+      "SELECT COUNT(*) AS count FROM likes WHERE user_id = ? AND post_id = ? AND board_type = ?",
+      [userId, postId, boardType]
+    );
+    res.json({ liked: result[0].count > 0 });
+  } catch (error) {
+    console.error("좋아요 상태 확인 오류:", error);
+    res.status(500).json({ message: "서버 오류 발생" });
+  }
+});
 
 module.exports = router;

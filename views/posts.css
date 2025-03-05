@@ -163,12 +163,13 @@ body {
 }
 
 .like-comment-btn, .delete-comment-btn {
-    padding: 5px 10px;
-    font-size: 14px;
-    cursor: pointer;
+    background-color: #857ac3;
+    color: #ffffff;
     border: none;
     border-radius: 5px;
-    transition: background-color 0.2s;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 .delete-comment-btn {
@@ -217,6 +218,53 @@ body {
     color: #555;
 }
 
+.post-like-section {
+    display: flex;
+    justify-content: flex-start; /* 좌측 정렬 */
+    align-items: center;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    gap: 8px; /* 버튼과 다른 요소 사이 간격 */
+}
+
+.like-btn {
+    background-color: #fff;
+    border: 2px solid #ff7f50;
+    color: #ff7f50;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 14px;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.like-btn:hover {
+    background-color: #ff7f50;
+    color: #fff;
+}
+
+.like-btn span {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .like-btn {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .like-btn span {
+        font-size: 14px;
+    }
+}
+
+
 /* 반응형 대응 (모바일 화면 최적화) */
 @media (max-width: 768px) {
     #post-details, #comments-section {
@@ -238,3 +286,18 @@ body {
         font-size: 13px;
     }
 }
+
+@media screen and (max-width: 768px) {
+    .page-header {
+      font-size: 24px; /* 모바일 화면에서 글씨 크기 줄이기 */
+      padding: 90px 0; /* 모바일에서 상하 여백 줄이기 */
+    }
+  }
+  
+  /* 모바일 화면 크기 (최대 480px)에서 추가적인 반응형 처리 */
+  @media screen and (max-width: 480px) {
+    .page-header {
+      font-size: 20px; /* 글씨 크기를 더 줄여서 가독성 확보 */
+      padding: 90px 0; /* 상하 여백을 더 줄여서 화면에 맞게 조정 */
+    }
+  }
