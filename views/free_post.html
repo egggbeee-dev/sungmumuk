@@ -16,42 +16,44 @@
     <main>
         <section id="post-details">
             <div class="post-header">
-                <span id="post-category"></span>
-                <h1 id="post-title"></h1>
-                <input type="text" id="edit-post-title" style="display: none;" />
-            </div>
-            <p id="post-author"></p>
-            <p id="post-content"></p>
-            <textarea id="edit-post-content" style="display: none;"></textarea>
-            <img id="post-image" style="display: none;" alt="게시글 이미지">
-            <p id="post-date"></p>
-
-            <div class="post-like-section">
-                <button id="like-btn" class="like-btn">🤍 <span id="like-count">0</span></button>
+                <span id="post-category" class="post-category"></span>
+                <h1 id="post-title" class="post-title">로딩 중...</h1>
             </div>
 
-            <div class="post-buttons">
-                <a href="/free.html" class="back-btn">← 목록으로 돌아가기</a>
-                <div id="edit-delete-buttons" style="display: none;">
-                    <button id="edit-post-btn">수정</button>
-                    <button id="delete-post-btn">삭제</button>
-                </div>
-                <div id="edit-buttons" style="display: none;">
-                    <button id="save-edit-btn">저장</button>
-                    <button id="cancel-edit-btn">취소</button>
-                </div>
+            <p id="post-author" class="post-author"></p>
+            <p id="post-date" class="post-date"></p>
+            <p id="post-content" class="post-content"></p>
+
+            <img id="post-image" class="post-image" style="display: none;" alt="게시글 이미지">
+
+            <div id="like-container">
+                <button id="like-btn" class="like-btn">❤️ <span id="like-count">0</span></button>
             </div>
+
+            <a href="/free.html" class="back-btn">← 목록으로 돌아가기</a>
+
+            <div id="edit-delete-buttons" class="post-buttons">
+                <button id="edit-post-btn" class="action-btn">수정</button>
+                <button id="delete-post-btn" class="action-btn delete-btn">삭제</button>
+            </div>
+
+            <form id="edit-post-form" style="display: none;">
+                <textarea id="edit-post-content" placeholder="내용을 수정하세요"></textarea>
+                <button type="button" id="save-edit-btn" class="action-btn">저장</button>
+                <button type="button" id="cancel-edit-btn" class="action-btn cancel-btn">취소</button>
+            </form>
         </section>
 
         <section id="comments-section">
             <h3>댓글</h3>
             <div class="comment-input-container">
                 <textarea id="comment-input" placeholder="댓글을 입력하세요"></textarea>
-                <button id="submit-comment-btn">댓글 작성</button>
+                <button id="submit-comment-btn" class="comment-btn">댓글 작성</button>
             </div>
             <div id="comments-list"></div>
         </section>
     </main>
+
+    <script src="free_post.js"></script>
 </body>
-<script src = "free_post.js"></script>
 </html>

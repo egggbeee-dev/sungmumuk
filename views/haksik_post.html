@@ -1,92 +1,61 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 상세</title>
-    <link rel="icon" href="성뭐먹3.png" type="image/png" />
-    <link rel="stylesheet" href="community_post.css" />
-    <link rel="stylesheet" href="header_footer.css" />
+    <link rel="icon" href="성뭐먹3.png" type="image/png">
+    <link rel="stylesheet" href="posts.css">
+    <link rel="stylesheet" href="header_footer.css">
 
-    <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
-      rel="stylesheet"
-    />
-
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
     <script src="header_footer.js" defer></script>
-    <!-- 헤더 및 푸터 동적 로드 -->
-  </head>
-  <body>
-    <!-- 헤더 동적 로드 -->
+</head>
+<body>
     <div id="header-placeholder"></div>
 
     <main>
-      <section id="post-details">
-        
-      <a href="/haksik.html" class="back-btn">← 목록으로 돌아가기</a>
+        <section id="post-details">
+            
+            <div class="post-header">
+                <div id="post-category" class="post-category"></div>
+                <h1 id="post-title" class="post-title">로딩 중...</h1>
+            </div>
 
-        <h1 id="post-title">로딩 중...</h1>
+            <p id="post-author" class="post-author"></p>
+            <p id="post-date" class="post-date"></p>
+            <p id="post-content" class="post-content"></p>
 
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 24px;
-            font-family: 'Black Han Sans', sans-serif;
-            font-weight: bold;
-          "
-        >
-        
-          <span id="post-category" style="color: #555"></span>
-          <h1 id="post-title" style="margin: 0; color: #6c63ff"></h1>
-        </div>
+            <img id="post-image" class="post-image" style="display: none;" alt="게시글 이미지">
+            
+            <div id="like-container">
+                <button id="like-btn" class="like-btn">❤️ <span id="like-count">0</span></button>
+            </div>
 
-        <p id="post-author"></p>
-        <!-- 작성자 정보 -->
-        <p id="post-content"></p>
-        <img id="post-image" style="display: none" alt="게시글 이미지" />
-        <p>작성일: <span id="post-date"></span></p>
-      </section>
-        <!-- 게시글 좋아요 버튼 --> 
-        <div id="like-container"> <button id="like-btn">❤️ <span id="like-count">0</span></button>  </div>
-      <!-- 게시글 수정/삭제 버튼 -->
-      <div id="edit-delete-buttons">
-        <button id="edit-post-btn">수정</button>
-        <button id="delete-post-btn">삭제</button>
-      </div>
+            <a href="/haksik.html" class="back-btn">← 목록으로 돌아가기</a>
 
-      <!-- 게시글 수정 폼 -->
-      <form id="edit-post-form" style="display: none">
-        <textarea
-          id="edit-post-content"
-          rows="5"
-          placeholder="내용을 수정하세요"
-        ></textarea>
-        <button type="button" id="save-edit-btn">저장</button>
-      </form>
+            <div id="edit-delete-buttons">
+                <button id="edit-post-btn" class="action-btn">수정</button>
+                <button id="delete-post-btn" class="action-btn delete-btn">삭제</button>
+            </div>
+
+            <form id="edit-post-form" style="display: none;">
+                <textarea id="edit-post-content" placeholder="내용을 수정하세요"></textarea>
+                <button type="button" id="save-edit-btn" class="action-btn">저장</button>
+            </form>
+        </section>
+
+        <section id="comments-section">
+            <h3>댓글</h3>
+            <div class="comment-input-container">
+                <textarea id="comment-input" placeholder="댓글을 입력하세요"></textarea>
+                <button id="submit-comment-btn" class="comment-btn">댓글 작성</button>
+            </div>
+            <div id="comments-list"></div>
+        </section>
     </main>
 
-    <section id="comments-section">
-      <h3>댓글</h3>
-
-      <!-- 댓글 작성 영역 -->
-      <div class="comment-input-container">
-        <textarea id="comment-input" placeholder="댓글을 입력하세요"></textarea>
-        <button id="submit-comment-btn">댓글 작성</button>
-      </div>
-
-      <!-- 댓글 리스트 -->
-      <div id="comments-list"></div>
-      <!-- "댓글이 없습니다." 메시지가 여기 표시됩니다. -->
-
-      <script src="haksik_post.js"></script>
-    <!-- 반응형 -->
-  </body>
+    <script src="haksik_post.js"></script>
+</body>
 </html>
-

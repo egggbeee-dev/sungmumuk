@@ -1,3 +1,7 @@
+main {
+    margin-top: 70px;  /* 헤더 높이만큼 여백을 주는 방식 */
+}
+
 /* 전체 페이지 기본 스타일 */
 body {
     font-family: 'Noto Sans KR', sans-serif;
@@ -17,6 +21,9 @@ body {
   
   }
 
+  .post-header {
+    margin-bottom: 10px;
+}
 
 /* 게시글 상세 섹션 */
 #post-details {
@@ -27,12 +34,20 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
+.post-category {
+    font-size: 18px;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px; /* 카테고리 아래 여백 */
+    display: block; /* 강제로 줄바꿈 */
+}
 
-#post-title {
-    font-size: 22px;
+.post-title {
+    font-size: 24px;
+    font-weight: bold;
     color: #6c63ff;
     margin: 0;
-    font-weight: bold;
+    display: block; /* 필요하면 명시 */
 }
 
 #post-content {
