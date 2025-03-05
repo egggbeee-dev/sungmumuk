@@ -117,22 +117,34 @@
     });
 
     // 로그인 상태 확인
-    async function checkAuthStatus() {
-        try {
-            const res = await fetch("/auth/status");
-            const data = await res.json();
+    // 로그인 상태 확인
+  async function checkAuthStatus() {
+    try {
+        const response = await fetch('/auth/status');
+        const authStatus = await response.json();
 
-            if (data.loggedIn) {
-                currentUserId = data.user.id;
-                loginMessage.style.display = "none";
+        if (authStatus.loggedIn) {
+            isLoggedIn = true;
+            currentUserId = authStatus.user.id;
+            enablePostActions();
+            loginMessage.style.display = 'none';
+        } else {
+            isLoggedIn = false;
+            currentUserId = null;  // 로그인 안한 상태에서도 페이지 보이게 초기화
+
+            const userResponse = confirm("자유 게시판은 로그인 후 이용 가능합니다.\n로그인 페이지로 이동하시겠습니까?");
+            if (userResponse) {
+                window.location.href = "/login.html"; // 로그인 페이지로 이동
             } else {
-                currentUserId = null;
-                loginMessage.style.display = "block";
+                window.history.back(); // 이전 페이지로 이동
             }
-        } catch (err) {
-            console.error("로그인 상태 확인 오류:", err);
+
+            disablePostActions();
         }
+    } catch (error) {
+        console.error('로그인 상태 확인 오류:', error);
     }
+}
 
     // 게시글 불러오기 (필터 적용)
     async function loadPosts(filter = "") {
