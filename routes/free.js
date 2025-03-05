@@ -132,28 +132,33 @@ router.put('/posts/:id', async (req, res) => {
 router.delete('/posts/:id', ensureAuthenticated, async (req, res) => {
   const postId = req.params.id;
   const userId = req.user.id;
-
+  const connection = await pool.getConnection();
   try {
-    // 작성자 확인
-    const [rows] = await pool.query('SELECT user_id FROM posts WHERE post_id = ?', [postId]);
-    if (rows.length === 0) {
-        return res.status(404).json({ message: "게시글을 찾을 수 없습니다." });
-    }
-    if (rows[0].user_id !== userId) {
-        return res.status(403).json({ message: "삭제 권한이 없습니다." });
-    }
+      await connection.beginTransaction();
 
-    // 좋아요 먼저 삭제 (외래키 문제 해결)
-    await pool.query('DELETE FROM likes WHERE post_id = ?', [postId]);
+      // 1. 댓글 먼저 삭제
+      await connection.query('DELETE FROM comments WHERE post_id = ?', [postId]);
 
-    // 게시글 삭제
-    await pool.query('DELETE FROM posts WHERE post_id = ?', [postId]);
+      // 2. 좋아요 삭제 (likes 테이블도 참조 중일 가능성 있음)
+      await connection.query('DELETE FROM likes WHERE post_id = ?', [postId]);
 
-    res.status(200).json({ message: "게시글이 삭제되었습니다." });
-} catch (error) {
-    console.error('게시글 삭제 오류:', error);
-    res.status(500).json({ message: "게시글 삭제 중 오류 발생" });
-}
+      // 3. 게시글 삭제
+      const [result] = await connection.query('DELETE FROM posts WHERE post_id = ?', [postId]);
+
+      await connection.commit();
+
+      if (result.affectedRows === 0) {
+          return res.status(404).json({ message: '게시글을 찾을 수 없습니다.' });
+      }
+
+      res.status(200).json({ message: '게시글이 삭제되었습니다.' });
+  } catch (error) {
+      await connection.rollback();
+      console.error('게시글 삭제 오류:', error);
+      res.status(500).json({ message: '게시글 삭제 중 오류 발생' });
+  } finally {
+      connection.release();
+  }
 });
 
 // 검색 기능 API (GET /free/search)
